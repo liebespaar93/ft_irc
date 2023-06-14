@@ -24,6 +24,7 @@ int main(int argc, char const *argv[])
 	try
 	{
 		server = new Server(port_str, password_str);
+		server->ft_server_on();
 		delete server;
 	}
 	catch (const std::exception &e)

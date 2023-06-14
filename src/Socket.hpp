@@ -15,6 +15,7 @@ private:
 	/* data */
 	int _fd;
 	addrinfo *_info;
+	sockaddr _socket_info;
 	pollfd _pfd;
 
 	Socket(){};
@@ -24,7 +25,7 @@ private:
 	void ft_create_socket();
 
 public:
-	Socket(int fd, sockaddr *&socket_info);
+	Socket(int fd, sockaddr *socket_info);
 	Socket(const char *IP, const char *port);
 	~Socket();
 

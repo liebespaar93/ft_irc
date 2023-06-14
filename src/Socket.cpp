@@ -7,12 +7,10 @@
 #include "Logger.hpp"
 #include "Error.hpp"
 
-Socket::Socket(int fd, sockaddr *&socket_info)
+Socket::Socket(int fd, sockaddr *socket_info)
 	: _fd(fd)
 {
-	this->_info = new addrinfo;
-	this->_info->ai_addr = socket_info;
-
+	this->_socket_info = *socket_info; 
 	this->_pfd.fd = this->_fd;
 	this->_pfd.events = POLLSTANDARD;
 	this->_pfd.revents = 0;
@@ -30,20 +28,19 @@ Socket::Socket(const char *IP, const char *port)
 	hints.ai_flags = AI_PASSIVE | SO_REUSEADDR; // use my IP
 	if (getaddrinfo(NULL, port, &hints, &this->_info) != 0)
 		throw Error("getaddrinfo() != 0");
-
+	this->_socket_info = *this->_info->ai_addr; 
 	this->ft_create_socket();
 	Logger("socket create").ft_socket(this->_fd);
 }
 
 Socket::~Socket()
 {
-	freeaddrinfo(this->_info);
-	close(this->_fd);
 	Logger("socket close").ft_socket(this->_fd);
 }
 
 void Socket::ft_create_socket()
 {
+	addrinfo *info;
 	int y = 1;
 
 	if ((this->_fd = socket(this->_info->ai_family, this->_info->ai_socktype, this->_info->ai_protocol)) == -1)
@@ -70,6 +67,7 @@ void Socket::ft_create_socket()
 
 	if (SOCONN > SOMAXCONN || listen(_fd, SOCONN) == -1)
 		throw Error("listen() == -1");
+	freeaddrinfo(this->_info);
 	this->_pfd.fd = this->_fd;
 	this->_pfd.events = POLLSTANDARD;
 	this->_pfd.revents = 0;
@@ -79,14 +77,14 @@ Socket *Socket::ft_accept()
 {
 	Socket *client = NULL;
 	int socket_fd;
-	sockaddr *ip4addr;
+	sockaddr ip4addr;
 	socklen_t client_addr_size = sizeof(sockaddr);
 
 	if (this->ft_poll() > 0)
 	{
-		if ((socket_fd = accept(this->_fd, ip4addr, &client_addr_size)) == -1)
+		if ((socket_fd = accept(this->_fd, &ip4addr, &client_addr_size)) == -1)
 			throw Error("accept fd == -1");
-		client = new Socket(socket_fd, ip4addr);
+		client = new Socket(socket_fd, &ip4addr);
 		return client;
 	}
 	return (NULL);
