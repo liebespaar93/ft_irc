@@ -1,12 +1,28 @@
+#include <vector>
+
 #include "Server.hpp"
 #include "Logger.hpp"
 #include "Error.hpp"
 
+
 Server::Server(std::string port, std::string password)
-	: _password(password), _on(1)
+	: UserControl(), _password(password), _on(1)
 {
 	this->_server = new Socket("0.0.0.0", port.c_str());
 	Logger("Server Craete").ft_create();
+}
+
+Server::~Server()
+{
+	Socket *socket_del;
+
+	while (!this->_socket.empty())
+	{
+		socket_del = this->_socket.front();
+		this->_socket.pop();
+		delete socket_del;
+	}
+	delete this->_server;
 }
 
 void Server::ft_server_on()
@@ -25,7 +41,12 @@ void Server::ft_server_on()
 void Server::ft_connect_socket(Socket *accept_socket)
 {
 	this->_socket.push(accept_socket);
+	User *new_user = new User(accept_socket->ft_get_socket_fd());
+	new_user->ft_set_IP(accept_socket->ft_get_socket_IP());
+	this->ft_append_user(new_user);
 }
+
+
 
 void Server::ft_server_check_socket_fd()
 {
@@ -49,20 +70,22 @@ void Server::ft_server_check_socket_fd()
 	}
 }
 
+
 void Server::ft_pollin(Socket *socket_front)
 {
 	int fd;
-	char buf[4096];
+	char buf[512];
 	ssize_t len;
 	int socket_send_loop;
 
-	fd = socket_front->ft_get_socket_fd();
-	len = recv(fd, &buf, 4095, 0);
+	fd = socket_front->ft_get_socket_fd(); /// 버퍼보다 큰  값이 올경우
+	len = recv(fd, &buf, 511, 0);
+
 	if (len < 0)
 		throw Error("recv() failed");
 	if (len == 0)
 	{
-		Logger("connect close").ft_socket(fd);
+		Logger("connect close").ft_socket_close(fd);
 		delete socket_front;
 		return;
 	}
@@ -76,27 +99,17 @@ void Server::ft_pollin(Socket *socket_front)
 		return;
 	}
 	std::cout << buf << std::endl;
+	this->ft_parse((std::string)buf);
 	this->_socket.push(socket_front);
 }
 
-Server::~Server()
+
+void Server::ft_parse(std::string buf)
 {
-	Socket *socket_del;
+	std::string cmd;
+	std::vector<std::string> *parameters;
 
-	while (!this->_socket.empty())
-	{
-		socket_del = this->_socket.front();
-		this->_socket.pop();
-		delete socket_del;
-	}
-	delete this->_server;
 }
-
-
-
-
-
-
 void Server::ft_server_input()
 {
 	std::string buf;
@@ -114,10 +127,9 @@ void Server::ft_server_input()
 		{
 			front = this->_socket.front();
 			send(front->ft_get_socket_fd(), buf.c_str(), buf.size(), 0);
+			Logger("server send").ft_server_msg(front->ft_get_socket_fd());
 			this->_socket.pop();
 			this->_socket.push(front);
-
 		}
-		Logger("server send").ft_server_msg(4);
 	}
 }
