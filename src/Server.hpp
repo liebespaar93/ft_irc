@@ -6,8 +6,9 @@
 #include <queue>
 
 #include "Socket.hpp"
+#include "UserControl.hpp"
 
-class Server
+class Server : public UserControl
 {
 private:
 	/* data */
@@ -25,17 +26,14 @@ private:
 	void ft_server_check_socket_fd();
 	void ft_connect_socket(Socket *accept_socket);
 
+	/* parse */
+	void ft_parse(std::string buf);
 
 public:
 	Server(std::string port_str, std::string password_str);
 	~Server();
 
 	void ft_server_on();
-
-
-
-
-
 
 	void ft_server_input();/////////
 };

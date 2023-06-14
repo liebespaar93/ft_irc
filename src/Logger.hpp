@@ -38,6 +38,11 @@ public:
 		std::cout << FG_WARNING << "[CREATE] " << FG_LBLUE << "[ " << fd << " ] " << FG_INFO << _msg
 				  << NO_COLOR << std::endl;
 	}
+	void ft_socket_close(int fd)
+	{
+		std::cout << FG_ERROR << "[CLOSE] " << FG_LBLUE << "[ " << fd << " ] " << FG_INFO << _msg
+				  << NO_COLOR << std::endl;
+	}
 	void	ft_server_msg(int fd)
 	{
 		std::cout << FG_WARNING << "[SERVER] SEND" << FG_LBLUE << "[ " << fd << " ] " << FG_INFO << _msg

@@ -19,13 +19,7 @@ Socket::Socket(int fd, sockaddr *socket_info)
 
 Socket::Socket(const char *IP, const char *port)
 {
-	struct addrinfo hints;
-
-	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = IPPROTO_TCP;
-	hints.ai_flags = AI_PASSIVE | SO_REUSEADDR; // use my IP
+	struct addrinfo hints = {.ai_flags = AI_PASSIVE | SO_REUSEADDR, .ai_family = AF_INET, .ai_socktype = SOCK_STREAM, .ai_protocol = IPPROTO_TCP };
 	if (getaddrinfo(NULL, port, &hints, &this->_info) != 0)
 		throw Error("getaddrinfo() != 0");
 	this->_socket_info = *this->_info->ai_addr; 
@@ -35,7 +29,7 @@ Socket::Socket(const char *IP, const char *port)
 
 Socket::~Socket()
 {
-	Logger("socket close").ft_socket(this->_fd);
+	Logger("socket close").ft_socket_close(this->_fd);
 }
 
 void Socket::ft_create_socket()
@@ -46,24 +40,11 @@ void Socket::ft_create_socket()
 	if ((this->_fd = socket(this->_info->ai_family, this->_info->ai_socktype, this->_info->ai_protocol)) == -1)
 		throw Error("socket() == -1");
 	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &y, sizeof(int)) == -1)
-	{
-		close(_fd);
-		freeaddrinfo(this->_info);
-		throw Error("setsockopt() == -1");
-	}
+		(close(_fd), freeaddrinfo(this->_info), throw Error("setsockopt() == -1"));
 	if (fcntl(_fd, F_SETFL, O_NONBLOCK) == -1)
-	{
-		close(_fd);
-		freeaddrinfo(this->_info);
-		throw Error("fcntl() == -1");
-	}
-
+		(close(_fd), freeaddrinfo(this->_info), throw Error("fcntl() == -1"));
 	if (bind(this->_fd, this->_info->ai_addr, this->_info->ai_addrlen) == -1)
-	{
-		close(_fd);
-		freeaddrinfo(this->_info);
-		throw Error("bind() == -1");
-	}
+		(close(_fd), freeaddrinfo(this->_info), throw Error("bind() == -1"));
 
 	if (SOCONN > SOMAXCONN || listen(_fd, SOCONN) == -1)
 		throw Error("listen() == -1");
