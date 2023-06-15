@@ -5,7 +5,7 @@ NAME = server
 
 CC = c++
 CFLAGS = 
-IFLAGS = -I ./src
+IFLAGS = -I ./src  -I ./src/cmd
 DFLAGS = 
 CXXFLAGS = 
 

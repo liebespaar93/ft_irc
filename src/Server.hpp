@@ -4,9 +4,11 @@
 #include <string>
 #include <sys/socket.h>
 #include <queue>
+#include <map>
 
 #include "Socket.hpp"
 #include "UserControl.hpp"
+#include "Cmd.hpp"
 
 class Server : public UserControl
 {
@@ -14,6 +16,7 @@ private:
 	/* data */
 	Socket *_server;
 	std::string _password;
+	std::map<std::string, Cmd *> _cmd_map;
 	int _on;
 
 	std::queue<Socket *> _socket;
@@ -28,7 +31,7 @@ private:
 
 	/* parse */
 	void ft_parse(std::string buf);
-
+	void ft_set_cmd_map();
 public:
 	Server(std::string port_str, std::string password_str);
 	~Server();

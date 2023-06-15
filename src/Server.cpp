@@ -3,7 +3,9 @@
 #include "Server.hpp"
 #include "Logger.hpp"
 #include "Error.hpp"
+#include "Utile.hpp"
 
+#include "Cmds.hpp"
 
 Server::Server(std::string port, std::string password)
 	: UserControl(), _password(password), _on(1)
@@ -103,13 +105,55 @@ void Server::ft_pollin(Socket *socket_front)
 	this->_socket.push(socket_front);
 }
 
-
+void Server::ft_set_cmd_map()
+{
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("CAP" , new Cap()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("AUTHENTICATE" , new Authenticate()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PASS" , new Pass()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("NICK" , new Nick()));
+	//this->_cmd_map.insert(std::pair<std::string, Cmd *>("USER" , new User()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PING" , new Ping()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PONG" , new Pong()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("OPER" , new Oper()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("QUIT" , new Quit()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("JOIN" , new Join()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PART" , new Part()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("TOPIC" , new Topic()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("LIST" , new List()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("INVITE" , new Invite()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("KICK" , new Kick()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("MOTD" , new Motd()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("ADMIN" , new Admin()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("CONNECT" , new Connect()));
+	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("LUSERS" , new Lusers()));
+	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("VERSION" , new Version()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("TIME" , new Time()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("STATS" , new Stats()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("HELP" , new Help()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("INFO" , new Info()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("MODE" , new Mode()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("NOTICE" , new Notice()));
+	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("WHO" , new Who()));
+	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("WHOIS" , new Whois()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("KILL" , new Kill()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("REHASH" , new Rehash()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("RESTART" , new Restart()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("SQUIT" , new Squit()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("AWAY" , new Away()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("LINKS" , new Links()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("USERHOST" , new Userhost()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("WALLOPS" , new Wallops()));
+}
 void Server::ft_parse(std::string buf)
 {
-	std::string cmd;
-	std::vector<std::string> *parameters;
+	std::vector<std::string> msg = split(buf, " ");
+	
 
+	msg[0];
+	
 }
+
+
 void Server::ft_server_input()
 {
 	std::string buf;
