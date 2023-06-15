@@ -9,13 +9,15 @@ class Invite: public Cmd
 {
 private:
 	/* data */
-
-public:
-	Invite();
 	Invite(const Invite& ref);
-	~Invite();
 
 	Invite&	operator=(const Invite& ref);
+
+public:
+	Invite() { this->_cmd = "INVITE"; };
+	~Invite(){};
+
+	
 };
 
 #endif

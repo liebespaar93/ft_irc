@@ -32,10 +32,10 @@ UserControl&	UserControl::operator=(const UserControl& ref)
 	return (*this);
 }
 
-void	UserControl::ft_append_user(User *user)
+int	UserControl::ft_append_user(User *user)
 {
 	this->_fd_map->insert( std::pair<const int, User *>(user->ft_get_fd(), user ));
-	this->_name_map->insert( std::pair<std::string, const int>( user->ft_get_user_name(), user->ft_get_fd() ));
+	// this->_name_map->insert( std::pair<std::string, const int>( user->ft_get_user_name(), user->ft_get_fd() ));
 }
 
 User   *UserControl::ft_get_user(const int &fd)

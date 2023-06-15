@@ -8,9 +8,10 @@
 
 #include "Socket.hpp"
 #include "UserControl.hpp"
+#include "ChannelControl.hpp"
 #include "Cmd.hpp"
 
-class Server : public UserControl
+class Server : public UserControl, public ChannelControl
 {
 private:
 	/* data */
@@ -30,7 +31,7 @@ private:
 	void ft_connect_socket(Socket *accept_socket);
 
 	/* parse */
-	void ft_parse(std::string buf);
+	void ft_parse(std::string buf, int fd);
 	void ft_set_cmd_map();
 public:
 	Server(std::string port_str, std::string password_str);

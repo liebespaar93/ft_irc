@@ -15,6 +15,9 @@ private:
 	std::string _channel_name;
 	std::string _channel_topic;
 	std::string _password;
+
+	std::map<std::string, User *> _privilege_user_map;
+
 	bool _has_password;
 	bool _is_invite_only;
 	bool _is_restricted;
@@ -44,10 +47,14 @@ public:
 	void ft_set_invite(bool on) { this->_is_invite_only = on; }
 	void ft_set_topic(const std::string new_topic) { this->_channel_topic = new_topic; }
 
-	bool ft_channel_join_user(User *user);
-	void ft_channel_leave_user(User *user);
+	int ft_channel_join_user(User *user);
+	int ft_channel_join_user(User *user, std::string password);
+	int ft_channel_leave_user(User *user);
 	void ft_send_all(std::string user_name, std::string buf);
 	void ft_send_me(std::string user_name, std::string buf);
+
+	int ft_privilege_user_authorization(User *user);
+	int ft_privilege_user_delete(std::string user_name);
 };
 
 #endif

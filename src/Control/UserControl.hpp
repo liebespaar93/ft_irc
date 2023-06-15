@@ -24,7 +24,7 @@ public:
 
 	UserControl&	operator=(const UserControl& ref);
 	
-	void	ft_append_user(User *user);
+	int	ft_append_user(User *user);
 
 	User	*ft_get_user(const int &fd);
 	User	*ft_get_user(const std::string &user_name);

@@ -25,19 +25,19 @@ public:
 			this->ft_send();
 			return ;
 		}
-		/* 
-			need new 
-		*/
-		// RPL_ADMINME();
-		// this->ft_send();
-		// RPL_ADMINLOC1 ();
-		// this->ft_send();
-		// RPL_ADMINLOC2 ();
-		// this->ft_send();
-		// RPL_ADMINEMAIL ();
-		// this->ft_send();
+		RPL_ADMINME(this->_client, this->_info);
+		this->ft_send();
+		RPL_ADMINLOC1 (this->_client, this->_info);
+		this->ft_send();
+		RPL_ADMINLOC2 (this->_client, this->_info);
+		this->ft_send();
+		RPL_ADMINEMAIL (this->_client, this->_info);
+		this->ft_send();
 	}
-
 };
-
+//Request: ADMIN 
+//Response: :*.freenode.net 256 nick_name *.freenode.net :Administrative info
+//Response: :*.freenode.net 257 nick_name :Name: freenode
+//Response: :*.freenode.net 258 nick_name :Nickname: Infrastructure Team
+//Response: :*.freenode.net 259 nick_name :Email: infrastructure@freenode.net
 #endif

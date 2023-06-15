@@ -93,21 +93,25 @@
 // Sent as a reply to the LUSERS command. <c> and <s> are non-negative integers and represent the number of clients and other servers connected to this server, respectively.
 
 // RPL_ADMINME (256)
-//   "<client> [<server>] :Administrative info"
+#define RPL_ADMINME(client, server) \
+  client + " " + server + " :Administrative info"
 // Sent as a reply to an ADMIN command, this numeric establishes the name of the server whose administrative info is being provided. The text used in the last param of this message may vary.
 
 // <server> is optional and MAY be included in responses, the server can also be gained from the <source> of this message.
 
 // RPL_ADMINLOC1 (257)
-//   "<client> :<info>"
+#define RPL_ADMINLOC1(client, info) \
+  client + " : " + info
 // Sent as a reply to an ADMIN command, <info> is a string intended to provide information about the location of the server (i.e. city, state and country). The text used in the last param of this message varies wildly.
 
 // RPL_ADMINLOC2 (258)
-//   "<client> :<info>"
+#define RPL_ADMINLOC2(client, info) \
+  client + " : " + info
 // Sent as a reply to an ADMIN command, <info> is a string intended to provide information about whoever runs the server (i.e. details of the institution hosting it). The text used in the last param of this message varies wildly.
 
 // RPL_ADMINEMAIL (259)
-//   "<client> :<info>"
+#define RPL_ADMINEMAIL(client, info) \
+  client + " : " + info
 // Sent as a reply to an ADMIN command, <info> MUST contain the email address to contact the administrator(s) of the server. The text used in the last param of this message varies wildly.
 
 // RPL_TRYAGAIN (263)
@@ -759,25 +763,24 @@
 //         ERR_INVALIDMODEPARAM(696) "<client> <target chan/user> <mode char> <parameter> :<description>" Indicates that there was a problem with a mode parameter.Replaces various implementation
 //         - specific mode - specific numerics.
 
-//                           RPL_HELPSTART(704) "<client> <subject> :<first line of help section>" Indicates the start of a reply to a HELP command.The text used in the last parameter of this message may vary,
-//     and SHOULD be displayed as - is by IRC clients to their users;
-//     possibly emphasized as the title of the help section.
+// RPL_HELPSTART (704) 
+#define RPL_HELPSTART(client, subject, text) \
+	client + " " + subject + " : " + text
+// Indicates the start of a reply to a HELP command. The text used in the last parameter of this message may vary, and SHOULD be displayed as-is by IRC clients to their users; possibly emphasized as the title of the help section.
+// The <subject> MUST be the one requested by the client, but may be casefolded; unless it would be an invalid parameter, in which case it MUST be *.
 
-//     The<subject> MUST be the one requested by the client,
-//     but may be casefolded;
-//     unless it would be an invalid parameter, in which case it MUST be *.
+// RPL_HELPTXT(705)
+#define RPL_HELPTXT(client, subject, text) \
+	client + " " + subject + " : " + text 
+// Returns a line of HELP text to the client. Lines MAY be wrapped to a certain line length by the server. Note that the final line MUST be a RPL_ENDOFHELP (706) numeric.
+// The <subject> MUST be the one requested by the client, but may be casefolded; unless it would be an invalid parameter, in which case it MUST be *.
 
-//                                              RPL_HELPTXT(705) "<client> <subject> :<line of help text>" Returns a line of HELP text to the client.Lines MAY be wrapped to a certain line length by the server.Note that the final line MUST be a RPL_ENDOFHELP(706) numeric.
+// RPL_ENDOFHELP (706) 
+#define RPL_ENDOFHELP(client, subject, text) \
+	client + " " + subject + " : " + text 
+// Returns the final HELP line to the client.
+// The <subject> MUST be the one requested by the client, but may be casefolded; unless it would be an invalid parameter, in which case it MUST be *.
 
-//                                              The<subject> MUST be the one requested by the client,
-//     but may be casefolded;
-//     unless it would be an invalid parameter, in which case it MUST be *.
-
-//                                              RPL_ENDOFHELP(706) "<client> <subject> :<last line of help text>" Returns the final HELP line to the client.
-
-//                                              The<subject> MUST be the one requested by the client,
-//     but may be casefolded;
-//     unless it would be an invalid parameter, in which case it MUST be *.
 
 //                                              ERR_NOPRIVS(723) "<client> <priv> :Insufficient oper privileges." Sent by a server to alert an IRC
 //                                              operator that they they do not have the specific

@@ -24,6 +24,7 @@ public:
 // ERR_ERRONEUSNICKNAME (432)
 // ERR_NICKNAMEINUSE (433)
 // ERR_NICKCOLLISION (436)
+//.nickname [ [ "!" user ] "@" host ] 성공시 밑에 예시
 // Response: :test!~myname@freenode-tki.fvn.6ohrpn.IP NICK :test2
 
 };
