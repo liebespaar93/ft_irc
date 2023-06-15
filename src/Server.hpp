@@ -38,6 +38,8 @@ public:
 	~Server();
 
 	void ft_server_on();
+	
+	std::string ft_get_password(){ return this->_password; };
 
 	void ft_server_input();/////////
 };

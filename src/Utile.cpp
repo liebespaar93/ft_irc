@@ -16,3 +16,11 @@ std::vector<std::string> split(const std::string &str, const std::string &delimi
 	}
 	return tokens;
 }
+
+bool checkAlpha(const std::string &str)
+{
+    for(int i = 0; i < str.size(); i++)
+        if(!std::isalpha(str[i]) || !std::isspace(str[i]))
+            return true;
+    return false;
+}

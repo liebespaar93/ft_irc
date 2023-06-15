@@ -33,7 +33,7 @@ public:
 			password = split(msg[2], ",");
 		
 		int i = 0;
-		while (i < channel.size());
+		while (i < channel.size())
 		{
 			if (password.size() > i)
 				code = this->_server->ft_join_channel(this->_user, channel.at(i), password.at(i));

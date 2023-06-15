@@ -4,6 +4,7 @@
 #include <map>
 
 #include "User.hpp"
+class User;
 
 class Channel
 {

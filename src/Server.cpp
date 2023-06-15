@@ -11,6 +11,7 @@ Server::Server(std::string port, std::string password)
 	: UserControl(), _password(password), _on(1)
 {
 	this->_server = new Socket("0.0.0.0", port.c_str());
+	this->ft_set_cmd_map();
 	Logger("Server Craete").ft_create();
 }
 
@@ -45,7 +46,7 @@ void Server::ft_connect_socket(Socket *accept_socket)
 	this->_socket.push(accept_socket);
 	User *new_user = new User(accept_socket->ft_get_socket_fd());
 	new_user->ft_set_IP(accept_socket->ft_get_socket_IP());
-	if (this->ft_append_user(new_user));
+	this->ft_append_user(new_user);
 }
 
 
@@ -61,14 +62,16 @@ void Server::ft_server_check_socket_fd()
 	while (socket_size--)
 	{
 		socket_front = this->_socket.front();
-		this->_socket.pop();
 		revents = socket_front->ft_poll();
 		if (revents & POLLERR) 
 			Logger("POLLERR").ft_error();
 		else if ((revents & POLLRDNORM))
 			this->ft_pollin(socket_front);
 		else
+		{
+			this->_socket.pop();
 			this->_socket.push(socket_front);
+		}
 	}
 }
 
@@ -87,22 +90,19 @@ void Server::ft_pollin(Socket *socket_front)
 		throw Error("recv() failed");
 	if (len == 0)
 	{
+		this->_socket.pop();
 		Logger("connect close").ft_socket_close(fd);
 		delete socket_front;
 		return;
 	}
 	buf[len] = '\0';
-	if (len > 0 && buf[len - 1] == '\n')
-		buf[--len] = '\0';
-
-	if (len == 1 && buf[0] == '\n')
+	std::vector<std::__1::string> gnl = split(buf, "\r\n");
+	for (int i = 0; i < gnl.size(); i++)
 	{
-		delete socket_front;
-		return;
+		this->ft_parse(gnl[i], fd);
+		Logger("gnl[i]").ft_recv_msg(fd);
 	}
-	std::cout << buf << std::endl;
-	this->ft_parse((std::string)buf, fd);
-	this->_socket.push(socket_front);
+	gnl.clear();
 }
 
 void Server::ft_set_cmd_map()
@@ -110,9 +110,9 @@ void Server::ft_set_cmd_map()
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("JOIN" , new Join()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("CAP" , new Cap()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("AUTHENTICATE" , new Authenticate()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("PASS" , new Pass()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("NICK" , new Nick()));
-	// //this->_cmd_map.insert(std::pair<std::string, Cmd *>("USER" , new User()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PASS" , new Pass()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("NICK" , new Nick()));
+	//this->_cmd_map.insert(std::pair<std::string, Cmd *>("USER" , new User()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("PING" , new Ping()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("PONG" , new Pong()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("OPER" , new Oper()));
@@ -153,6 +153,7 @@ void Server::ft_parse(std::string buf, int fd)
 		Cmd* cmd = this->_cmd_map.at(msg.at(0));
 		cmd->ft_set_server(this);
 		cmd->ft_set_user(this->ft_get_user(fd));
+		cmd->ft_set_server_name("ft_irc");
 		cmd->ft_recv(msg);
 	}
 	

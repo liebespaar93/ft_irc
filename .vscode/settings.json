@@ -68,6 +68,7 @@
 		"concepts": "cpp",
 		"algorithm": "cpp",
 		"iterator": "cpp",
-		"memory_resource": "cpp"
+		"memory_resource": "cpp",
+		"functional": "cpp"
 	}
 }

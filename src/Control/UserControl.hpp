@@ -16,6 +16,7 @@ private:
 	std::map<const int, User *> *_fd_map;
 	std::map<const std::string, int> *_name_map;
     std::map<std::string, Channel *> *_invite_map;
+    std::map<std::string, int> *_nick_map;
 
 public:
 	UserControl();
@@ -26,10 +27,13 @@ public:
 	
 	int	ft_append_user(User *user);
 
-	User	*ft_get_user(const int &fd);
-	User	*ft_get_user(const std::string &user_name);
+	User	*ft_get_user(const int fd);
+	User	*ft_get_user(const std::string user_name);
+	User	*ft_get_nick(const std::string nick_name);
 	UserControl	&ft_get_user_control_class() { return (*this); }
 
+	int	ft_append_nick_name(const std::string nick_name, User *user);
+	int	ft_delete_nick_name(const std::string nick_name);
 
 	void ft_invite_channel(std::string user_name, Channel *user_channel);
 

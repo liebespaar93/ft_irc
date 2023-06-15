@@ -7,5 +7,6 @@
 
 
 std::vector<std::string> split(const std::string &str, const std::string &delimiters);
+bool checkAlpha(const std::string &str);
 
 #endif
