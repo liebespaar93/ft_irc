@@ -17,3 +17,7 @@ public:
 };
 
 #endif
+
+
+// Request: QUIT Leaving...
+// Response: ERROR :Closing link: (~login@175.223.44.157) [Quit: Leaving...]

@@ -35,38 +35,50 @@ public:
 		int i = 0;
 		while (i < channel.size())
 		{
+			if (channel[i].at(0) == '#')
+				channel[i] = channel[i].substr(1, channel[i].size());
 			if (password.size() > i)
 				code = this->_server->ft_join_channel(this->_user, channel.at(i), password.at(i));
 			else
 				code = this->_server->ft_join_channel(this->_user, channel.at(i));
 			if (code == 471)
 			{
-				this->_send_msg = ERR_CHANNELISFULL(this->_client, this->_channel);
+				this->ft_set_client("471");
+				this->_send_msg = ERR_CHANNELISFULL(this->_client, channel.at(i));
 				this->ft_send();
 			}
 			else if (code == 475)
 			{
-				this->_send_msg = ERR_BADCHANNELKEY(this->_client, this->_channel);
+				this->ft_set_client("475");
+				this->_send_msg = ERR_BADCHANNELKEY(this->_client, channel.at(i));
 				this->ft_send();
 			}
 			else if (code == 0 )
 			{
-				this->_send_msg = this->_client + " " + this->_cmd + " :" + this->_channel;
+				this->_send_msg = this->_client + " " + this->_cmd + " :" + channel.at(i);
 				this->ft_send();
-				this->_send_msg = RPL_NAMREPLY(this->_client, this->_symbol, this->_channel, this->_prefix, this->_user->ft_get_nick_name());
+				this->ft_set_client("353");
+				this->_send_msg = RPL_NAMREPLY(this->_client, this->_symbol, channel.at(i), this->_prefix, this->_user->ft_get_nick_name());
 				this->ft_send();
+				this->ft_set_client("366");
 				this->_send_msg = RPL_ENDOFNAMES(this->_client, this->_channel);
 				this->ft_send();
 			}
+			i++;
 		}
 		
 	}
 };
 // Request: JOIN #channel_name
 // Response: :nick_name!~myname@freenode-pig.su5.hqs74b.IP JOIN :#channel_name
+// Response: :ft_irc 353               nick =    :[]nick{ []nick
 // Response: :*.freenode.net 353 nick_name = #channel_name :@nick_name
 // Response: :*.freenode.net 366 nick_name #ar :End of /NAMES list.
 // Request: MODE #channel_name +sn
 // Response: :nick_name!~myname@freenode-pig.su5.hqs74b.IP MODE #channel_name :+s
 
+
+// 암호 있는방
+// Request: JOIN #testroom
+// Response: :*.freenode.net 475 testnick2 #testroom :Cannot join channel (incorrect channel key)
 #endif

@@ -19,7 +19,7 @@ public:
 	{
 		if (!this->_user->ft_get_pass())
 			return;
-		if (msg.size() == 1)
+		if (msg.size() != 2)
 		{
 			this->ft_set_client("431");
 			this->_send_msg = ERR_NONICKNAMEGIVEN(this->_client);
@@ -42,12 +42,10 @@ public:
 		}
 		if (!this->_user->ft_get_user_name().size())
 		{
-			this->_send_msg = ":" + this->_server_name + " NOTICE Could not resolve your hostname: Domain not found; using your IP address (" + this->_user->ft_get_IP() + ") instead.";
+			this->_send_msg = ":" + this->_server_name + " NOTICE * :*** Could not resolve your hostname: Domain not found; using your IP address (" + this->_user->ft_get_IP() + ") instead.";
 			this->ft_send();
-			return ;
-
 		}
-
+		this->_user->ft_set_nick_name(msg[1]);
 		this->_send_msg = ":" + this->_user->ft_get_nick_name() + "!~" + this->_user->ft_get_user_name() + "@" +
 						  this->_user->ft_get_IP() + " " + this->_cmd + " " + ":" + msg.at(1);
 		this->ft_send();

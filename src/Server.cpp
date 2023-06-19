@@ -90,6 +90,7 @@ void Server::ft_pollin(Socket *socket_front)
 		throw Error("recv() failed");
 	if (len == 0)
 	{
+		/* \r 테스트 궁금점 */
 		this->_socket.pop();
 		Logger("connect close").ft_socket_close(fd);
 		delete socket_front;
@@ -112,9 +113,9 @@ void Server::ft_set_cmd_map()
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("AUTHENTICATE" , new Authenticate()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PASS" , new Pass()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("NICK" , new Nick()));
-	//this->_cmd_map.insert(std::pair<std::string, Cmd *>("USER" , new User()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("PING" , new Ping()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("PONG" , new Pong()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("USER" , new CmdUser()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PING" , new Ping()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PONG" , new Pong()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("OPER" , new Oper()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("QUIT" , new Quit()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("PART" , new Part()));
@@ -147,16 +148,16 @@ void Server::ft_set_cmd_map()
 void Server::ft_parse(std::string buf, int fd)
 {
 	std::vector<std::string> msg = split(buf, " ");
-	
+
 	if (this->_cmd_map.find(msg.at(0)) != this->_cmd_map.end())
 	{
 		Cmd* cmd = this->_cmd_map.at(msg.at(0));
 		cmd->ft_set_server(this);
 		cmd->ft_set_user(this->ft_get_user(fd));
 		cmd->ft_set_server_name("ft_irc");
+		cmd->ft_set_time();
 		cmd->ft_recv(msg);
 	}
-	
 }
 
 

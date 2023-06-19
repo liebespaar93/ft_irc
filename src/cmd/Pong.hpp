@@ -21,12 +21,13 @@ public:
 	{
 		if (msg.size() == 1)
 		{
+			this->ft_set_client("461");
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
-			this->ft_send();
-			this->_send_msg += ERR_NOORIGIN(this->_client);
 			this->ft_send();
 		}
 	}
 };
 
 #endif
+
+//Response: :*.freenode.net 461 mynick PONG :Not enough parameters.

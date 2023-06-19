@@ -16,8 +16,57 @@ public:
 
 	void ft_recv(std::vector<std::string> msg)
 	{
-		this->_server;
+		std::string user_name = "";
+		std::string real_name = "";
+		if (!this->_user->ft_get_pass())
+		{
+			this->ft_set_client("462");
+			this->_send_msg = ERR_ALREADYREGISTERED(this->_client);
+			this->ft_send();
+			return ;
+		}
+		if (msg.size() > 2)
+			user_name = msg[1];
+		int i = 2;
+		while (i < msg.size())
+		{
+			if (!msg[i++].compare("0"))
+			{
+				if (i < msg.size() && !msg[i++].compare("*"))
+				{
+					while ( i < msg.size())
+					{
+						real_name += msg[i++];
+					}
+					this->_user->ft_set_user_name(user_name);
+					this->_user->ft_set_real_name(real_name);
+					
+					this->ft_set_client("001");
+					this->_send_msg = RPL_WELCOME(this->_client, this->_server_name, this->_user->ft_get_nick_name(), this->_user->ft_get_user_name(), this->_user->ft_get_IP());
+					this->ft_send();
+					this->ft_set_client("002");
+					this->_send_msg = RPL_YOURHOST(this->_client, this->_server_name, "v.1" );
+					this->ft_send();
+					this->ft_set_client("003");
+					this->_send_msg = RPL_CREATED(this->_client, (std::string)(this->_timestr));
+					this->ft_send();
+					return ;
+				}
+			}
+		}
+		this->ft_set_client("461");
+		this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
+		this->ft_send();
+		return ;
 	}
 };
 
 #endif
+// USER guest 0 * :Ronnie Reagan
+// Response: :*.freenode.net 001 mynick :Welcome to the freenode IRC Network mynick!~myname@110.70.51.236
+// Response: :*.freenode.net 002 mynick :Your host is *.freenode.net, running version InspIRCd-3
+// Response: :*.freenode.net 003 mynick :This server was created 23:06:04 Apr 20 2022
+
+
+//Response: :*.freenode.net 004 mynick *.freenode.net InspIRCd-3 BDHILRSTWcdghikorswxz ABCDEFIJKLMNOPQRSTUWXYZbcdefhijklmnoprstuvwz :BEFIJLWXYZbdefhjklovw
+//Response: :*.freenode.net 005 mynick NICKLEN=30 PREFIX=(Yohv)!@%+ REMOVE SAFELIST SECURELIST=60 SILENCE=32 STATUSMSG=!@%+ TOPICLEN=390 UHNAMES USERIP USERLEN=10 USERMODES=,,s,BDHILRSTWcdghikorwxz VBANLIST :are supported by this server

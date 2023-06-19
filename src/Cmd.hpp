@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <ctime>
 
 #include "Message.hpp"
 #include "Server.hpp"
@@ -17,8 +18,10 @@ private:
 	Cmd &operator=(const Cmd &ref) { return *this; };
 
 protected:
-	Server	*_server;
-	User 	*_user;
+	Server *_server;
+	User *_user;
+	time_t _time;
+	char *_timestr;
 
 	std::string _cmd;
 	std::string _client;
@@ -36,14 +39,21 @@ public:
 	Cmd(){};
 	~Cmd(){};
 
-	void ft_set_client(std::string code){this->_client = this->_server_name + " " + code + " " + this->_user->ft_get_nick_name();} ;
-	void ft_set_server(Server *server) {this->_server = server; };
-	void ft_set_server_name(std::string server_name) {this->_server_name = server_name; };
-	void ft_set_user(User *user) {this->_user = user; };
-
-	void ft_send(){ send(this->_user->ft_get_fd(), this->_send_msg.c_str(), this->_send_msg.size(), 0); };
+	void ft_set_client(std::string code) { this->_client = this->_server_name + " " + code + " " + this->_user->ft_get_nick_name(); };
+	void ft_set_server(Server *server) { this->_server = server; };
+	void ft_set_server_name(std::string server_name) { this->_server_name = server_name; };
+	void ft_set_user(User *user) { this->_user = user; };
+	void ft_set_time()
+	{
+		this->_time = time(NULL);
+		this->_timestr = asctime(localtime(&this->_time));
+	};
+	void ft_send()
+	{
+		this->_send_msg += "\r\n";
+		send(this->_user->ft_get_fd(), this->_send_msg.c_str(), this->_send_msg.size(), 0);
+	};
 	virtual void ft_recv(std::vector<std::string> msg) = 0;
-
 };
 
 #endif
