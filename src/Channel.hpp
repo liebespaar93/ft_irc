@@ -12,6 +12,7 @@ class Channel
 private:
 	Channel();
 	Channel(const Channel &ref){};
+	Channel &operator=(const Channel &ref) {return *this;};
 	/* data */
 	std::string _channel_name;
 	std::string _channel_topic;
@@ -29,7 +30,6 @@ private:
 public:
 	Channel(std::string channel_name) : _channel_name(channel_name){};
 	~Channel() { this->_user_list.clear(); };
-	Channel &operator=(const Channel &ref);
 
 	std::string const &ft_get_name() { return this->_channel_name; };
 	std::string const &ft_get_topic() { return this->_channel_topic; }
@@ -56,6 +56,7 @@ public:
 
 	int ft_privilege_user_authorization(User *user);
 	int ft_privilege_user_delete(std::string user_name);
+	std::string ft_privilege_has_user(std::string user_name);
 };
 
 #endif

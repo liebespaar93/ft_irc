@@ -37,7 +37,7 @@ void Server::ft_server_on()
 		if (accept_socket)
 			this->ft_connect_socket(accept_socket);
 		this->ft_server_check_socket_fd();
-		ft_server_input(); /////////////
+		ft_server_input();
 	}
 }
 
@@ -126,16 +126,16 @@ void Server::ft_set_cmd_map()
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("MOTD" , new Motd()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("ADMIN" , new Admin()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("CONNECT" , new Connect()));
-	// // this->_cmd_map.insert(std::pair<std::string, Cmd *>("LUSERS" , new Lusers()));
-	// // this->_cmd_map.insert(std::pair<std::string, Cmd *>("VERSION" , new Version()));
+	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("LUSERS" , new Lusers()));
+	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("VERSION" , new Version()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("TIME" , new Time()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("STATS" , new Stats()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("HELP" , new Help()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("INFO" , new Info()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("MODE" , new Mode()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("NOTICE" , new Notice()));
-	// // this->_cmd_map.insert(std::pair<std::string, Cmd *>("WHO" , new Who()));
-	// // this->_cmd_map.insert(std::pair<std::string, Cmd *>("WHOIS" , new Whois()));
+	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("WHO" , new Who()));
+	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("WHOIS" , new Whois()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("KILL" , new Kill()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("REHASH" , new Rehash()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("RESTART" , new Restart()));

@@ -28,8 +28,8 @@ public:
     std::map<const std::string, Channel *> *ft_get_channel_map() { return this->_channel_map; }
 
 
-	int ft_join_channel(User *user, std::string channel_name);
-	int ft_join_channel(User *user, std::string channel_name, std::string password);
+	int ft_join_channel(User *user, std::string channel_name, std::string &symbol);
+	int ft_join_channel(User *user, std::string channel_name, std::string password, std::string &symbol);
 	int ft_leave_channel(User *user, std::string channel_name);
 	
 

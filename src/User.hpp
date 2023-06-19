@@ -41,6 +41,7 @@ public:
 	const inline size_t ft_get_channel_size() { return this->_channel_list.size(); };
 	bool ft_get_pass() { return this->_pass; }
 	std::string ft_get_IP() { return this->_IP; };
+	std::string ft_get_info() { return ":" + this->_nick_name + "!~" + this->_user_name + "@" + this->_IP; };
 
 	void ft_set_nick_name(std::string nick_name) { this->_nick_name = nick_name; };
 	void ft_set_user_name(std::string user_name) { this->_user_name = user_name; };

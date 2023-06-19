@@ -387,7 +387,7 @@
 
 // 353
 #define RPL_NAMREPLY(client, symbol, channel, prefix, nick) \
-    ":" + client + " " + symbol + " " + channel + " :[" + prefix + "]" + nick + "{ [" + prefix + "]" + nick
+    ":" + client + " " + symbol + " " + channel + " :" + prefix + nick
 //   "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 // Sent as a reply to the NAMES command, this numeric lists the clients that are joined to <channel> and their status in that channel.
 

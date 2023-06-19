@@ -17,6 +17,8 @@ public:
 
 	void ft_recv(std::vector<std::string> msg)
 	{
+		Channel *channel_info;
+		std::map<std::__1::string, User *> channel_user_list;
 		std::vector<std::string> channel;
 		std::vector<std::string> password;
 		int code;
@@ -31,16 +33,13 @@ public:
 			channel = split(msg[1], ",");
 		if (msg.size() > 2)
 			password = split(msg[2], ",");
-		
 		int i = 0;
 		while (i < channel.size())
 		{
-			if (channel[i].at(0) == '#')
-				channel[i] = channel[i].substr(1, channel[i].size());
 			if (password.size() > i)
-				code = this->_server->ft_join_channel(this->_user, channel.at(i), password.at(i));
+				code = this->_server->ft_join_channel(this->_user, channel.at(i), password.at(i), this->_symbol);
 			else
-				code = this->_server->ft_join_channel(this->_user, channel.at(i));
+				code = this->_server->ft_join_channel(this->_user, channel.at(i), this->_symbol);
 			if (code == 471)
 			{
 				this->ft_set_client("471");
@@ -55,14 +54,35 @@ public:
 			}
 			else if (code == 0 )
 			{
-				this->_send_msg = this->_client + " " + this->_cmd + " :" + channel.at(i);
+				channel_info = this->_server->ft_get_channel(channel[i]);
+				channel_user_list = channel_info->ft_get_user_list();
+				this->_prefix = channel_info->ft_privilege_has_user(this->_user->ft_get_nick_name());
+				
+				this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " :" +  channel[i];
 				this->ft_send();
 				this->ft_set_client("353");
-				this->_send_msg = RPL_NAMREPLY(this->_client, this->_symbol, channel.at(i), this->_prefix, this->_user->ft_get_nick_name());
+				this->_prefix = channel_info->ft_privilege_has_user(this->_user->ft_get_nick_name());
+				this->_send_msg = RPL_NAMREPLY(this->_client, this->_symbol, channel.at(i), this->_prefix , this->_user->ft_get_nick_name());
+				for (std::map<std::__1::string, User *>::iterator it = channel_user_list.begin(); it != channel_user_list.end(); it++ )
+				{
+					if (this->_user->ft_get_user_name() != it->first)
+					{
+						this->_prefix = channel_info->ft_privilege_has_user(it->first);
+						this->_send_msg += " " + this->_prefix + this->_server->ft_get_user(it->first)->ft_get_nick_name();
+					}
+				}
 				this->ft_send();
 				this->ft_set_client("366");
 				this->_send_msg = RPL_ENDOFNAMES(this->_client, this->_channel);
 				this->ft_send();
+				for (std::map<std::__1::string, User *>::iterator it = channel_user_list.begin(); it != channel_user_list.end(); it++ )
+				{
+					if (this->_user->ft_get_user_name() != it->first)
+					{
+						this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " :" +  channel[i];
+						this->ft_send(it->second->ft_get_fd());
+					}
+				}
 			}
 			i++;
 		}
@@ -71,7 +91,7 @@ public:
 };
 // Request: JOIN #channel_name
 // Response: :nick_name!~myname@freenode-pig.su5.hqs74b.IP JOIN :#channel_name
-// Response: :ft_irc 353               nick =    :[]nick{ []nick
+// Response: :ft_irc 353 nick = #test :@nick name
 // Response: :*.freenode.net 353 nick_name = #channel_name :@nick_name
 // Response: :*.freenode.net 366 nick_name #ar :End of /NAMES list.
 // Request: MODE #channel_name +sn

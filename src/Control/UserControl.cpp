@@ -40,7 +40,6 @@ UserControl&	UserControl::operator=(const UserControl& ref)
 int	UserControl::ft_append_user(User *user)
 {
 	this->_fd_map->insert( std::pair<const int, User *>(user->ft_get_fd(), user ));
-	// this->_name_map->insert( std::pair<std::string, const int>( user->ft_get_user_name(), user->ft_get_fd() ));
 	return (0);
 }
 
@@ -66,6 +65,23 @@ User	*UserControl::ft_get_nick(const std::string nick_name)
 	return (this->ft_get_user(this->_nick_map->at(nick_name)));
 }
 
+int	UserControl::ft_append_user_name(const std::string user_name, User *user)
+{
+	if (this->_name_map->find(user_name) != this->_name_map->end())
+		return (433); // ERR_NICKNAMEINUSE
+	this->ft_delete_user_name(user->ft_get_user_name());
+	user->ft_set_user_name(user_name);
+	this->_name_map->insert(std::pair<std::string, int>(user_name, user->ft_get_fd()));
+	return (0);
+}
+
+int UserControl::ft_delete_user_name(const std::string user_name)
+{
+	if (this->_name_map->find(user_name) == this->_name_map->end())
+		return (1);
+	this->_name_map->erase(user_name);
+	return (0);
+}
 
 int	UserControl::ft_append_nick_name(const std::string nick_name, User *user)
 {
@@ -73,6 +89,7 @@ int	UserControl::ft_append_nick_name(const std::string nick_name, User *user)
 	if (this->_nick_map->find(nick_name) != this->_nick_map->end())
 		return (433); // ERR_NICKNAMEINUSE
 	this->ft_delete_nick_name(user->ft_get_nick_name());
+	user->ft_set_nick_name(nick_name);
 	this->_nick_map->insert(std::pair<std::string, int>(nick_name, user->ft_get_fd()));
 	return (0);
 }

@@ -38,9 +38,8 @@ public:
 					{
 						real_name += msg[i++];
 					}
-					this->_user->ft_set_user_name(user_name);
+					this->_server->ft_append_user_name(user_name, this->_user);
 					this->_user->ft_set_real_name(real_name);
-					
 					this->ft_set_client("001");
 					this->_send_msg = RPL_WELCOME(this->_client, this->_server_name, this->_user->ft_get_nick_name(), this->_user->ft_get_user_name(), this->_user->ft_get_IP());
 					this->ft_send();

@@ -53,6 +53,11 @@ public:
 		this->_send_msg += "\r\n";
 		send(this->_user->ft_get_fd(), this->_send_msg.c_str(), this->_send_msg.size(), 0);
 	};
+	void ft_send(int fd)
+	{
+		this->_send_msg += "\r\n";
+		send(fd, this->_send_msg.c_str(), this->_send_msg.size(), 0);
+	};
 	virtual void ft_recv(std::vector<std::string> msg) = 0;
 };
 

@@ -28,7 +28,7 @@ ChannelControl&	ChannelControl::operator=(const ChannelControl& ref)
     return (*this);
 }
 
-int ChannelControl::ft_join_channel(User *user, std::string channel_name)
+int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::string &symbol)
 {
 	if (this->_channel_map->find(channel_name) == this->_channel_map->end())
 	{
@@ -36,12 +36,14 @@ int ChannelControl::ft_join_channel(User *user, std::string channel_name)
 		new_channel->ft_channel_join_user(user);
 		new_channel->ft_privilege_user_authorization(user);
 		this->ft_append_channel(new_channel);
+		symbol = "=";
 		return (0);
 	}
+	symbol = "@";
 	return (this->_channel_map->at(channel_name)->ft_channel_join_user(user));
 }
 
-int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::string password)
+int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::string password, std::string &symbol)
 {
 	if (this->_channel_map->find(channel_name) == this->_channel_map->end())
 	{
@@ -49,8 +51,10 @@ int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::s
 		new_channel->ft_channel_join_user(user);
 		new_channel->ft_privilege_user_authorization(user);
 		this->ft_append_channel(new_channel);
+		symbol = "=";
 		return (0);
 	}
+	symbol = "@";
 	return (this->_channel_map->at(channel_name)->ft_channel_join_user(user, password));
 
 }
