@@ -6,3 +6,4 @@
 #include "Pong.hpp"
 #include "Ping.hpp"
 #include "Privmsg.hpp"
+#include "Part.hpp"
