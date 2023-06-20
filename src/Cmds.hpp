@@ -5,3 +5,4 @@
 #include "CmdUser.hpp"
 #include "Pong.hpp"
 #include "Ping.hpp"
+#include "Privmsg.hpp"

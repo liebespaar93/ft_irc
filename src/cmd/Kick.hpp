@@ -19,3 +19,10 @@ public:
 };
 
 #endif
+/*
+Request: KICK #testroom testnick2 :
+all
+Response: :testnick!~testlogin@freenode-8ft.tgg.6ohrpn.IP KICK #testroom testnick2 :
+
+
+*/

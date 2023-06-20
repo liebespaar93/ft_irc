@@ -39,6 +39,7 @@ public:
 	const std::string ft_get_real_name() { return this->_real_name; };
 	const std::map<std::string, Channel *> ft_get_channel_list() { return this->_channel_list; };
 	const inline size_t ft_get_channel_size() { return this->_channel_list.size(); };
+    Channel * ft_get_channel(const std::string &channel_name);
 	bool ft_get_pass() { return this->_pass; }
 	std::string ft_get_IP() { return this->_IP; };
 	std::string ft_get_info() { return ":" + this->_nick_name + "!~" + this->_user_name + "@" + this->_IP; };

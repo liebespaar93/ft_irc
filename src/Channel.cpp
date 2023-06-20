@@ -7,6 +7,7 @@ int	Channel::ft_channel_join_user(User *user)
 	if (this->_limit <= this->_user_list.size())
 		return (471); // ERR_CHANNELISFULL
 	this->_user_list.insert( std::pair<std::string, User *>(user->ft_get_user_name(), user));
+	user->ft_append_channel(this);
 	return (0);
 }
 
@@ -19,6 +20,7 @@ int	Channel::ft_channel_join_user(User *user, std::string password)
 	if (!this->_password.compare(password))
 		return (475); // ERR_BADCHANNELKEY
 	this->_user_list.insert( std::pair<std::string, User *>(user->ft_get_user_name(), user));
+	user->ft_append_channel(this);
 	return (0);
 }
 
@@ -28,6 +30,7 @@ int	Channel::ft_channel_leave_user(User *user)
 	if (this->_user_list.find(user->ft_get_user_name()) == this->_user_list.end())
 		return (442);
 	this->_user_list.erase(user->ft_get_user_name());
+	user->ft_delete_channel(this->_channel_name);
 	return (0);
 }
 
@@ -69,7 +72,7 @@ int	Channel::ft_privilege_user_delete(std::string user_name)
 
 std::string Channel::ft_privilege_has_user(std::string user_name)
 {
-	if (this->_privilege_user_map.find(user_name) == this->_privilege_user_map.end())
+	if (this->_privilege_user_map.find(user_name) != this->_privilege_user_map.end())
 		return ("@");
 	return ("");
 }
