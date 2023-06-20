@@ -35,7 +35,7 @@ public:
 			this->ft_send();
 			return ;
 		}
-		if (password.compare(this->_server->ft_get_password()))
+		if (this->_server->ft_get_password().compare(msg[1]))
 		{
 			this->ft_set_client("464");
 			this->_send_msg = ERR_PASSWDMISMATCH(this->_client);

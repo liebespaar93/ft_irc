@@ -33,15 +33,16 @@ private:
 	/* parse */
 	void ft_parse(std::string buf, int fd);
 	void ft_set_cmd_map();
+
 public:
 	Server(std::string port_str, std::string password_str);
 	~Server();
 
 	void ft_server_on();
-	
-	std::string ft_get_password(){ return this->_password; };
 
-	void ft_server_input();/////////
+	std::string ft_get_password() { return this->_password; };
+
+	void ft_server_input();
 };
 
 #endif

@@ -633,7 +633,7 @@
 
 // 462
 #define ERR_ALREADYREGISTERED(client) \
-    ":" + client + " :You may not reregister"
+    ":" + client + " :You may not register"
 //   "<client> :You may not reregister"
 // Returned when a client tries to change a detail that can only be set during registration (such as resending the PASS or USER after registration). The text used in the last param of this message varies.
 
