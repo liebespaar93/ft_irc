@@ -5,13 +5,13 @@
 /* [WELCOME 001 - 002]*/ // client == ":servername cmd-num username"
 // 001
 #define RPL_WELCOME(client, networkname, nick, user, host) \
-    client + " :Welcome to the " + networkname + " Network,  " + nick + "[!" + user + "@" + host + "]"
+    ":" + client + " :Welcome to the " + networkname + " Network,  " + nick + "[!" + user + "@" + host + "]"
 // 002
-#define RPL_YOURHOST(client, networkname, nick, user, host) \
-    client + " :Your host is " + servername + ", running version  " + version
+#define RPL_YOURHOST(client, networkname, version) \
+    ":" + client + " :Your host is " + networkname + ", running version  " + version
 // 003
 #define RPL_CREATED(client, datetime) \
-    client + " :This server was created " + datetime
+    ":" + client + " :This server was created " + datetime
 
 // RPL_MYINFO (004)
 //   "<client> <servername> <version> <available user modes>
@@ -93,21 +93,25 @@
 // Sent as a reply to the LUSERS command. <c> and <s> are non-negative integers and represent the number of clients and other servers connected to this server, respectively.
 
 // RPL_ADMINME (256)
-//   "<client> [<server>] :Administrative info"
+#define RPL_ADMINME(client, server) \
+  ":" + client + " " + server + " :Administrative info"
 // Sent as a reply to an ADMIN command, this numeric establishes the name of the server whose administrative info is being provided. The text used in the last param of this message may vary.
 
 // <server> is optional and MAY be included in responses, the server can also be gained from the <source> of this message.
 
 // RPL_ADMINLOC1 (257)
-//   "<client> :<info>"
+#define RPL_ADMINLOC1(client, info) \
+  ":" + client + " : " + info
 // Sent as a reply to an ADMIN command, <info> is a string intended to provide information about the location of the server (i.e. city, state and country). The text used in the last param of this message varies wildly.
 
 // RPL_ADMINLOC2 (258)
-//   "<client> :<info>"
+#define RPL_ADMINLOC2(client, info) \
+  ":" + client + " : " + info
 // Sent as a reply to an ADMIN command, <info> is a string intended to provide information about whoever runs the server (i.e. details of the institution hosting it). The text used in the last param of this message varies wildly.
 
 // RPL_ADMINEMAIL (259)
-//   "<client> :<info>"
+#define RPL_ADMINEMAIL(client, info) \
+  ":" + client + " : " + info
 // Sent as a reply to an ADMIN command, <info> MUST contain the email address to contact the administrator(s) of the server. The text used in the last param of this message varies wildly.
 
 // RPL_TRYAGAIN (263)
@@ -128,7 +132,7 @@
 
 // 276
 #define RPL_WHOISCERTFP(client, nick, fingerprint) \
-    client + " " + nick + " :has client certificate fingerprint " + fingerprint
+    ":" + client + " " + nick + " :has client certificate fingerprint " + fingerprint
 // Sent as a reply to the WHOIS command, this numeric shows the SSL/TLS certificate fingerprint used by the client with the nickname <nick>. Clients MUST only be sent this numeric if they are either using the WHOIS command on themselves or they are an operator.
 
 // RPL_NONE(300)
@@ -137,12 +141,12 @@
 
 // 301
 #define RPL_AWAY(client, nick, message) \
-    client + " " + nick + " :" + message
+    ":" + client + " " + nick + " :" + message
 // Indicates that the user with the nickname <nick> is currently away and sends the away message that they set.
 
 // 302
 #define RPL_USERHOST(client, reply) \
-    client + " :[" + reply + "{ " + reply + "}]"
+    ":" + client + " :[" + reply + "{ " + reply + "}]"
 //  "<client> :[<reply>{ <reply>}]"
 // Sent as a reply to the USERHOST command, this numeric lists nicknames and the information associated with them. The last parameter of this numeric (if there are any results) is a list of <reply> values, delimited by a SPACE character (' ', 0x20).
 
@@ -155,19 +159,19 @@
 
 // 305
 #define RPL_UNAWAY(client) \
-    client + " :You are no longer marked as being away"
+    ":" + client + " :You are no longer marked as being away"
 //   "<client> :You are no longer marked as being away"
 // Sent as a reply to the AWAY command, this lets the client know that they are no longer set as being away. The text used in the last param of this message may vary.
 
 // 306
 #define RPL_NOWAWAY(client) \
-    client + " :You have been marked as being away"
+    ":" + client + " :You have been marked as being away"
 //   "<client> :You have been marked as being away"
 // Sent as a reply to the AWAY command, this lets the client know that they are set as being away. The text used in the last param of this message may vary.
 
 // 352
 #define RPL_WHOREPLY(client, channel, username, host, server, nick, flags, hopcount, realname) \
-    client + " " + channel + " " + username + " " + host + " " + server + " " + nick + " " + flags + " : " + hopcount + " " + realname
+    ":" + client + " " + channel + " " + username + " " + host + " " + server + " " + nick + " " + flags + " : " + hopcount + " " + realname
 //   "<client> <channel> <username> <host> <server> <nick> <flags> :<hopcount> <realname>"
 // Sent as a reply to the WHO command, this numeric gives information about the client with the nickname <nick>. Refer to RPL_WHOISUSER (311) for the meaning of the fields <username>, <host> and <realname>. <server> is the name of the server the client is connected to. If the WHO command was given a channel as the <mask> parameter, then the same channel MUST be returned in <channel>. Otherwise <channel> is an arbitrary channel the client is joined to or a literal asterisk character ('*', 0x2A) if no channel is returned. <hopcount> is the number of intermediate servers between the client issuing the WHO command and the client <nick>, it might be unreliable so clients SHOULD ignore it.
 
@@ -180,7 +184,7 @@
 
 // 315
 #define RPL_ENDOFWHO(client, mask) \
-    client + " " + mask + " :End of WHO list"
+    ":" + client + " " + mask + " :End of WHO list"
 
 //   "<client> <mask> :End of WHO list"
 // Sent as a reply to the WHO command, this numeric indicates the end of a WHO response for the mask <mask>.
@@ -191,7 +195,7 @@
 
 // 307
 #define RPL_WHOISREGNICK(client, nick) \
-    client + " " + nick + " :has identified for this nick"
+    ":" + client + " " + nick + " :has identified for this nick"
 //   "<client> <nick> :has identified for this nick"
 // Sent as a reply to the WHOIS command, this numeric indicates that the client with the nickname <nick> was authenticated as the owner of this nick on the network.
 
@@ -199,37 +203,37 @@
 
 // 311
 #define RPL_WHOISUSER(client, nick, username, host, realname) \
-    client + " " + nick + " " + username + " " + host " * :" + realname
+    ":" + client + " " + nick + " " + username + " " + host " * :" + realname
 //   "<client> <nick> <username> <host> * :<realname>"
 // Sent as a reply to the WHOIS command, this numeric shows details about the client with the nickname <nick>. <username> and <realname> represent the names set by the USER command (though <username> may be set by the server in other ways). <host> represents the host used for the client in nickmasks (which may or may not be a real hostname or IP address). <host> CANNOT start with a colon (':', 0x3A) as this would get parsed as a trailing parameter – IPv6 addresses such as "::1" are prefixed with a zero ('0', 0x30) to ensure this. The second-last parameter is a literal asterisk character ('*', 0x2A) and does not mean anything.
 
 // 312
 #define RPL_WHOISSERVER(client, nick, server, server_info) \
-    client + " " + nick + " " + server + " :" + server_info
+    ":" + client + " " + nick + " " + server + " :" + server_info
 //   "<client> <nick> <server> :<server info>"
 // Sent as a reply to the WHOIS (or WHOWAS) command, this numeric shows which server the client with the nickname <nick> is (or was) connected to. <server> is the name of the server (as used in message prefixes). <server info> is a string containing a description of that server.
 
 // 313
 #define RPL_WHOISOPERATOR(client, nick) \
-    client + " " + nick + " : is an IRC operator"
+    ":" + client + " " + nick + " : is an IRC operator"
 //   "<client> <nick> :is an IRC operator"
 // Sent as a reply to the WHOIS command, this numeric indicates that the client with the nickname <nick> is an operator. This command MAY also indicate what type or level of operator the client is by changing the text in the last parameter of this numeric. The text used in the last param of this message varies wildly, and SHOULD be displayed as-is by IRC clients to their users.
 
 // 314
 #define RPL_WHOWASUSER(client, nick, username, host, realname) \
-    client + " " + nick + " " + username + " " + host + "* :" + realname
+    ":" + client + " " + nick + " " + username + " " + host + "* :" + realname
 //   "<client> <nick> <username> <host> * :<realname>"
 // Sent as a reply to the WHOWAS command, this numeric shows details about one of the last clients that used the nickname <nick>. The purpose of each argument is the same as with the RPL_WHOISUSER (311) numeric.
 
 // 317
 #define RPL_WHOISIDLE(client, nick, secs, signon) \
-    client + " " + nick + " " + secs + " " + signon + " :seconds idle, signon time"
+    ":" + client + " " + nick + " " + secs + " " + signon + " :seconds idle, signon time"
 //   "<client> <nick> <secs> <signon> :seconds idle, signon time"
 // Sent as a reply to the WHOIS command, this numeric indicates how long the client with the nickname <nick> has been idle. <secs> is the number of seconds since the client has been active. Servers generally denote specific commands (for instance, perhaps JOIN, PRIVMSG, NOTICE, etc) as updating the ‘idle time’, and calculate this off when the idle time was last updated. <signon> is a unix timestamp representing when the user joined the network. The text used in the last param of this message may vary.
 
 // 318
 #define RPL_ENDOFWHOIS(client, nick) \
-    client + " " + nick + " :End of /WHOIS list"
+    ":" + client + " " + nick + " :End of /WHOIS list"
 //   "<client> <nick> :End of /WHOIS list"
 // Sent as a reply to the WHOIS command, this numeric indicates the end of a WHOIS response for the client with the nickname <nick>.
 
@@ -239,7 +243,7 @@
 
 // 319
 #define RPL_WHOISCHANNELS(client, nick, prefix, channel) \
-    client + " " + nick + " :" + "[" + prefix + "]" + channel + "{ " + "[" + prefix + "]" + channel + "}"
+    ":" + client + " " + nick + " :" + "[" + prefix + "]" + channel + "{ " + "[" + prefix + "]" + channel + "}"
 //   "<client> <nick> :[prefix]<channel>{ [prefix]<channel>}
 // Sent as a reply to the WHOIS command, this numeric lists the channels that the client with the nickname <nick> is joined to and their status in these channels. <prefix> is the highest channel membership prefix that the client has in that channel, if the client has one. <channel> is the name of a channel that the client is joined to. The last parameter of this numeric is a list of [prefix]<channel> pairs, delimited by a SPACE character (' ', 0x20).
 
@@ -249,25 +253,25 @@
 
 // 320
 #define RPL_WHOISSPECIAL(client, nick) \
-    client + " " + nick + " :blah blah blah"
+    ":" + client + " " + nick + " :blah blah blah"
 //   "<client> <nick> :blah blah blah"
 // Sent as a reply to the WHOIS command, this numeric is used for extra human-readable information on the client with nickname <nick>. This should only be used for non-essential information that does not need to be machine-readable or understood by client software.
 
 // 321
 #define RPL_LISTSTART(client) \
-    client + " Channel :Users Name"
+    ":" + client + " Channel :Users Name"
 //   "<client> Channel :Users  Name"
 // Sent as a reply to the LIST command, this numeric marks the start of a channel list. As noted in the command description, this numeric MAY be skipped by the server so clients MUST NOT depend on receiving it.
 
 // 322
 #define RPL_LIST(client, channel, client_count, topic) \
-    client + " " + channel + " " + client_count + " " + topic
+    ":" + client + " " + channel + " " + client_count + " " + topic
 //   "<client> <channel> <client count> :<topic>"
 // Sent as a reply to the LIST command, this numeric sends information about a channel to the client. <channel> is the name of the channel. <client count> is an integer indicating how many clients are joined to that channel. <topic> is the channel’s topic (as set by the TOPIC command).
 
 // 323
 #define RPL_LISTEND(client) \
-    client + " :End of /LIST"
+    ":" + client + " :End of /LIST"
 //   "<client> :End of /LIST"
 // Sent as a reply to the LIST command, this numeric indicates the end of a LIST response.
 
@@ -281,7 +285,7 @@
 
 // 330
 #define RPL_WHOISACCOUNT(client, nick, account) \
-    client + " " + nick + " " + account + " :is logged in as"
+    ":" + client + " " + nick + " " + account + " :is logged in as"
 //   "<client> <nick> <account> :is logged in as"
 // Sent as a reply to the WHOIS command, this numeric indicates that the client with the nickname <nick> was authenticated as the owner of <account>.
 
@@ -289,25 +293,25 @@
 
 // 331
 #define RPL_NOTOPIC(client, channel) \
-    client + " " + channel + " :No topic is set"
+    ":" + client + " " + channel + " :No topic is set"
 //   "<client> <channel> :No topic is set"
 // Sent to a client when joining a channel to inform them that the channel with the name <channel> does not have any topic set.
 
 // 332
 #define RPL_TOPIC(client, channel, topic) \
-    client + " " + channel + " :" + topic
+    ":" + client + " " + channel + " :" + topic
 //   "<client> <channel> :<topic>"
 // Sent to a client when joining the <channel> to inform them of the current topic of the channel.
 
 // 333
 #define RPL_TOPICWHOTIME(client, channel, nick, setat) \
-    client + " " + channel + " " + nick + " " + setat
+    ":" + client + " " + channel + " " + nick + " " + setat
 //   "<client> <channel> <nick> <setat>"
 // Sent to a client to let them know who set the topic (<nick>) and when they set it (<setat> is a unix timestamp). Sent after RPL_TOPIC (332).
 
 // 336
 #define RPL_INVITELIST(client, channel) \
-    client + " " + channel
+    ":" + client + " " + channel
 //   "<client> <channel>"
 // Sent to a client as a reply to the INVITE command when used with no parameter, to indicate a channel the client was invited to.
 
@@ -317,7 +321,7 @@
 
 // 337
 #define RPL_ENDOFINVITELIST(client) \
-    client + " :End of /INVITE list"
+    ":" + client + " :End of /INVITE list"
 //   "<client> :End of /INVITE list"
 // Sent as a reply to the INVITE command when used with no parameter, this numeric indicates the end of invitations a client received.
 
@@ -339,13 +343,13 @@
 
 // 341
 #define RPL_INVITING(client, nick, channel) \
-    client + " " + nick + " " + channel
+    ":" + client + " " + nick + " " + channel
 //   "<client> <nick> <channel>"
 // Sent as a reply to the INVITE command to indicate that the attempt was successful and the client with the nickname <nick> has been invited to <channel>.
 
 // 346
 #define RPL_INVEXLIST(client, channel, mask) \
-    client + " " + channel + " " + mask
+    ":" + client + " " + channel + " " + mask
 //   "<client> <channel> <mask>"
 // Sent as a reply to the MODE command, when clients are viewing the current entries on a channel’s invite-exception list. <mask> is the given mask on the invite-exception list.
 
@@ -355,7 +359,7 @@
 
 // 347
 #define RPL_ENDOFINVEXLIST(client, channel) \
-    client + " " + channel + " :End of Channel Invite Exception List"
+    ":" + client + " " + channel + " :End of Channel Invite Exception List"
 //   "<client> <channel> :End of Channel Invite Exception List"
 // Sent as a reply to the MODE command, this numeric indicates the end of a channel’s invite-exception list.
 
@@ -365,25 +369,25 @@
 
 // 348
 #define RPL_EXCEPTLIST(client, channel, mask) \
-    client + " " + channel + " " + mask
+    ":" + client + " " + channel + " " + mask
 //   "<client> <channel> <mask>"
 // Sent as a reply to the MODE command, when clients are viewing the current entries on a channel’s exception list. <mask> is the given mask on the exception list.
 
 // 349
 #define RPL_ENDOFEXCEPTLIST(client, channel) \
-    client + " " + channel + " :End of channel exception list"
+    ":" + client + " " + channel + " :End of channel exception list"
 //   "<client> <channel> :End of channel exception list"
 // Sent as a reply to the MODE command, this numeric indicates the end of a channel’s exception list.
 
 // 351
 #define RPL_VERSION(client, version, server, comments) \
-    client + " " + version + " " + server + " :" + comments
+    ":" + client + " " + version + " " + server + " :" + comments
 //   "<client> <version> <server> :<comments>"
 // Sent as a reply to the VERSION command, this numeric indicates information about the desired server. <version> is the name and version of the software being used (including any revision information). <server> is the name of the server. <comments> may contain any further comments or details about the specific version of the server.
 
 // 353
 #define RPL_NAMREPLY(client, symbol, channel, prefix, nick) \
-    client + " " + symbol + " " + channel + " :[" + prefix + "]" + nick + "{ [" + prefix + "]" + nick
+    ":" + client + " " + symbol + " " + channel + " :" + prefix + nick
 //   "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 // Sent as a reply to the NAMES command, this numeric lists the clients that are joined to <channel> and their status in that channel.
 
@@ -396,7 +400,7 @@
 
 // 366
 #define RPL_ENDOFNAMES(client, channel) \
-    client + " " + channel + " :End of /NAMES list"
+    ":" + client + " " + channel + " :End of /NAMES list"
 //   "<client> <channel> :End of /NAMES list"
 // Sent as a reply to the NAMES command, this numeric specifies the end of a list of channel member names.
 
@@ -418,25 +422,25 @@
 
 // 368
 #define RPL_ENDOFBANLIST(client, channel) \
-    client + " " + channel + " :End of channel ban list."
+    ":" + client + " " + channel + " :End of channel ban list."
 //   "<client> <channel> :End of channel ban list"
 // Sent as a reply to the MODE command, this numeric indicates the end of a channel’s ban list.
 
 // 369
 #define RPL_ENDOFWHOWAS(client, nick) \
-    client + " " + nick + " :End of WHOWAS"
+    ":" + client + " " + nick + " :End of WHOWAS"
 //   "<client> <nick> :End of WHOWAS"
 // Sent as a reply to the WHOWAS command, this numeric indicates the end of a WHOWAS reponse for the nickname <nick>. This numeric is sent after all other WHOWAS response numerics have been sent to the client.
 
 // 371
 #define RPL_INFO(client, string) \
-    client + " :" + string
+    ":" + client + " :" + string
 //   "<client> :<string>"
 // Sent as a reply to the INFO command, this numeric returns human-readable information describing the server: e.g. its version, list of authors and contributors, and any other miscellaneous information which may be considered to be relevant.
 
 // 374
 #define RPL_ENDOFINFO(client) \
-    client + " :End of INFO list"
+    ":" + client + " :End of INFO list"
 //   "<client> :End of INFO list"
 // Indicates the end of an INFO response.
 
@@ -454,7 +458,7 @@
 
 // 378
 #define RPL_WHOISHOST(client, nick) \
-    client + " " + nick + " :is connecting from #@localhost 127.0.0.1"
+    ":" + client + " " + nick + " :is connecting from #@localhost 127.0.0.1"
 //   "<client> <nick> :is connecting from *@localhost 127.0.0.1"
 // Sent as a reply to the WHOIS command, this numeric shows details about where the client with nickname <nick> is connecting from.
 
@@ -462,13 +466,13 @@
 
 // 379
 #define RPL_WHOISMODES(client, nick) \
-    client + " " + nick + " :is using modes +aliosw"
+    ":" + client + " " + nick + " :is using modes +aliosw"
 //   "<client> <nick> :is using modes +ailosw"
 // Sent as a reply to the WHOIS command, this numeric shows the client what user modes the target users has.
 
 // 381
 #define RPL_YOUREOPER(client) \
-    client + " :You are now an IRC operator"
+    ":" + client + " :You are now an IRC operator"
 //   "<client> :You are now an IRC operator"
 // Sent to a client which has just successfully issued an OPER command and gained operator status. The text used in the last param of this message varies wildly.
 
@@ -487,7 +491,7 @@
 
 // 400
 #define ERR_UNKNOWNERROR(client, command, subcommand, info) \
-    client + " " + command + "{" + subcommand + "} :" + info // doublc check
+    ":" + client + " " + command + "{" + subcommand + "} :" + info // doublc check
 //   "<client> <command>{ <subcommand>} :<info>"
 // Indicates that the given command/subcommand could not be processed. <subcommand> may repeat for more specific subcommands.
 
@@ -501,25 +505,25 @@
 
 // 401
 #define ERR_NOSUCHNICK(client, nickname) \
-    client + " " + nickname + " :No such nick/channel"
+    ":" + client + " " + nickname + " :No such nick/channel"
 //   "<client> <nickname> :No such nick/channel"
 // Indicates that no client can be found for the supplied nickname. The text used in the last param of this message may vary.
 
 // 402
 #define ERR_NOSUCHSERVER(client, server_name) \
-    client + " " + server_name + " :No such server"
+    ":" + client + " " + server_name + " :No such server"
 //   "<client> <server name> :No such server"
 // Indicates that the given server name does not exist. The text used in the last param of this message may vary.
 
 // 403
 #define ERR_NOSUCHCHANNEL(client, channel) \
-    client + " " + channel
+    ":" + client + " " + channel
 //   "<client> <channel> :No such channel"
 // Indicates that no channel can be found for the supplied channel name. The text used in the last param of this message may vary.
 
 // 404
 #define ERR_CANNOTSENDTOCHAN(client, channel) \
-    client + " " + channel + " :Cannot send to channel"
+    ":" + client + " " + channel + " :Cannot send to channel"
 //   "<client> <channel> :Cannot send to channel"
 // Indicates that the PRIVMSG / NOTICE could not be delivered to <channel>. The text used in the last param of this message may vary.
 
@@ -527,151 +531,151 @@
 
 // 405
 #define ERR_TOOMANYCHANNELS(client, channel) \
-    client + " " + channel + " :You have joined too many channels"
+    ":" + client + " " + channel + " :You have joined too many channels"
 //   "<client> <channel> :You have joined too many channels"
 // Indicates that the JOIN command failed because the client has joined their maximum number of channels. The text used in the last param of this message may vary.
 
 // 406
 #define ERR_WASNOSUCHNICK(client) \
-    client + " :There was no such nickname"
+    ":" + client + " :There was no such nickname"
 //   "<client> :There was no such nickname"
 // Returned as a reply to WHOWAS to indicate there is no history information for that nickname.
 
 // 409
 #define ERR_NOORIGIN(client) \
-    client + " :No origin specified"
+    ":" + client + " :No origin specified"
 //   "<client> :No origin specified"
 // Indicates a PING or PONG message missing the originator parameter which is required by old IRC servers. Nowadays, this may be used by some servers when the PING <token> is empty.
 
 // 411
 #define ERR_NORECIPIENT(client) \
-    client + " :No recipient given (" + command ")"
+    ":" + client + " :No recipient given (" + command ")"
 //   "<client> :No recipient given (<command>)"
 // Returned by the PRIVMSG command to indicate the message wasn’t delivered because there was no recipient given.
 
 // 412
 #define ERR_NOTEXTTOSEND(client) \
-    client + " :No text to send"
+    ":" + client + " :No text to send"
 //   "<client> :No text to send"
 // Returned by the PRIVMSG command to indicate the message wasn’t delivered because there was no text to send.
 
 // 417
 #define ERR_INPUTTOOLONG(client) \
-    client + " :Input line was too long"
+    ":" + client + " :Input line was too long"
 //   "<client> :Input line was too long"
 // Indicates a given line does not follow the specified size limits (512 bytes for the main section, 4094 or 8191 bytes for the tag section).
 
 // 421
 #define ERR_UNKNOWNCOMMAND(client, command) \
-    client + " " + command + " :Unknown command"
+    ":" + client + " " + command + " :Unknown command"
 //   "<client> <command> :Unknown command"
 // Sent to a registered client to indicate that the command they sent isn’t known by the server. The text used in the last param of this message may vary.
 
 // 422
 #define ERR_NOMOTD(client) \
-    client + " :MOTD File is missing"
+    ":" + client + " :MOTD File is missing"
 //   "<client> :MOTD File is missing"
 // Indicates that the Message of the Day file does not exist or could not be found. The text used in the last param of this message may vary.
 
 // 431
 #define ERR_NONICKNAMEGIVEN(client) \
-    client + " :No nickname given"
+    ":" + client + " :No nickname given"
 //   "<client> :No nickname given"
 // Returned when a nickname parameter is expected for a command but isn’t given.
 
 // 432
 #define ERR_ERRONEUSNICKNAME(client, nick) \
-    client + " " + nick + " :Errorneus nickname"
+    ":" + client + " " + nick + " :Errorneus nickname"
 //   "<client> <nick> :Erroneus nickname"
 // Returned when a NICK command cannot be successfully completed as the desired nickname contains characters that are disallowed by the server. See the NICK command for more information on characters which are allowed in various IRC servers. The text used in the last param of this message may vary.
 
 // 433
 #define ERR_NICKNAMEINUSE(client, nick) \
-    client + " " + nick + " :Nickname is already in use"
+    ":" + client + " " + nick + " :Nickname is already in use"
 //   "<client> <nick> :Nickname is already in use"
 // Returned when a NICK command cannot be successfully completed as the desired nickname is already in use on the network. The text used in the last param of this message may vary.
 
 // 436
 #define ERR_NICKCOLLISION(client, nick, user, host) \
-    client + " " + nick + " :Nickname collision KILL from " + user + "@" + host
+    ":" + client + " " + nick + " :Nickname collision KILL from " + user + "@" + host
 //   "<client> <nick> :Nickname collision KILL from <user>@<host>"
 // Returned by a server to a client when it detects a nickname collision (registered of a NICK that already exists by another server). The text used in the last param of this message may vary.
 
 // 441
 #define ERR_USERNOTINCHANNEL(client, nick, channel) \
-    client + " " + nick + " " + channel + " :They aren't on that channel"
+    ":" + client + " " + nick + " " + channel + " :They aren't on that channel"
 //   "<client> <nick> <channel> :They aren't on that channel"
 // Returned when a client tries to perform a channel+nick affecting command, when the nick isn’t joined to the channel (for example, MODE #channel +o nick).
 
 // 442
 #define ERR_NOTONCHANNEL(client, channel) \
-    client + " " + channel + " :You're not on that channel"
+    ":" + client + " " + channel + " :You're not on that channel"
 //   "<client> <channel> :You're not on that channel"
 // Returned when a client tries to perform a channel-affecting command on a channel which the client isn’t a part of.
 
 // 443
 #define ERR_USERONCHANNEL(client, nick, channel) \
-    client + " " + nick + " " + channel + " :is already on channel"
+    ":" + client + " " + nick + " " + channel + " :is already on channel"
 //   "<client> <nick> <channel> :is already on channel"
 // Returned when a client tries to invite <nick> to a channel they’re already joined to.
 
 // 451
 #define ERR_NOTREGISTERED(client) \
-    client + " :You have not registered"
+    ":" + client + " :You have not registered"
 //   "<client> :You have not registered"
 // Returned when a client command cannot be parsed as they are not yet registered. Servers offer only a limited subset of commands until clients are properly registered to the server. The text used in the last param of this message may vary.
 
 // 461
 #define ERR_NEEDMOREPARAMS(client, command) \
-    client + " " + command + " :Not enough parameters"
+    ":" + client + " " + command + " :Not enough parameters"
 //   "<client> <command> :Not enough parameters"
 // Returned when a client command cannot be parsed because not enough parameters were supplied. The text used in the last param of this message may vary.
 
 // 462
 #define ERR_ALREADYREGISTERED(client) \
-    client + " :You may not reregister"
+    ":" + client + " :You may not register"
 //   "<client> :You may not reregister"
 // Returned when a client tries to change a detail that can only be set during registration (such as resending the PASS or USER after registration). The text used in the last param of this message varies.
 
 // 464
 #define ERR_PASSWDMISMATCH(client) \
-    client + " :Password incorrect"
+    ":" + client + " :Password incorrect"
 //   "<client> :Password incorrect"
 // Returned to indicate that the connection could not be registered as the password was either incorrect or not supplied. The text used in the last param of this message may vary.
 
 // 465
 #define ERR_YOUREBANNEDCREEP(client) \
-    client + " :You are banned from this server."
+    ":" + client + " :You are banned from this server."
 //   "<client> :You are banned from this server."
 // Returned to indicate that the server has been configured to explicitly deny connections from this client. The text used in the last param of this message varies wildly and typically also contains the reason for the ban and/or ban details, and SHOULD be displayed as-is by IRC clients to their users.
 
 // 471
 #define ERR_CHANNELISFULL(client, channel) \
-    client + " " + channel + " :Cannot join channel (+l)"
+    ":" + client + " " + channel + " :Cannot join channel (+l)"
 //   "<client> <channel> :Cannot join channel (+l)"
 // Returned to indicate that a JOIN command failed because the client limit mode has been set and the maximum number of users are already joined to the channel. The text used in the last param of this message may vary.
 
 // 472
 #define ERR_UNKNOWNMODE(client, modechar) \
-    client + " " + modechar + " :is unknown mode char to me"
+    ":" + client + " " + modechar + " :is unknown mode char to me"
 //   "<client> <modechar> :is unknown mode char to me"
 // Indicates that a mode character used by a client is not recognized by the server. The text used in the last param of this message may vary.
 
 // 473
 #define ERR_INVITEONLYCHAN(client, channel) \
-    client + " " + channel + " :Cannot join channel (+i)"
+    ":" + client + " " + channel + " :Cannot join channel (+i)"
 //   "<client> <channel> :Cannot join channel (+i)"
 // Returned to indicate that a JOIN command failed because the channel is set to [invite-only] mode and the client has not been invited to the channel or had an invite exception set for them. The text used in the last param of this message may vary.
 
 // 474
 #define ERR_BANNEDFROMCHAN(client, channel) \
-    client + " " + channel + " :Cannot join channel (+b)"
+    ":" + client + " " + channel + " :Cannot join channel (+b)"
 //   "<client> <channel> :Cannot join channel (+b)"
 // Returned to indicate that a JOIN command failed because the client has been banned from the channel and has not had a ban exception set for them. The text used in the last param of this message may vary.
 
 // 475
 #define ERR_BADCHANNELKEY(client, channel) \
-    client + " " + channel + " :Cannot join channel (+k)"
+    ":" + client + " " + channel + " :Cannot join channel (+k)"
 //   "<client> <channel> :Cannot join channel (+k)"
 // Returned to indicate that a JOIN command failed because the channel requires a key and the key was either incorrect or not supplied. The text used in the last param of this message may vary.
 
@@ -689,48 +693,48 @@
 
 // 481
 #define ERR_NOPRIVILEGES(client) \
-    client + " :Permission Denied- You're not an IRC operator"
+    ":" + client + " :Permission Denied- You're not an IRC operator"
 //   "<client> :Permission Denied- You're not an IRC operator"
 // Indicates that the command failed because the user is not an IRC operator. The text used in the last param of this message may vary.
 
 // 482
 #define ERR_CHANOPRIVSNEEDED(client, channel) \
-    client + " " + channel + " :You're not channel operator"
+    ":" + client + " " + channel + " :You're not channel operator"
 //   "<client> <channel> :You're not channel operator"
 // Indicates that a command failed because the client does not have the appropriate channel privileges. This numeric can apply for different prefixes such as halfop, operator, etc. The text used in the last param of this message may vary.
 
 // 483
 #define ERR_CANTKILLSERVER(client) \
-    client + " :You cant kill a server!"
+    ":" + client + " :You cant kill a server!"
 //   "<client> :You cant kill a server!"
 // Indicates that a KILL command failed because the user tried to kill a server. The text used in the last param of this message may vary.
 
 // 491
 #define ERR_NOOPERHOST(client) \
-    client + " :No O-lines for your host"
+    ":" + client + " :No O-lines for your host"
 //   "<client> :No O-lines for your host"
 // Indicates that an OPER command failed because the server has not been configured to allow connections from this client’s host to become an operator. The text used in the last param of this message may vary.
 
 // 501
 #define ERR_UMODEUNKNOWNFLAG(client) \
-    client + " :Unknown MODE flag"
+    ":" + client + " :Unknown MODE flag"
 //   "<client> :Unknown MODE flag"
 // Indicates that a MODE command affecting a user contained a MODE letter that was not recognized. The text used in the last param of this message may vary.
 
 // 502
 #define ERR_USERSDONTMATCH(client) \
-    client + " :Cant change mode for other users"
+    ":" + client + " :Cant change mode for other users"
 //   "<client> :Cant change mode for other users"
 // Indicates that a MODE command affecting a user failed because they were trying to set or view modes for other users. The text used in the last param of this message varies, for instance when trying to view modes for another user, a server may send: "Can't view modes for other users".
 
 // 524
 #define ERR_HELPNOTFOUND(client, subject) \
-    client + " " + subject + " :No help available on this topic"
+    ":" + client + " " + subject + " :No help available on this topic"
 // "<client> <subject> :No help available on this topic" Indicates that a HELP command requested help on a subject the server does not know about.
 
 // 525
 #define ERR_INVALIDKEY(client, target_chan) \
-    client + " " + target_chan + " :Key is not well-formed"
+    ":" + client + " " + target_chan + " :Key is not well-formed"
 
 // The<subject>
 //     MUST be the one requested by the client,
@@ -759,25 +763,24 @@
 //         ERR_INVALIDMODEPARAM(696) "<client> <target chan/user> <mode char> <parameter> :<description>" Indicates that there was a problem with a mode parameter.Replaces various implementation
 //         - specific mode - specific numerics.
 
-//                           RPL_HELPSTART(704) "<client> <subject> :<first line of help section>" Indicates the start of a reply to a HELP command.The text used in the last parameter of this message may vary,
-//     and SHOULD be displayed as - is by IRC clients to their users;
-//     possibly emphasized as the title of the help section.
+// RPL_HELPSTART (704) 
+#define RPL_HELPSTART(client, subject, text) \
+	":" + client + " " + subject + " : " + text
+// Indicates the start of a reply to a HELP command. The text used in the last parameter of this message may vary, and SHOULD be displayed as-is by IRC clients to their users; possibly emphasized as the title of the help section.
+// The <subject> MUST be the one requested by the client, but may be casefolded; unless it would be an invalid parameter, in which case it MUST be *.
 
-//     The<subject> MUST be the one requested by the client,
-//     but may be casefolded;
-//     unless it would be an invalid parameter, in which case it MUST be *.
+// RPL_HELPTXT(705)
+#define RPL_HELPTXT(client, subject, text) \
+	":" + client + " " + subject + " : " + text 
+// Returns a line of HELP text to the client. Lines MAY be wrapped to a certain line length by the server. Note that the final line MUST be a RPL_ENDOFHELP (706) numeric.
+// The <subject> MUST be the one requested by the client, but may be casefolded; unless it would be an invalid parameter, in which case it MUST be *.
 
-//                                              RPL_HELPTXT(705) "<client> <subject> :<line of help text>" Returns a line of HELP text to the client.Lines MAY be wrapped to a certain line length by the server.Note that the final line MUST be a RPL_ENDOFHELP(706) numeric.
+// RPL_ENDOFHELP (706) 
+#define RPL_ENDOFHELP(client, subject, text) \
+	":" + client + " " + subject + " : " + text 
+// Returns the final HELP line to the client.
+// The <subject> MUST be the one requested by the client, but may be casefolded; unless it would be an invalid parameter, in which case it MUST be *.
 
-//                                              The<subject> MUST be the one requested by the client,
-//     but may be casefolded;
-//     unless it would be an invalid parameter, in which case it MUST be *.
-
-//                                              RPL_ENDOFHELP(706) "<client> <subject> :<last line of help text>" Returns the final HELP line to the client.
-
-//                                              The<subject> MUST be the one requested by the client,
-//     but may be casefolded;
-//     unless it would be an invalid parameter, in which case it MUST be *.
 
 //                                              ERR_NOPRIVS(723) "<client> <priv> :Insufficient oper privileges." Sent by a server to alert an IRC
 //                                              operator that they they do not have the specific

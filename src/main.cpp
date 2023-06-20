@@ -21,6 +21,6 @@ int main(int argc, char const *argv[])
 		delete server;
 	}
 	catch (const std::exception &e){ std::cerr << e.what() << '\n';}
-	system("leaks server");
+	// system("leaks server");
 	return 0;
 }

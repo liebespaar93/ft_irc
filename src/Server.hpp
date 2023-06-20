@@ -4,16 +4,20 @@
 #include <string>
 #include <sys/socket.h>
 #include <queue>
+#include <map>
 
 #include "Socket.hpp"
 #include "UserControl.hpp"
+#include "ChannelControl.hpp"
+#include "Cmd.hpp"
 
-class Server : public UserControl
+class Server : public UserControl, public ChannelControl
 {
 private:
 	/* data */
 	Socket *_server;
 	std::string _password;
+	std::map<std::string, Cmd *> _cmd_map;
 	int _on;
 
 	std::queue<Socket *> _socket;
@@ -27,7 +31,8 @@ private:
 	void ft_connect_socket(Socket *accept_socket);
 
 	/* parse */
-	void ft_parse(std::string buf);
+	void ft_parse(std::string buf, int fd);
+	void ft_set_cmd_map();
 
 public:
 	Server(std::string port_str, std::string password_str);
@@ -35,7 +40,9 @@ public:
 
 	void ft_server_on();
 
-	void ft_server_input();/////////
+	std::string ft_get_password() { return this->_password; };
+
+	void ft_server_input();
 };
 
 #endif
