@@ -22,3 +22,11 @@ Channel *User::ft_get_channel(const std::string &channel_name)
 		return (NULL);
 	return (this->_channel_list.at(channel_name));
 }
+
+void User::ft_quit()
+{
+	while (this->_channel_list.begin() != this->_channel_list.end())
+	{
+		this->_channel_list.begin()->second->ft_channel_leave_user(this);
+	}
+}

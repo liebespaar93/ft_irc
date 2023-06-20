@@ -65,8 +65,6 @@ int	Channel::ft_privilege_user_delete(std::string user_name)
 	if (this->_privilege_user_map.find(user_name) == this->_privilege_user_map.end())
 		return (1);
 	this->_privilege_user_map.erase(user_name);
-	if (this->_privilege_user_map.size() == 0 && this->_user_list.size() != 0)
-		this->ft_privilege_user_authorization(this->_user_list.at(0));
 	return (0);
 }
 

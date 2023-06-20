@@ -92,6 +92,7 @@ void Server::ft_pollin(Socket *socket_front)
 	{
 		/* \r 테스트 궁금점 */
 		this->_socket.pop();
+		this->ft_delete_user(this->ft_get_user(socket_front->ft_get_socket_fd()));
 		Logger("connect close").ft_socket_close(fd);
 		delete socket_front;
 		return;
@@ -116,11 +117,11 @@ void Server::ft_set_cmd_map()
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PONG" , new Pong()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PRIVMSG" , new Privmsg()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PART" , new Part()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("QUIT" , new Quit()));
 	
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("CAP" , new Cap()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("AUTHENTICATE" , new Authenticate()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("OPER" , new Oper()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("QUIT" , new Quit()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("TOPIC" , new Topic()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("LIST" , new List()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("INVITE" , new Invite()));

@@ -7,3 +7,4 @@
 #include "Ping.hpp"
 #include "Privmsg.hpp"
 #include "Part.hpp"
+#include "Quit.hpp"

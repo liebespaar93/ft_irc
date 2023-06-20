@@ -31,7 +31,9 @@ private:
 
 public:
 	User(int fd) : _fd(fd), _user_name(""), _nick_name(""), _IP(""), _pass(false){};
-	~User(){};
+	~User(){
+		this->ft_quit();
+	};
 
 	const int &ft_get_fd() { return this->_fd; };
 	const std::string ft_get_user_name() { return this->_user_name; };
@@ -49,6 +51,8 @@ public:
 	void ft_set_real_name(std::string real_name) { this->_real_name = real_name; };
 	void ft_set_IP(std::string IP) { this->_IP = IP; };
 	void ft_set_pass() { this->_pass = true; }
+
+	void ft_quit();
 
 	void ft_append_channel(Channel *channel);
 	void ft_delete_channel(std::string channel_name);
