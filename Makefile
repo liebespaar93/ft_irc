@@ -5,7 +5,9 @@ NAME = server
 
 CC = c++
 CFLAGS = 
-IFLAGS = -I ./src  -I ./src/cmd -I ./src/control
+IFLAGS = -I ${ROOTDIR}/src \
+		-I ${ROOTDIR}/src/cmd \
+		-I ${ROOTDIR}/src/control
 DFLAGS = 
 CXXFLAGS = 
 
@@ -13,6 +15,7 @@ CXXFLAGS =
 ROOTDIR = $(abspath $(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))))
 SRC_DIR = $(ROOTDIR)/src
 SRC_CONTROL_DIR = $(ROOTDIR)/src/control
+SRC_CMD_DIR = $(ROOTDIR)/src/cmd
 
 OBJ_DIR = $(ROOTDIR)/obj
 INCLUDE_DIR = $(ROOTDIR)/include
@@ -32,8 +35,15 @@ SRC_CONTROL_FILE =	ChannelControl.cpp \
 
 SRC_CONTROL_C = $(addprefix $(SRC_CONTROL_DIR)/, $(SRC_CONTROL_FILE))
 
+SRC_CMD_FILE = 
+
+
+SRC_CMD_C = $(addprefix $(SRC_CMD_DIR)/, $(SRC_CMD_FILE))
+
+
 OBJS =	$(SRC_C:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)	\
-		$(SRC_CONTROL_C:$(SRC_CONTROL_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+		$(SRC_CONTROL_C:$(SRC_CONTROL_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
+		$(SRC_CMD_C:$(SRC_CMD_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
 
 OBJS_CLEAN = $(OBJS)
 
@@ -61,6 +71,9 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp
 	@$(CC) $(CFLAGS) $(IFLAGS) $(DFLAGS) $(CXXFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o : $(SRC_CONTROL_DIR)/%.cpp
+	@$(CC) $(CFLAGS) $(IFLAGS) $(DFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o : $(SRC_CMD_DIR)/%.cpp
 	@$(CC) $(CFLAGS) $(IFLAGS) $(DFLAGS) $(CXXFLAGS) -c $< -o $@
 
 clean:

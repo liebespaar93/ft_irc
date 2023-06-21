@@ -10,7 +10,6 @@ private:
 	Info(const Info& ref) {};
 	Info&	operator=(const Info& ref) { return *this;};
 
-
 public:
 	Info() { this->_cmd = "INFO"; };
 	~Info() {};

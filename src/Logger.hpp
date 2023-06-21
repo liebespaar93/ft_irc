@@ -33,6 +33,17 @@ public:
 				  << NO_COLOR << std::endl;
 	};
 
+	void ft_channel_create(std::string channel_name)
+	{
+		std::cout << FG_MEMO << "[CREATE] " << FG_LMAGENTA << channel_name << " : " << FG_INFO << _msg
+				  << NO_COLOR << std::endl;
+	};
+
+	void ft_channel_destory(std::string channel_name)
+	{
+		std::cout << FG_MEMO << "[DESTORY] " << FG_LMAGENTA << channel_name << " : "  << FG_INFO << _msg
+				  << NO_COLOR << std::endl;
+	}
 	void ft_socket(int fd)
 	{
 		std::cout << FG_WARNING << "[CREATE] " << FG_LBLUE << "[ " << fd << " ] " << FG_INFO << _msg
@@ -56,6 +67,17 @@ public:
 	void	ft_recv_msg(int fd)
 	{
 		std::cout << FG_GREEN << "[CMD] SEND" << FG_LBLUE << "[ " << fd << " ] " << FG_INFO << _msg
+				  << NO_COLOR << std::endl;
+	}
+
+	void ft_join(std::string channel_name)
+	{
+		std::cout << FG_LCYAN << "[JOIN]" << FG_LBLUE << "[ " << channel_name << " ] " << FG_INFO << _msg
+				  << NO_COLOR << std::endl;
+	}
+	void ft_leave(std::string channel_name)
+	{
+		std::cout << FG_RED << "[LEAVE]" << FG_LBLUE << "[ " << channel_name << " ] " << FG_INFO << _msg
 				  << NO_COLOR << std::endl;
 	}
 };
