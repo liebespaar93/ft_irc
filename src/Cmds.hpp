@@ -1,3 +1,5 @@
+#ifndef CMDS_HPP
+# define CMDS_HPP
 
 #include "Join.hpp"
 #include "Nick.hpp"
@@ -9,3 +11,7 @@
 #include "Part.hpp"
 #include "Quit.hpp"
 #include "Kick.hpp"
+#include "Invite.hpp"
+
+#endif
+

@@ -1,21 +1,21 @@
 #ifndef PONG_HPP
-# define PONG_HPP
+#define PONG_HPP
 
 #include "Cmd.hpp"
 
-class Pong: public Cmd
+class Pong : public Cmd
 {
 private:
-	Pong(const Pong& ref) {};
+	Pong(const Pong &ref){};
 
-	Pong&	operator=(const Pong& ref) {return *this;};
-	
+	Pong &operator=(const Pong &ref) { return *this; };
+
 public:
 	Pong()
 	{
 		this->_cmd = "PONG";
 	};
-	~Pong() {};
+	~Pong(){};
 
 	void ft_recv(std::vector<std::string> msg)
 	{
@@ -25,9 +25,10 @@ public:
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
 			this->ft_send();
 		}
+		send(this->_user->ft_get_fd(), "", 0, 0);
 	}
 };
 
 #endif
 
-//Response: :*.freenode.net 461 mynick PONG :Not enough parameters.
+// Response: :*.freenode.net 461 mynick PONG :Not enough parameters.

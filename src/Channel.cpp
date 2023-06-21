@@ -1,13 +1,16 @@
 #include "Channel.hpp"
+#include "Logger.hpp"
 
 int Channel::ft_channel_join_user(User *user)
 {
 	if (this->_user_list.find(user->ft_get_user_name()) != this->_user_list.end())
 		return (1);
-	if (this->_limit <= this->_user_list.size())
+	if (this->_limit && this->_limit <= this->_user_list.size())
 		return (471); // ERR_CHANNELISFULL
 	this->_user_list.insert(std::pair<std::string, User *>(user->ft_get_user_name(), user));
 	user->ft_append_channel(this);
+	this->ft_invite_delete_user(user);
+	Logger(user->ft_get_nick_name()).ft_join(this->_channel_name);
 	return (0);
 }
 
@@ -15,22 +18,30 @@ int Channel::ft_channel_join_user(User *user, std::string password)
 {
 	if (this->_user_list.find(user->ft_get_user_name()) != this->_user_list.end())
 		return (1);
-	if (this->_limit <= this->_user_list.size())
+	if (this->_limit && this->_limit <= this->_user_list.size())
 		return (471); // ERR_CHANNELISFULL
-	if (!this->_password.compare(password))
+	if (!this->ft_invite_has_user(user) || !this->_password.compare(password))
 		return (475); // ERR_BADCHANNELKEY
 	this->_user_list.insert(std::pair<std::string, User *>(user->ft_get_user_name(), user));
 	user->ft_append_channel(this);
+	this->ft_invite_delete_user(user);
+	Logger(user->ft_get_nick_name()).ft_join(this->_channel_name);
 	return (0);
 }
 
 int Channel::ft_channel_leave_user(User *user)
 {
+	if (!user)
+	{
+		Logger("ft_channel_leave_user :  NULL").ft_error();
+		return (1);
+	}
 	this->ft_privilege_user_delete(user->ft_get_user_name());
 	if (this->_user_list.find(user->ft_get_user_name()) == this->_user_list.end())
 		return (442);
 	this->_user_list.erase(user->ft_get_user_name());
 	user->ft_delete_channel(this->_channel_name);
+	Logger(user->ft_get_nick_name()).ft_leave(this->_channel_name);
 	return (0);
 }
 
@@ -69,6 +80,29 @@ int Channel::ft_privilege_user_delete(std::string user_name)
 bool Channel::ft_privilege_has_user(std::string user_name)
 {
 	if (this->_privilege_user_map.find(user_name) != this->_privilege_user_map.end())
+		return (true);
+	return (false);
+}
+
+int Channel::ft_invite_append_user(User *user)
+{
+	if (this->_invite_map.find(user->ft_get_user_name()) != this->_invite_map.end())
+		return (0);
+	this->_invite_map.insert(std::pair<std::string, User* >(user->ft_get_user_name(), user));
+	return (0);
+}
+
+int Channel::ft_invite_delete_user(User *user)
+{
+	if (this->_invite_map.find(user->ft_get_user_name()) != this->_invite_map.end())
+		return (0);
+	this->_invite_map.erase(user->ft_get_user_name());
+	return (0);
+}
+
+bool Channel::ft_invite_has_user(User *user)
+{
+	if (this->_invite_map.find(user->ft_get_user_name()) != this->_invite_map.end())
 		return (true);
 	return (false);
 }

@@ -119,13 +119,13 @@ void Server::ft_set_cmd_map()
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PART" , new Part()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("QUIT" , new Quit()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("KICK" , new Kick()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("INVITE" , new Invite()));
 	
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("CAP" , new Cap()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("AUTHENTICATE" , new Authenticate()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("OPER" , new Oper()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("TOPIC" , new Topic()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("LIST" , new List()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("INVITE" , new Invite()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("MOTD" , new Motd()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("ADMIN" , new Admin()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("CONNECT" , new Connect()));

@@ -2,8 +2,10 @@
 #define CHANNEL_HPP
 
 #include <map>
+#include <iostream>
 
 #include "User.hpp"
+#include "Logger.hpp"
 class User;
 
 class Channel
@@ -12,7 +14,6 @@ class Channel
 private:
 	Channel();
 	Channel(const Channel &ref){};
-	Channel &operator=(const Channel &ref) {return *this;};
 	/* data */
 	std::string _channel_name;
 	std::string _channel_topic;
@@ -26,10 +27,32 @@ private:
 	int _limit;
 
 	std::map<std::string, User *> _user_list;
+    std::map<std::string, User *> _invite_map;
 
 public:
-	Channel(std::string channel_name) : _channel_name(channel_name){};
-	~Channel() { this->_user_list.clear(); };
+	Channel(std::string channel_name) : _channel_name(channel_name), _limit(0)
+	{
+		Logger("channel_create").ft_channel_create(this->_channel_name);
+	};
+	~Channel()
+	{
+		this->_user_list.clear();
+		Logger("channel_destory ").ft_channel_destory(this->_channel_name);
+	};
+
+	Channel &operator=(const Channel &ref)
+	{
+		this->_channel_name = ref._channel_name;
+		this->_channel_topic = ref._channel_topic;
+		this->_password = ref._password;
+		this->_privilege_user_map = ref._privilege_user_map;
+		this->_has_password = ref._has_password;
+		this->_is_invite_only = ref._is_invite_only;
+		this->_is_restricted = ref._is_restricted;
+		this->_limit = ref._limit;
+		this->_invite_map = ref._invite_map;
+		return *this;
+	};
 
 	std::string const &ft_get_name() { return this->_channel_name; };
 	std::string const &ft_get_topic() { return this->_channel_topic; };
@@ -38,7 +61,7 @@ public:
 	int const &ft_get_limit() { return this->_limit; };
 	bool const &ft_get_has_password() { return this->_has_password; };
 	bool const &ft_get_restrict() { return this->_is_restricted; };
-	bool const &ft_get_invite()  { return this->_is_invite_only; };
+	bool const &ft_get_invite() { return this->_is_invite_only; };
 	std::map<std::string, User *> &ft_get_user_list() { return this->_user_list; };
 
 	void ft_set_limit(int limit) { this->_limit = limit; };
@@ -57,6 +80,10 @@ public:
 	int ft_privilege_user_authorization(User *user);
 	int ft_privilege_user_delete(std::string user_name);
 	bool ft_privilege_has_user(std::string user_name);
+
+	int ft_invite_append_user(User *user);
+	int ft_invite_delete_user(User *user);
+	bool ft_invite_has_user(User *user);
 };
 
 #endif

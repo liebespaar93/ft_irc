@@ -29,6 +29,8 @@ Socket::Socket(const char *IP, const char *port)
 
 Socket::~Socket()
 {
+	send(this->_fd, "", 0, 0);
+	close(this->_fd);
 	Logger("socket close").ft_socket_close(this->_fd);
 }
 
