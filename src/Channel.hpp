@@ -27,10 +27,11 @@ private:
 	int _limit;
 
 	std::map<std::string, User *> _user_list;
-    std::map<std::string, User *> _invite_map;
+	std::map<std::string, User *> _invite_map;
 
 public:
-	Channel(std::string channel_name) : _channel_name(channel_name), _limit(0)
+	Channel(std::string channel_name)
+		: _channel_name(channel_name), _has_password(false), _is_invite_only(false), _is_restricted(false), _limit(0)
 	{
 		Logger("channel_create").ft_channel_create(this->_channel_name);
 	};

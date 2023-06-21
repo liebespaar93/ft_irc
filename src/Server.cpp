@@ -49,8 +49,6 @@ void Server::ft_connect_socket(Socket *accept_socket)
 	this->ft_append_user(new_user);
 }
 
-
-
 void Server::ft_server_check_socket_fd()
 {
 	int revents;
@@ -63,7 +61,7 @@ void Server::ft_server_check_socket_fd()
 	{
 		socket_front = this->_socket.front();
 		revents = socket_front->ft_poll();
-		if (revents & POLLERR) 
+		if (revents & POLLERR)
 			Logger("POLLERR").ft_error();
 		else if ((revents & POLLRDNORM))
 			this->ft_pollin(socket_front);
@@ -74,7 +72,6 @@ void Server::ft_server_check_socket_fd()
 		}
 	}
 }
-
 
 void Server::ft_pollin(Socket *socket_front)
 {
@@ -109,18 +106,19 @@ void Server::ft_pollin(Socket *socket_front)
 
 void Server::ft_set_cmd_map()
 {
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("JOIN" , new Join()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PASS" , new Pass()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("NICK" , new Nick()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("USER" , new CmdUser()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PING" , new Ping()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PONG" , new Pong()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PRIVMSG" , new Privmsg()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PART" , new Part()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("QUIT" , new Quit()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("KICK" , new Kick()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("INVITE" , new Invite()));
-	
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("JOIN", new Join()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PASS", new Pass()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("NICK", new Nick()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("USER", new CmdUser()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PING", new Ping()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PONG", new Pong()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PRIVMSG", new Privmsg()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PART", new Part()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("QUIT", new Quit()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("KICK", new Kick()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("INVITE", new Invite()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("MODE", new Mode()));
+
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("CAP" , new Cap()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("AUTHENTICATE" , new Authenticate()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("OPER" , new Oper()));
@@ -135,7 +133,6 @@ void Server::ft_set_cmd_map()
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("STATS" , new Stats()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("HELP" , new Help()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("INFO" , new Info()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("MODE" , new Mode()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("NOTICE" , new Notice()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("WHO" , new Who()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("WHOIS" , new Whois()));
@@ -154,7 +151,7 @@ void Server::ft_parse(std::string buf, int fd)
 
 	if (this->_cmd_map.find(msg.at(0)) != this->_cmd_map.end())
 	{
-		Cmd* cmd = this->_cmd_map.at(msg.at(0));
+		Cmd *cmd = this->_cmd_map.at(msg.at(0));
 		cmd->ft_set_server(this);
 		cmd->ft_set_user(this->ft_get_user(fd));
 		cmd->ft_set_server_name("ft_irc");
@@ -163,14 +160,13 @@ void Server::ft_parse(std::string buf, int fd)
 	}
 }
 
-
 void Server::ft_server_input()
 {
 	std::string buf;
 	struct pollfd pfd = {.fd = 0, .events = POLLIN};
 	int ret_poll;
 	int size = this->_socket.size();
-	Socket * front = NULL;
+	Socket *front = NULL;
 
 	ret_poll = poll(&pfd, 1, 0);
 	if (ret_poll > 0)
