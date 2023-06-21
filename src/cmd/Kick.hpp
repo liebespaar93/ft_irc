@@ -57,6 +57,7 @@ public:
 		{
 			this->ft_send(it->second->ft_get_fd());
 		}
+		this->_user->ft_get_channel(msg[1])->ft_invite_append_user(this->_server->ft_get_nick(msg[i++]));
 		i = 2;
 		while (i < msg.size())
 			this->_user->ft_get_channel(msg[1])->ft_channel_leave_user(this->_server->ft_get_nick(msg[i++]));

@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/src/**",
                 "${workspaceFolder}/src/control/**",
-                "${workspaceFolder}/src/cmd/**"
+                "${workspaceFolder}/src/cmd/**",
+                "${workspaceFolder}/src"
             ],
             "defines": [],
             "macFrameworkPath": [

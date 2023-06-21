@@ -11,6 +11,7 @@
 #include "Part.hpp"
 #include "Quit.hpp"
 #include "Kick.hpp"
+#include "Invite.hpp"
 
 #endif
 

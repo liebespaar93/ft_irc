@@ -15,7 +15,6 @@ private:
 	
 	std::map<const int, User *> *_fd_map;
 	std::map<const std::string, int> *_name_map;
-    // std::map<std::string, Channel *> *_invite_map;
     std::map<std::string, int> *_nick_map;
 
 public:
@@ -36,10 +35,6 @@ public:
 	int	ft_delete_user_name(const std::string user_name);
 	int	ft_append_nick_name(const std::string nick_name, User *user);
 	int	ft_delete_nick_name(const std::string nick_name);
-
-	// void ft_invite_channel(std::string user_name, Channel *user_channel);
-	// void ft_leave_user(User *user);
-
 };
 
 #endif
