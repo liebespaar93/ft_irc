@@ -10,19 +10,19 @@
 Socket::Socket(int fd, sockaddr *socket_info)
 	: _fd(fd)
 {
-	this->_socket_info = *socket_info; 
+	this->_socket_info = *socket_info;
 	this->_pfd.fd = this->_fd;
-	this->_pfd.events = POLLSTANDARD;
+	this->_pfd.events = POLLSTANDARD | POLLNLINK;
 	this->_pfd.revents = 0;
 	Logger("socket create").ft_socket(this->_fd);
 }
 
 Socket::Socket(const char *IP, const char *port)
 {
-	struct addrinfo hints = {.ai_flags = AI_PASSIVE | SO_REUSEADDR, .ai_family = AF_INET, .ai_socktype = SOCK_STREAM, .ai_protocol = IPPROTO_TCP };
+	struct addrinfo hints = {.ai_flags = AI_PASSIVE | SO_REUSEADDR, .ai_family = AF_INET, .ai_socktype = SOCK_STREAM, .ai_protocol = IPPROTO_TCP};
 	if (getaddrinfo(NULL, port, &hints, &this->_info) != 0)
 		throw Error("getaddrinfo() != 0");
-	this->_socket_info = *this->_info->ai_addr; 
+	this->_socket_info = *this->_info->ai_addr;
 	this->ft_create_socket();
 	Logger("socket create").ft_socket(this->_fd);
 }
