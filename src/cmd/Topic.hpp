@@ -39,7 +39,6 @@ public:
 		}
 		if (msg.size() == 2)
 		{
-			// Response: :*.freenode.net 331 gye #test00 :No topic is set.
 			if (this->_user->ft_get_channel(msg[1])->ft_get_topic() == "")
 			{
 				this->ft_set_client("331");
@@ -57,18 +56,14 @@ public:
 			this->ft_send();
 			return;
 		}
-		// mode의 문제인지 topic의 문제인지 체크 mode -t했을때 일반유저도 변경이 가능해야하는데 변경 불가
-		if (!this->_server->ft_get_channel(msg[1])->ft_get_restrict() || !this->_user->ft_get_channel(msg[1])->ft_privilege_has_user(this->_user->ft_get_user_name()))
+		if (this->_server->ft_get_channel(msg[1])->ft_get_restrict() && !this->_user->ft_get_channel(msg[1])->ft_privilege_has_user(this->_user->ft_get_user_name()))
 		{
-			// Response: :*.freenode.net 482 gyeongjukim #test00 :You do not have access to change the topic on this channel
-			// ERR_CHANOPRIVSNEEDED
 			this->ft_set_client("482");
 			this->_send_msg = ERR_CHANOPRIVSNEEDED(this->_client, msg[1]);
 			this->ft_send();
 			return;
 		}
-		// Response: :gyeo!~gg@127.0.0.1  #test00 ::this is a test
-		// Response: :gye!~gyeokim@freenode-n68.49c.2i380a.IP TOPIC #test00 :this is a test
+		msg[2] = msg[2].substr(1);
 		std::string topic_msg = "";
 		for (int i = 2; i < msg.size(); i++)
 			topic_msg += msg[i] + " ";
