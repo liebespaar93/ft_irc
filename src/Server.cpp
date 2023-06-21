@@ -61,8 +61,14 @@ void Server::ft_server_check_socket_fd()
 	{
 		socket_front = this->_socket.front();
 		revents = socket_front->ft_poll();
-		if (revents & POLLERR)
+		if (revents & (POLLERR | POLLHUP |POLLNVAL))
+		{
 			Logger("POLLERR").ft_error();
+			this->ft_user_destory(this->ft_get_user(socket_front->ft_get_socket_fd()));
+			this->_socket.pop();
+			this->_socket.push(socket_front);
+			delete socket_front;
+		}
 		else if ((revents & POLLRDNORM))
 			this->ft_pollin(socket_front);
 		else
@@ -158,6 +164,15 @@ void Server::ft_parse(std::string buf, int fd)
 		cmd->ft_set_time();
 		cmd->ft_recv(msg);
 	}
+}
+
+
+void Server::ft_user_destory(User *user)
+{
+	std::map<std::string, Channel *> channnel_list = user->ft_get_channel_list();
+	for (std::map<std::string, Channel *>::iterator it = channnel_list.begin(); it != channnel_list.end(); it++)
+		this->ft_leave_channel(user, it->first);
+	this->ft_delete_user(user);
 }
 
 void Server::ft_server_input()
