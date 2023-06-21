@@ -17,6 +17,8 @@ private:
 	/* data */
 	std::string _channel_name;
 	std::string _channel_topic;
+	User *_channel_topic_user;
+	std::string _channel_topic_time;
 	std::string _password;
 
 	std::map<std::string, User *> _privilege_user_map;
@@ -64,6 +66,8 @@ public:
 	bool const &ft_get_restrict() { return this->_is_restricted; };
 	bool const &ft_get_invite() { return this->_is_invite_only; };
 	std::map<std::string, User *> &ft_get_user_list() { return this->_user_list; };
+	User *ft_get_topic_user() { return this->_channel_topic_user; };
+	const std::string &ft_get_topic_time() { return this->_channel_topic_time; };
 
 	void ft_set_limit(int limit) { this->_limit = limit; };
 	void ft_set_password(const std::string new_password) { this->_password = new_password; };
@@ -71,6 +75,8 @@ public:
 	void ft_set_has_password(bool on) { this->_has_password = on; };
 	void ft_set_invite(bool on) { this->_is_invite_only = on; };
 	void ft_set_topic(const std::string new_topic) { this->_channel_topic = new_topic; };
+	void ft_set_topic_user(User *user) { this->_channel_topic_user = user; };
+	void ft_set_topic_time(const std::string &time) { this->_channel_topic_time = time; };
 
 	int ft_channel_join_user(User *user);
 	int ft_channel_join_user(User *user, std::string password);

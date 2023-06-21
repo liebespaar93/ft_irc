@@ -103,7 +103,8 @@ public:
 						this->_param++;
 						break;
 					case 'o': // give the privilage of operator
-						ft_give_auto(msg);
+						ft_give_auth(msg);
+						this->_param++;
 						break;
 					case 'l': // limit the number of members in channel
 						ft_set_limit(msg);
@@ -119,8 +120,10 @@ public:
 			}
 		}
 		// Response: :gyeongjukim!~gyeongjuk@freenode-n68.49c.2i380a.IP MODE #test00 :+i
-		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + this->_channel + " :";
-		this->_response_arr[0] = this->_response_arr[0].substr(0, this->_response_arr[0].find_last_not_of("+-"));
+		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + this->_channel + " ";
+		std::cout << "before loop: " << this->_response_arr[0] << std::endl;
+		// this->_response_arr[0] = this->_response_arr[0].substr(0, this->_response_arr[0].find_last_not_of("+-"));
+		// std::cout << "after substr: " << this->_response_arr[0] << std::endl;
 		while (this->_response_arr[0].size())
 		{
 			if (this->_response_arr[0][this->_response_arr[0].size() - 1] == '-' ||
@@ -129,10 +132,15 @@ public:
 			else
 				break;
 		}
+		std::cout << "after loop: " << this->_response_arr[0] << std::endl;
 		if (!this->_response_arr[0].size())
 			return;
 		for (int i = 0; i < this->_response_arr.size(); i++)
+		{
+			if (i + 1 == this->_response_arr.size())
+				this->_send_msg += ":";
 			this->_send_msg += this->_response_arr[i] + " ";
+		}
 		this->ft_send();
 	}
 
@@ -160,19 +168,28 @@ public:
 	{
 		if (this->_sign)
 		{
-			Logger("topic_work?").ft_error();
+			std::cout << "check before the process :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
+
 			if (!this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
 			{
+				Logger("+ topic_work?").ft_error();
+				std::cout << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(true);
+				std::cout << "after set :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_response_arr[0] += "t";
+				std::cout << this->_response_arr[0] << std::endl;
 			}
 		}
 		else
 		{
 			if (this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
 			{
+				Logger("- topic_work?").ft_error();
+				std::cout << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(false);
+				std::cout << "after set :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_response_arr[0] += "t";
+				std::cout << this->_response_arr[0] << std::endl;
 			}
 		}
 	}
@@ -188,7 +205,7 @@ public:
 		}
 		if (this->_sign)
 		{
-			if (!this->_user->ft_get_channel(this->_channel)->ft_get_has_password())
+			if (this->_user->ft_get_channel(this->_channel)->ft_get_has_password())
 				return;
 			this->_user->ft_get_channel(this->_channel)->ft_set_has_password(true);
 			this->_user->ft_get_channel(this->_channel)->ft_set_password(msg[this->_param]);
@@ -197,7 +214,7 @@ public:
 		}
 		else
 		{
-			if (this->_user->ft_get_channel(this->_channel)->ft_get_has_password())
+			if (!this->_user->ft_get_channel(this->_channel)->ft_get_has_password())
 				return;
 			if (this->_user->ft_get_channel(this->_channel)->ft_get_password().compare(msg[this->_param]))
 			{
@@ -213,7 +230,7 @@ public:
 		}
 	}
 
-	void ft_give_auto(std::vector<std::string> msg)
+	void ft_give_auth(std::vector<std::string> msg)
 	{
 		if (!(this->_param < this->_msg_size))
 		{
