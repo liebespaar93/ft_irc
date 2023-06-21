@@ -1,7 +1,8 @@
 #include <iostream>
 #include <iomanip>
 
-#include "ChannelControl.hpp"
+# include "ChannelControl.hpp"
+# include "Logger.hpp"
 
 ChannelControl::ChannelControl()
 {
@@ -65,6 +66,12 @@ int ChannelControl::ft_leave_channel(User *user, std::string channel_name)
 		return (403); // ERR_NOSUCHCHANNEL
 	if (this->_channel_map->at(channel_name)->ft_channel_leave_user(user))
 		return (442); // ERR_NOTONCHANNEL
+	if (this->_channel_map->at(channel_name)->ft_get_user_list().size() == 0)
+	{
+		Channel *tmp = this->_channel_map->at(channel_name);
+		this->_channel_map->erase(channel_name);
+		delete tmp;
+	}
 	return (0);
 }
 

@@ -24,7 +24,6 @@ private:
 
 	Server(){};
 	Server(const Server &ref){};
-	Server &operator=(const Server &ref) { return *this; };
 
 	void ft_pollin(Socket *socket_front);
 	void ft_server_check_socket_fd();
@@ -36,6 +35,15 @@ private:
 
 public:
 	Server(std::string port_str, std::string password_str);
+	Server &operator=(const Server &ref)
+	{
+		this->_server = ref._server;
+		this->_password = ref._password;
+		this->_cmd_map = ref._cmd_map;
+		this->_on = ref._on;
+		this->_socket = ref._socket;
+		return *this;
+	};
 	~Server();
 
 	void ft_server_on();

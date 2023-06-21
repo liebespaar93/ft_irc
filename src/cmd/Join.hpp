@@ -59,6 +59,7 @@ public:
 				this->_prefix = channel_info->ft_privilege_has_user(this->_user->ft_get_user_name()) ? "@" : "";
 				this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " :" +  channel[i];
 				this->ft_send();
+				
 				this->ft_set_client("353");
 				this->_prefix = channel_info->ft_privilege_has_user(this->_user->ft_get_user_name()) ? "@" : "";
 				this->_send_msg = RPL_NAMREPLY(this->_client, this->_symbol, channel.at(i), this->_prefix , this->_user->ft_get_nick_name());

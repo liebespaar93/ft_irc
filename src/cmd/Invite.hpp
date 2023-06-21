@@ -14,6 +14,10 @@ private:
 public:
 	Invite() { this->_cmd = "INVITE"; };
 	~Invite(){};
+	
+	
+	void ft_recv(std::vector<std::string> msg)
+	{}
 
 	// irssi로 여러 클라이언트를 돌리면서 /mode로 invtite only 설정을 해도 join이 되어서 테스트하기 굉장히 까다로움
 	// lime으로 모드 설정과 invtite 테스트 예정

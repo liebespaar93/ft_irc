@@ -48,13 +48,11 @@ public:
 			while (i < msg.size())
 				this->_send_msg += " " + msg[i];
 		}
-		this->_user->ft_delete_channel(msg[1]);
 		this->_send_msg += "\"";
 		std::map<std::string, User *> user_list = this->_server->ft_get_channel(msg[1])->ft_get_user_list();
 		for (std::map<std::string, User *>::iterator it = user_list.begin(); it != user_list.end(); it++)
-		{
 			this->ft_send(it->second->ft_get_fd());
-		}
+		this->_server->ft_leave_channel(this->_user, msg[1]);
 	}
 };
 
