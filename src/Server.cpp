@@ -93,7 +93,6 @@ void Server::ft_pollin(Socket *socket_front)
 		throw Error("recv() failed");
 	if (len == 0)
 	{
-		/* \r 테스트 궁금점 */
 		this->_socket.pop();
 		this->ft_delete_user(this->ft_get_user(socket_front->ft_get_socket_fd()));
 		Logger("connect close").ft_socket_close(fd);

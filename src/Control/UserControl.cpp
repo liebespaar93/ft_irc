@@ -3,20 +3,23 @@
 
 #include "UserControl.hpp"
 
-
 UserControl::UserControl()
 {
 	this->_fd_map = new std::map<const int, User *>;
 	this->_name_map = new std::map<const std::string, int>;
 	// this->_invite_map = new std::map<std::string, Channel *>;
 	this->_nick_map = new std::map<std::string, int>;
-	std::cout << std::setw(15) << "[UserControl] " << "create!!" << std::endl;
+	std::cout << std::setw(15) << "[UserControl] "
+
+			  << "create!!" << std::endl;
 }
 
-UserControl::UserControl(const UserControl& ref)
+UserControl::UserControl(const UserControl &ref)
 {
-	*this=ref;
-	std::cout << std::setw(15) << "[UserControl] " << "copy!!" << std::endl;
+	*this = ref;
+	std::cout << std::setw(15) << "[UserControl] "
+
+			  << "copy!!" << std::endl;
 }
 
 UserControl::~UserControl()
@@ -28,39 +31,41 @@ UserControl::~UserControl()
 	/// leak 확인
 }
 
-UserControl&	UserControl::operator=(const UserControl& ref)
+UserControl &UserControl::operator=(const UserControl &ref)
 {
 	this->_fd_map = ref._fd_map;
 	this->_name_map = ref._name_map;
 	// this->_invite_map = ref._invite_map;
-	std::cout << std::setw(15) << "[UserControl] " << "operator=!!" << std::endl;
+	std::cout << std::setw(15) << "[UserControl] "
+
+			  << "operator=!!" << std::endl;
 	return (*this);
 }
 
-User   *UserControl::ft_get_user(const int fd)
+User *UserControl::ft_get_user(const int fd)
 {
 	if (this->_fd_map->find(fd) == this->_fd_map->end())
 		return (NULL);
 	return (this->_fd_map->at(fd));
 }
 
-User	*UserControl::ft_get_user(const std::string user_name)
+User *UserControl::ft_get_user(const std::string user_name)
 {
 	if (this->_name_map->find(user_name) == this->_name_map->end())
 		return (NULL);
 	return (this->ft_get_user(this->_name_map->at(user_name)));
 }
 
-User	*UserControl::ft_get_nick(const std::string nick_name)
+User *UserControl::ft_get_nick(const std::string nick_name)
 {
 	if (this->_nick_map->find(nick_name) == this->_nick_map->end())
 		return (NULL);
 	return (this->ft_get_user(this->_nick_map->at(nick_name)));
 }
 
-int	UserControl::ft_append_user(User *user)
+int UserControl::ft_append_user(User *user)
 {
-	this->_fd_map->insert( std::pair<const int, User *>(user->ft_get_fd(), user ));
+	this->_fd_map->insert(std::pair<const int, User *>(user->ft_get_fd(), user));
 	return (0);
 }
 
@@ -75,7 +80,7 @@ int UserControl::ft_delete_user(User *user)
 	return (0);
 }
 
-int	UserControl::ft_append_user_name(const std::string user_name, User *user)
+int UserControl::ft_append_user_name(const std::string user_name, User *user)
 {
 	if (this->_name_map->find(user_name) != this->_name_map->end())
 		return (433); // ERR_NICKNAMEINUSE
@@ -93,7 +98,7 @@ int UserControl::ft_delete_user_name(const std::string user_name)
 	return (0);
 }
 
-int	UserControl::ft_append_nick_name(const std::string nick_name, User *user)
+int UserControl::ft_append_nick_name(const std::string nick_name, User *user)
 {
 
 	if (this->_nick_map->find(nick_name) != this->_nick_map->end())
