@@ -12,7 +12,7 @@ Socket::Socket(int fd, sockaddr *socket_info)
 {
 	this->_socket_info = *socket_info;
 	this->_pfd.fd = this->_fd;
-	this->_pfd.events = POLLSTANDARD | POLLNLINK;
+	this->_pfd.events = POLLSTANDARD ;
 	this->_pfd.revents = 0;
 	Logger("socket create").ft_socket(this->_fd);
 }
@@ -63,7 +63,7 @@ Socket *Socket::ft_accept()
 	sockaddr ip4addr;
 	socklen_t client_addr_size = sizeof(sockaddr);
 
-	if (this->ft_poll() > 0)
+	if (this->ft_poll() & POLLIN)
 	{
 		if ((socket_fd = accept(this->_fd, &ip4addr, &client_addr_size)) == -1)
 			throw Error("accept fd == -1");
@@ -75,7 +75,7 @@ Socket *Socket::ft_accept()
 
 int Socket::ft_poll()
 {
-	if (poll(&this->_pfd, 1, 0) == -1 && this->_pfd.revents & POLLERR)
+	if (poll(&this->_pfd, 1, 100) == -1 && this->_pfd.revents & POLLERR)
 		Logger("poll POLLERR").ft_error();
 #ifdef DEBUG
 	if (this->_pfd.revents)
