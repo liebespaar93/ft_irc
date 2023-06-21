@@ -111,22 +111,3 @@ int UserControl::ft_delete_nick_name(const std::string nick_name)
 	this->_nick_map->erase(nick_name);
 	return (0);
 }
-
-// void UserControl::ft_invite_channel(std::string user_name, Channel *user_channel)
-// {
-// 	User *invite_user = this->ft_get_user(user_name);
-// 	this->_invite_map->insert(std::pair<std::string, Channel *>(user_name, user_channel));
-// }
-
-// bool	Channel::ft_channel_invite_refuse(User *user)
-// {
-// 	if (this->_invite_list.at(user->ft_get_user_name()));
-// 	{
-// 		this->_invite_list.erase(user->ft_get_user_name());
-// 	}
-// }
-// 	if (this->_invite_list.at(user->ft_get_user_name()));
-// 	{
-// 		this->_invite_list.erase(user->ft_get_user_name());
-// 	}
-    // ft_channel_invite_accept() = leave & join

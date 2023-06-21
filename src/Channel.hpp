@@ -27,9 +27,10 @@ private:
 	int _limit;
 
 	std::map<std::string, User *> _user_list;
+    std::map<std::string, User *> _invite_map;
 
 public:
-	Channel(std::string channel_name) : _channel_name(channel_name)
+	Channel(std::string channel_name) : _channel_name(channel_name), _limit(0)
 	{
 		Logger("channel_create").ft_channel_create(this->_channel_name);
 	};
@@ -49,6 +50,7 @@ public:
 		this->_is_invite_only = ref._is_invite_only;
 		this->_is_restricted = ref._is_restricted;
 		this->_limit = ref._limit;
+		this->_invite_map = ref._invite_map;
 		return *this;
 	};
 
@@ -78,6 +80,10 @@ public:
 	int ft_privilege_user_authorization(User *user);
 	int ft_privilege_user_delete(std::string user_name);
 	bool ft_privilege_has_user(std::string user_name);
+
+	int ft_invite_append_user(User *user);
+	int ft_invite_delete_user(User *user);
+	bool ft_invite_has_user(User *user);
 };
 
 #endif
