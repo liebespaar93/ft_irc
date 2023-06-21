@@ -762,7 +762,7 @@
 
 // check
 // 696
-#define ERR_INVALIDMODEPARAM(client, target_user, mode_char, param, description) \ 
+#define ERR_INVALIDMODEPARAM(client, target_user, mode_char, param, description) \
     ":" + client + " " + target_user + " " + mode_char + " " + param + " :" + description
 //"<client> <target chan/user> <mode char> <parameter> :<description>" Indicates that there was a problem with a mode parameter.Replaces various implementation
 //         - specific mode - specific numerics.
