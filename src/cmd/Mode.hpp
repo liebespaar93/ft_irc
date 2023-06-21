@@ -9,8 +9,9 @@ private:
 	/* data */
 	Mode(const Mode &ref){};
 	Mode &operator=(const Mode &ref) { return *this; };
-	bool _sign = true;
-	int _param = 3;
+	// c++11
+	bool _sign;
+	int _param;
 	int _msg_size;
 	std::vector<std::string> _response_arr;
 
@@ -23,6 +24,7 @@ public:
 
 	void ft_recv(std::vector<std::string> msg)
 	{
+		Logger("mode").ft_error();
 		// 인자가 모지랄 때
 		if (msg.size() <= 2)
 		{
@@ -32,7 +34,7 @@ public:
 			return;
 		}
 		// 어떤 채널에도 들어가지 않았을 때
-		if (this->_user->ft_get_channel(msg[1])) // fd channel 검색
+		if (!this->_user->ft_get_channel(msg[1])) // fd channel 검색
 		{
 			this->ft_set_client("401");
 			this->_send_msg = ERR_NOSUCHNICK(this->_client, this->_user->ft_get_nick_name());
@@ -49,7 +51,10 @@ public:
 		}
 		this->_msg_size = msg.size();
 		this->_channel = msg[1];
+		this->_response_arr.clear();
 		this->_response_arr.push_back("");
+		this->_sign = true;
+		this->_param = 3;
 
 		if (2 < msg.size())
 		{
@@ -60,12 +65,28 @@ public:
 				if (msg[2][k] == '+')
 				{
 					this->_sign = true;
-					this->_response_arr[0] += "+";
+					if (this->_response_arr[0].size() &&
+						this->_response_arr[0][this->_response_arr[0].size() - 1] == '-')
+					{
+						this->_response_arr[0][this->_response_arr[0].size() - 1] = '+';
+					}
+					else
+					{
+						this->_response_arr[0] += "+";
+					}
 				}
 				else if (msg[2][k] == '-')
 				{
 					this->_sign = false;
-					this->_response_arr[0] += "-";
+					if (this->_response_arr[0].size() &&
+						this->_response_arr[0][this->_response_arr[0].size() - 1] == '+')
+					{
+						this->_response_arr[0][this->_response_arr[0].size() - 1] = '-';
+					}
+					else
+					{
+						this->_response_arr[0] += "-";
+					}
 				}
 				else
 				{
@@ -97,6 +118,22 @@ public:
 				k++;
 			}
 		}
+		// Response: :gyeongjukim!~gyeongjuk@freenode-n68.49c.2i380a.IP MODE #test00 :+i
+		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + this->_channel + " :";
+		this->_response_arr[0] = this->_response_arr[0].substr(0, this->_response_arr[0].find_last_not_of("+-"));
+		while (this->_response_arr[0].size())
+		{
+			if (this->_response_arr[0][this->_response_arr[0].size() - 1] == '-' ||
+				this->_response_arr[0][this->_response_arr[0].size() - 1] == '+')
+				this->_response_arr[0].pop_back();
+			else
+				break;
+		}
+		if (!this->_response_arr[0].size())
+			return;
+		for (int i = 0; i < this->_response_arr.size(); i++)
+			this->_send_msg += this->_response_arr[i] + " ";
+		this->ft_send();
 	}
 
 	void ft_invite_only()
@@ -123,6 +160,7 @@ public:
 	{
 		if (this->_sign)
 		{
+			Logger("topic_work?").ft_error();
 			if (!this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
 			{
 				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(true);
