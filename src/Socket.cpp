@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <fcntl.h>
+#include <ctime>
 
 #include "Socket.hpp"
 #include "Logger.hpp"
@@ -12,7 +13,7 @@ Socket::Socket(int fd, sockaddr *socket_info)
 {
 	this->_socket_info = *socket_info;
 	this->_pfd.fd = this->_fd;
-	this->_pfd.events = POLLSTANDARD ;
+	this->_pfd.events = POLLSTANDARD;
 	this->_pfd.revents = 0;
 	Logger("socket create").ft_socket(this->_fd);
 }
@@ -87,6 +88,17 @@ int Socket::ft_poll()
 #endif
 	return (this->_pfd.revents);
 }
+
+// bool Socket::ft_ping()
+// {
+// 	if (this->_time + 3000 < time(NULL))
+// 	{
+// 		std::string msg = "PING " + asctime(localtime(time(NULL))) + socket_front->ft_get_socket_fd(); // error check
+// 		this->ft_set_time();
+// 		// this->_ping_check =
+// 		send(this->_fd, msg.c_str(), msg.size(), 0);
+// 	}
+// }
 
 /**
  * socket function for client

@@ -49,6 +49,8 @@ public:
 						  this->_user->ft_get_IP() + " " + this->_cmd + " " + ":" + msg.at(1);
 		this->ft_send();
 		this->_server->ft_append_nick_name(msg.at(1), this->_user);
+		this->_send_msg += "\r\n";
+		this->_server->ft_send_all_in_channels(this->_user, this->_send_msg);
 	}
 	// 실제 상용시 2번째 파람에 닉으로 변경 같을경우 안함
 	// ERR_NONICKNAMEGIVEN (431)
@@ -57,7 +59,7 @@ public:
 	// ERR_NICKCOLLISION (436)
 	//.nickname [ [ "!" user ] "@" host ] 성공시 밑에 예시
 	// Response: :mynick!~myname@freenode-pig.su5.hqs74b.IP NICK :next_nick
-	//Response: :*.freenode.net NOTICE * :*** Could not resolve your hostname: Domain not found; using your IP address (110.70.51.236) instead.
+	// Response: :*.freenode.net NOTICE * :*** Could not resolve your hostname: Domain not found; using your IP address (110.70.51.236) instead.
 };
 
 #endif

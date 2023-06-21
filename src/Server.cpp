@@ -61,7 +61,7 @@ void Server::ft_server_check_socket_fd()
 	{
 		socket_front = this->_socket.front();
 		revents = socket_front->ft_poll();
-		if (revents & (POLLERR | POLLHUP |POLLNVAL))
+		if (revents & (POLLERR | POLLHUP | POLLNVAL))
 		{
 			Logger("POLLERR").ft_error();
 			this->ft_user_destory(this->ft_get_user(socket_front->ft_get_socket_fd()));
@@ -93,7 +93,6 @@ void Server::ft_pollin(Socket *socket_front)
 		throw Error("recv() failed");
 	if (len == 0)
 	{
-		/* \r 테스트 궁금점 */
 		this->_socket.pop();
 		this->ft_delete_user(this->ft_get_user(socket_front->ft_get_socket_fd()));
 		Logger("connect close").ft_socket_close(fd);
@@ -124,11 +123,11 @@ void Server::ft_set_cmd_map()
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("KICK", new Kick()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("INVITE", new Invite()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("MODE", new Mode()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("TOPIC", new Topic()));
 
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("CAP" , new Cap()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("AUTHENTICATE" , new Authenticate()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("OPER" , new Oper()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("TOPIC" , new Topic()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("LIST" , new List()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("MOTD" , new Motd()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("ADMIN" , new Admin()));
@@ -165,7 +164,6 @@ void Server::ft_parse(std::string buf, int fd)
 		cmd->ft_recv(msg);
 	}
 }
-
 
 void Server::ft_user_destory(User *user)
 {
