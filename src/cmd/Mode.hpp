@@ -9,6 +9,10 @@ private:
 	/* data */
 	Mode(const Mode &ref){};
 	Mode &operator=(const Mode &ref) { return *this; };
+	bool _sign = true;
+	int _param = 3;
+	int _msg_size;
+	std::vector<std::string> _response_arr;
 
 public:
 	Mode()
@@ -16,46 +20,223 @@ public:
 		this->_cmd = "MODE";
 	};
 	~Mode(){};
-	////// 나중에
-	// irssi로 여러 클라이언트로 테스트 했는데 mode 명령어가 프로젝트대로 안먹힘 나중에 lime으로 두 클라이언트로 테스트 예정
+
 	void ft_recv(std::vector<std::string> msg)
 	{
-		if (msg.size() == 1 || msg.size() > 3)
+		// 인자가 모지랄 때
+		if (msg.size() <= 2)
 		{
-			this->_send_msg = ERR_UMODEUNKNOWNFLAG(this->_client);
+			this->ft_set_client("461");
+			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
 			this->ft_send();
 			return;
 		}
-		std::string option;
-		std::string argument;
-		if (msg.size() == 2 && (msg.at(1) == "-i" || msg.at(1) == "-t"))
-			option = msg.at(1);
-		else if (msg.size() == 3)
-			argument = msg.at(2);
-		if (option == "-i")
+		// 어떤 채널에도 들어가지 않았을 때
+		if (this->_user->ft_get_channel(msg[1])) // fd channel 검색
 		{
-			// channel invite_only flag on
+			this->ft_set_client("401");
+			this->_send_msg = ERR_NOSUCHNICK(this->_client, this->_user->ft_get_nick_name());
+			this->ft_send();
+			return;
 		}
-		else if (option == "-t")
+		// operator가 명령한게 아닐 때
+		if (!this->_user->ft_get_channel(msg[1])->ft_privilege_has_user(this->_user->ft_get_user_name()))
 		{
-			// channel topic restriction flag on
+			this->ft_set_client("482");
+			this->_send_msg = ERR_CHANOPRIVSNEEDED(this->_client, msg[1]);
+			this->ft_send();
+			return;
 		}
-		else if (option == "-k")
+		this->_msg_size = msg.size();
+		this->_channel = msg[1];
+		this->_response_arr.push_back("");
+
+		if (2 < msg.size())
 		{
-			// it needs argument
+			int k = 0;
+
+			while (k < msg[2].size())
+			{
+				if (msg[2][k] == '+')
+				{
+					this->_sign = true;
+					this->_response_arr[0] += "+";
+				}
+				else if (msg[2][k] == '-')
+				{
+					this->_sign = false;
+					this->_response_arr[0] += "-";
+				}
+				else
+				{
+					switch (msg[2][k])
+					{
+					case 'i': // invite-only
+						ft_invite_only();
+						break;
+					case 't': // only operator can modify topic
+						ft_topic_restrict();
+						break;
+					case 'k': // key set
+						ft_key_set(msg);
+						this->_param++;
+						break;
+					case 'o': // give the privilage of operator
+						ft_give_auto(msg);
+						break;
+					case 'l': // limit the number of members in channel
+						ft_set_limit(msg);
+						break;
+					default:
+						this->ft_set_client("472");
+						this->_send_msg = ERR_UNKNOWNMODE(this->_client, msg[2][k]);
+						this->ft_send();
+						break;
+					}
+				}
+				k++;
+			}
 		}
-		else if (option == "-o")
+	}
+
+	void ft_invite_only()
+	{
+		if (this->_sign)
 		{
-		}
-		else if (option == "-l")
-		{
+			if (!this->_user->ft_get_channel(this->_channel)->ft_get_invite())
+			{
+				this->_user->ft_get_channel(this->_channel)->ft_set_invite(true);
+				this->_response_arr[0] += "i";
+			}
 		}
 		else
 		{
+			if (this->_user->ft_get_channel(this->_channel)->ft_get_invite())
+			{
+				this->_user->ft_get_channel(this->_channel)->ft_set_invite(false);
+				this->_response_arr[0] += "i";
+			}
 		}
-		// ERR_INVALIDKEY
-		// ERR_CHANOPRIVSNEEDED : you're not channel operator
-		// ERR_NOSUCHCHANNEL : no such channel 403
+	}
+
+	void ft_topic_restrict()
+	{
+		if (this->_sign)
+		{
+			if (!this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
+			{
+				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(true);
+				this->_response_arr[0] += "t";
+			}
+		}
+		else
+		{
+			if (this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
+			{
+				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(false);
+				this->_response_arr[0] += "t";
+			}
+		}
+	}
+
+	void ft_key_set(std::vector<std::string> msg) // argument가 숫자든 문자든 상관없음
+	{
+		if (!(this->_param < this->_msg_size))
+		{
+			this->ft_set_client("461");
+			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
+			this->ft_send();
+			return;
+		}
+		if (this->_sign)
+		{
+			if (!this->_user->ft_get_channel(this->_channel)->ft_get_has_password())
+				return;
+			this->_user->ft_get_channel(this->_channel)->ft_set_has_password(true);
+			this->_user->ft_get_channel(this->_channel)->ft_set_password(msg[this->_param]);
+			this->_response_arr[0] += "k";
+			this->_response_arr.push_back(msg[this->_param]);
+		}
+		else
+		{
+			if (this->_user->ft_get_channel(this->_channel)->ft_get_has_password())
+				return;
+			if (this->_user->ft_get_channel(this->_channel)->ft_get_password().compare(msg[this->_param]))
+			{
+				this->ft_set_client("800");
+				this->_send_msg = this->_client + " error: you put wrong password";
+				this->ft_send();
+				return;
+			}
+			this->_user->ft_get_channel(this->_channel)->ft_set_password("");
+			this->_user->ft_get_channel(this->_channel)->ft_set_has_password(false);
+			this->_response_arr[0] += "k";
+			this->_response_arr.push_back(msg[this->_param]);
+		}
+	}
+
+	void ft_give_auto(std::vector<std::string> msg)
+	{
+		if (!(this->_param < this->_msg_size))
+		{
+			this->ft_set_client("461");
+			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
+			this->ft_send();
+			return;
+		}
+		// user 검색 있는지 없는지
+		if (!this->_server->ft_get_user(msg[this->_param])->ft_get_channel(this->_channel))
+		{
+			this->ft_set_client("401");
+			this->_send_msg = ERR_NOSUCHNICK(this->_client, this->_user->ft_get_nick_name());
+			this->ft_send();
+			return;
+		}
+		if (this->_sign)
+		{
+			if (!this->_user->ft_get_channel(this->_channel)->ft_privilege_has_user(msg[this->_param]))
+			{
+				this->_user->ft_get_channel(this->_channel)->ft_privilege_user_authorization(this->_server->ft_get_nick(msg[this->_param]));
+				this->_response_arr[0] += "o";
+				this->_response_arr.push_back(msg[this->_param]);
+			}
+		}
+		else
+		{
+			if (this->_user->ft_get_channel(this->_channel)->ft_privilege_has_user(msg[this->_param]))
+			{
+				this->_user->ft_get_channel(this->_channel)->ft_privilege_user_delete(msg[this->_param]);
+				this->_response_arr[0] += "o";
+				this->_response_arr.push_back(msg[this->_param]);
+			}
+		}
+	}
+
+	// Response: :*.freenode.net 696 gye #test00 l adsf :Invalid limit mode parameter. Syntax: <limit>.
+	void ft_set_limit(std::vector<std::string> msg)
+	{
+		// Response: :*.freenode.net 696 gye #test00 l asdf :Invalid limit mode parameter. Syntax: <limit>.
+		if (msg[this->_param].find_first_not_of("0123456789") != std::string::npos)
+		{
+			this->ft_set_client("696");
+			this->_send_msg = ERR_INVALIDMODEPARAM(this->_client, this->_channel, "l", msg[this->_param], "wrong type of the parameter");
+			this->ft_send();
+			return;
+		}
+		if (this->_sign)
+		{
+			this->_user->ft_get_channel(this->_channel)->ft_set_limit(atoi(msg[this->_param].c_str()));
+			this->_response_arr[0] += "l";
+			this->_response_arr.push_back(msg[this->_param]);
+		}
+		else // no argu / argu 있어도 무시
+		{
+			if (this->_user->ft_get_channel(this->_channel)->ft_get_limit())
+			{
+				this->_user->ft_get_channel(this->_channel)->ft_set_limit(0);
+				this->_response_arr[0] += "l";
+			}
+		}
 	}
 };
 

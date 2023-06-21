@@ -15,6 +15,7 @@ public:
 	Invite() { this->_cmd = "INVITE"; };
 	~Invite(){};
 
+
 	void ft_recv(std::vector<std::string> msg)
 	{
 		if (msg.size() < 3)
