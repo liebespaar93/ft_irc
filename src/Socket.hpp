@@ -20,7 +20,7 @@ private:
 	sockaddr _socket_info;
 	pollfd _pfd;
 	time_t _time;
-	std::string _ping_check;
+	bool _ping_check;
 
 	Socket(){};
 	Socket(const Socket &ref);
@@ -44,5 +44,6 @@ public:
 	Socket *ft_accept();
 
 	bool ft_ping();
+	bool ft_pong(std::string msg);
 };
 #endif

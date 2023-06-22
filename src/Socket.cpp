@@ -9,7 +9,7 @@
 #include "Error.hpp"
 
 Socket::Socket(int fd, sockaddr *socket_info)
-	: _fd(fd)
+	: _fd(fd), _ping_check(false), _time(time(NULL))
 {
 	this->_socket_info = *socket_info;
 	this->_pfd.fd = this->_fd;
@@ -19,6 +19,7 @@ Socket::Socket(int fd, sockaddr *socket_info)
 }
 
 Socket::Socket(const char *IP, const char *port)
+	:_time(time(NULL))
 {
 	struct addrinfo hints = {.ai_flags = AI_PASSIVE | SO_REUSEADDR, .ai_family = AF_INET, .ai_socktype = SOCK_STREAM, .ai_protocol = IPPROTO_TCP};
 	if (getaddrinfo(NULL, port, &hints, &this->_info) != 0)
@@ -89,6 +90,29 @@ int Socket::ft_poll()
 	return (this->_pfd.revents);
 }
 
+bool Socket::ft_ping()
+{
+	time_t now = time(NULL);
+	if (this->_time + 10 > now)
+		return (false);
+	if ((this->_time + 20 < now) )
+		return (true);
+	if (this->_ping_check)
+		return (false);
+	std::string test = "PING :life \r\n";
+	send(this->_fd, test.c_str(), test.size() , 0);
+	this->_ping_check = true;
+	return (false);
+}
+
+bool Socket::ft_pong(std::string msg)
+{
+	this->_time = time(NULL);
+	this->_ping_check = false;
+	return (true);
+}
+//Request: PING testnick2
+//29	13.236930	45.56.126.124	172.20.10.3	IRC	114	Response (PONG)
 // bool Socket::ft_ping()
 // {
 // 	if (this->_time + 3000 < time(NULL))
