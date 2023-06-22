@@ -2,7 +2,7 @@
 #define MESSAGE_HPP
 
 // ping/pong/whois/list
-/* [WELCOME 001 - 002]*/ // client == ":servername cmd-num username"
+/* [WELCOME 001 - 003]*/ // client == ":servername cmd-num username"
 // 001
 #define RPL_WELCOME(client, networkname, nick, user, host) \
     ":" + client + " :Welcome to the " + networkname + " Network,  " + nick + "[!" + user + "@" + host + "]"
