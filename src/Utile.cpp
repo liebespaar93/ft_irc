@@ -1,5 +1,6 @@
 
 #include "Utile.hpp"
+#include <algorithm>
 
 std::vector<std::string> split(const std::string &str, const std::string &delimiters)
 {
@@ -19,8 +20,28 @@ std::vector<std::string> split(const std::string &str, const std::string &delimi
 
 bool checkAlpha(const std::string &str)
 {
-    for(int i = 0; i < str.size(); i++)
-        if(!std::isalpha(str[i]) || !std::isspace(str[i]))
-            return true;
-    return false;
+	for (int i = 0; i < str.size(); i++)
+		if (!std::isalpha(str[i]) || !std::isspace(str[i]))
+			return true;
+	return false;
+}
+
+std::string itostring(int i)
+{
+	std::string num = "";
+	std::string sign = "";
+	if (i == 0)
+		return "0";
+	if (i < 0)
+	{
+		i *= -1;
+		sign = "-";
+	}
+	while (i != 0)
+	{
+		num.push_back('0' + (i % 10));
+		std::reverse(num.begin(), num.end());
+		i = i / 10;
+	}
+	return (sign + num);
 }

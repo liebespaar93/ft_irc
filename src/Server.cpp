@@ -31,7 +31,7 @@ Server::~Server()
 void Server::ft_server_on()
 {
 	Socket *accept_socket;
-	while (this->_on && this->_socket.size() < 3)
+	while (this->_on)
 	{
 		accept_socket = this->_server->ft_accept();
 		if (accept_socket)
@@ -112,7 +112,7 @@ void Server::ft_pollin(Socket *socket_front)
 	for (int i = 0; i < gnl.size(); i++)
 	{
 		this->ft_parse(gnl[i], socket_front);
-		Logger("gnl[i]").ft_recv_msg(fd);
+		Logger(gnl[i]).ft_recv_msg(fd);
 	}
 	gnl.clear();
 }

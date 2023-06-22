@@ -2,6 +2,7 @@
 #define CMDUSER_HPP
 
 #include "Cmd.hpp"
+#include <cstdlib>
 
 class CmdUser : public Cmd
 {
@@ -32,11 +33,20 @@ public:
 			this->ft_send();
 		}
 		user_name = msg[1];
+		if  (this->_server->ft_get_user(user_name))
+		{
+			int i = 0;
+			user_name = user_name + "_";
+			while (this->_server->ft_get_user(user_name + itostring(i)))
+				i++;
+			user_name = user_name + itostring(i);
+		}
 		int i = 3;
 		while (i < msg.size())
 		{
 			real_name += msg[i++];
 		}
+		std::cout << "user_name : " << user_name << std::endl;
 		this->_server->ft_append_user_name(user_name, this->_user);
 		this->_user->ft_set_real_name(real_name);
 		this->ft_set_client("001");
