@@ -48,7 +48,7 @@ public:
 		this->_send_msg = ":" + this->_server_name + " NOTICE * :*** Looking up your hostname...;";
 		this->ft_send();
 
-		this->_send_msg = "PING : logintest";
+		this->_send_msg = "PING :logintest";
 		this->ft_send();
 		Logger("PASS").ft_cmd_msg(this->_user->ft_get_fd());
 	}

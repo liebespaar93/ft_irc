@@ -30,7 +30,7 @@ private:
 	void ft_connect_socket(Socket *accept_socket);
 
 	/* parse */
-	void ft_parse(std::string buf, int fd);
+	void ft_parse(std::string buf, Socket *socket_front);
 	void ft_set_cmd_map();
 
 public:

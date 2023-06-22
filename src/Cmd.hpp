@@ -20,6 +20,7 @@ private:
 protected:
 	Server *_server;
 	User *_user;
+	Socket *_socket;
 	time_t _time;
 	char *_timestr;
 
@@ -27,7 +28,6 @@ protected:
 	std::string _client;
 	std::string _server_name;
 	std::string _channel;
-	std::string _info;
 	std::string _symbol;
 	std::string _prefix;
 
@@ -43,6 +43,7 @@ public:
 	void ft_set_server(Server *server) { this->_server = server; };
 	void ft_set_server_name(std::string server_name) { this->_server_name = server_name; };
 	void ft_set_user(User *user) { this->_user = user; };
+	void ft_set_socket(Socket *socket) { this->_socket = socket; };
 	void ft_set_time()
 	{
 		this->_time = time(NULL);

@@ -25,7 +25,7 @@ public:
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
 			this->ft_send();
 		}
-		send(this->_user->ft_get_fd(), "", 0, 0);
+		this->_socket->ft_pong(msg[1]);
 	}
 };
 

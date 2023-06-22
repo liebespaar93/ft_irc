@@ -66,15 +66,23 @@ void Server::ft_server_check_socket_fd()
 			Logger("POLLERR").ft_error();
 			this->ft_user_destory(this->ft_get_user(socket_front->ft_get_socket_fd()));
 			this->_socket.pop();
-			this->_socket.push(socket_front);
 			delete socket_front;
 		}
 		else if ((revents & POLLRDNORM))
 			this->ft_pollin(socket_front);
 		else
 		{
-			this->_socket.pop();
-			this->_socket.push(socket_front);
+			if (socket_front->ft_ping())
+			{
+				this->ft_user_destory(this->ft_get_user(socket_front->ft_get_socket_fd()));
+				this->_socket.pop();
+				delete socket_front;
+			}
+			else
+			{
+				this->_socket.pop();
+				this->_socket.push(socket_front);
+			}
 		}
 	}
 }
@@ -86,9 +94,9 @@ void Server::ft_pollin(Socket *socket_front)
 	ssize_t len;
 	int socket_send_loop;
 
-	fd = socket_front->ft_get_socket_fd(); /// 버퍼보다 큰  값이 올경우
+	fd = socket_front->ft_get_socket_fd();
 	len = recv(fd, &buf, 511, 0);
-
+	socket_front->ft_set_time();
 	if (len < 0)
 		throw Error("recv() failed");
 	if (len == 0)
@@ -103,7 +111,7 @@ void Server::ft_pollin(Socket *socket_front)
 	std::vector<std::__1::string> gnl = split(buf, "\r\n");
 	for (int i = 0; i < gnl.size(); i++)
 	{
-		this->ft_parse(gnl[i], fd);
+		this->ft_parse(gnl[i], socket_front);
 		Logger("gnl[i]").ft_recv_msg(fd);
 	}
 	gnl.clear();
@@ -150,7 +158,7 @@ void Server::ft_set_cmd_map()
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("USERHOST" , new Userhost()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("WALLOPS" , new Wallops()));
 }
-void Server::ft_parse(std::string buf, int fd)
+void Server::ft_parse(std::string buf, Socket *socket_front)
 {
 	std::vector<std::string> msg = split(buf, " ");
 
@@ -158,9 +166,10 @@ void Server::ft_parse(std::string buf, int fd)
 	{
 		Cmd *cmd = this->_cmd_map.at(msg.at(0));
 		cmd->ft_set_server(this);
-		cmd->ft_set_user(this->ft_get_user(fd));
+		cmd->ft_set_user(this->ft_get_user(socket_front->ft_get_socket_fd()));
 		cmd->ft_set_server_name("ft_irc");
 		cmd->ft_set_time();
+		cmd->ft_set_socket(socket_front);
 		cmd->ft_recv(msg);
 	}
 }
