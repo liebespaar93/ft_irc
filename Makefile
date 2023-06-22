@@ -1,6 +1,6 @@
 include color.mk
 
-NAME = server
+NAME = ircserv
 
 
 CC = c++
