@@ -49,23 +49,16 @@ public:
 			this->ft_send();
 			return;
 		}
-		std::cout << "error passed all" << std::endl;
 		this->_send_msg = ":" + this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " ";
 		int i = 2;
 		while (i < msg.size())
 			this->_send_msg += msg[i++] + " ";
-		std::cout << "after while loop" << std::endl;
-		this->_send_msg += ":" + this->_user->ft_get_nick_name();
 		std::map<std::string, User *> user_list = this->_server->ft_get_channel(msg[1])->ft_get_user_list();
-		std::cout << "before for loop" << std::endl;
 		for (std::map<std::string, User *>::iterator it = user_list.begin(); it != user_list.end(); it++)
 		{
 			this->ft_send(it->second->ft_get_fd());
 		}
-		std::cout << "after for loop" << std::endl;
-		this->_user->ft_get_channel(msg[1])->ft_invite_append_user(this->_server->ft_get_nick(msg[i++]));
 		i = 2;
-		std::cout << "before the last loop" << std::endl;
 		while (i < msg.size())
 			this->_user->ft_get_channel(msg[1])->ft_channel_leave_user(this->_server->ft_get_nick(msg[i++]));
 	}
