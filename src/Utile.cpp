@@ -26,7 +26,7 @@ bool checkAlpha(const std::string &str)
 	return false;
 }
 
-std::string itostring(int i)
+std::string ft_itostring(int i)
 {
 	std::string num = "";
 	std::string sign = "";
