@@ -53,13 +53,11 @@ public:
 		int i = 2;
 		while (i < msg.size())
 			this->_send_msg += msg[i++] + " ";
-		this->_send_msg += ":" + this->_user->ft_get_nick_name();
 		std::map<std::string, User *> user_list = this->_server->ft_get_channel(msg[1])->ft_get_user_list();
 		for (std::map<std::string, User *>::iterator it = user_list.begin(); it != user_list.end(); it++)
 		{
 			this->ft_send(it->second->ft_get_fd());
 		}
-		this->_user->ft_get_channel(msg[1])->ft_invite_append_user(this->_server->ft_get_nick(msg[i++]));
 		i = 2;
 		while (i < msg.size())
 			this->_user->ft_get_channel(msg[1])->ft_channel_leave_user(this->_server->ft_get_nick(msg[i++]));
