@@ -24,6 +24,8 @@ public:
 
 	void ft_recv(std::vector<std::string> msg)
 	{
+		if (!this->_user->ft_get_login())
+			return;
 		Logger("mode").ft_error();
 		// 인자가 모지랄 때
 		if (msg.size() <= 2)

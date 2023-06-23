@@ -69,7 +69,9 @@ void Server::ft_server_check_socket_fd()
 			delete socket_front;
 		}
 		else if ((revents & POLLRDNORM))
+		{
 			this->ft_pollin(socket_front);
+		}
 		else
 		{
 			if (socket_front->ft_ping())
@@ -128,7 +130,7 @@ void Server::ft_set_cmd_map()
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PRIVMSG", new Privmsg()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("PART", new Part()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("QUIT", new Quit()));
-	this->_cmd_map.insert(std::pair<std::string, Cmd *>("KICK", new Kick()));
+	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("KICK", new Kick()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("INVITE", new Invite()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("MODE", new Mode()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("TOPIC", new Topic()));

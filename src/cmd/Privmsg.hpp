@@ -16,6 +16,8 @@ public:
 
 	void ft_recv(std::vector<std::string> msg)
 	{
+		if (!this->_user->ft_get_login())
+			return;
 		if (msg.size() < 3)
 		{
 			this->ft_set_client("461");
@@ -33,7 +35,7 @@ public:
 				return;
 			}
 		}
-		else
+		else if (!this->_server->ft_get_nick(msg[1]))
 		{
 			this->ft_set_client("401");
 			this->_send_msg = ERR_NOSUCHNICK(this->_client, msg[1]);
