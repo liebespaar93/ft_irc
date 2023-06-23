@@ -42,8 +42,3 @@ public:
 };
 
 #endif
-
-
-// Request: QUIT Leaving...
-// Response: ERROR :Closing link: (~login@175.223.44.157) [Quit: Leaving...]
-// Response: ERROR :Closing link: (~testlogin@175.223.38.114) [Quit: test]

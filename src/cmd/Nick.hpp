@@ -73,14 +73,6 @@ public:
 			}
 		}
 	}
-	// 실제 상용시 2번째 파람에 닉으로 변경 같을경우 안함
-	// ERR_NONICKNAMEGIVEN (431)
-	// ERR_ERRONEUSNICKNAME (432)
-	// ERR_NICKNAMEINUSE (433)
-	// ERR_NICKCOLLISION (436)
-	//.nickname [ [ "!" user ] "@" host ] 성공시 밑에 예시
-	// Response: :mynick!~myname@freenode-pig.su5.hqs74b.IP NICK :next_nick
-	// Response: :*.freenode.net NOTICE * :*** Could not resolve your hostname: Domain not found; using your IP address (110.70.51.236) instead.
 };
 
 #endif

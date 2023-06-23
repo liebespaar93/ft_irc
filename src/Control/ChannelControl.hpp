@@ -9,7 +9,6 @@ class ChannelControl
 {
 private:
     /* data */
-
     std::map<const std::string, Channel *> *_channel_map;
 
     void ft_append_channel(Channel *channel);

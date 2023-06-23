@@ -50,7 +50,3 @@ public:
 };
 
 #endif
-//Response: :*.freenode.net NOTICE mynick :*** Ident lookup timed out, using ~myname instead.
-//Response: :*.freenode.net 001 mynick :Welcome to the freenode IRC Network mynick!~myname@110.70.51.236
-//Response: :*.freenode.net 002 mynick :Your host is *.freenode.net, running version InspIRCd-3
-//Response: :*.freenode.net 003 mynick :This server was created 23:06:04 Apr 20 2022

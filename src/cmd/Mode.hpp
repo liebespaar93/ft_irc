@@ -26,8 +26,6 @@ public:
 	{
 		if (!this->_user->ft_get_login())
 			return;
-		Logger("mode").ft_error();
-		// 인자가 모지랄 때
 		if (msg.size() <= 2)
 		{
 			this->ft_set_client("461");
@@ -35,15 +33,13 @@ public:
 			this->ft_send();
 			return;
 		}
-		// 어떤 채널에도 들어가지 않았을 때
-		if (!this->_user->ft_get_channel(msg[1])) // fd channel 검색
+		if (!this->_user->ft_get_channel(msg[1]))
 		{
 			this->ft_set_client("401");
 			this->_send_msg = ERR_NOSUCHNICK(this->_client, this->_user->ft_get_nick_name());
 			this->ft_send();
 			return;
 		}
-		// operator가 명령한게 아닐 때
 		if (!this->_user->ft_get_channel(msg[1])->ft_privilege_has_user(this->_user->ft_get_user_name()))
 		{
 			this->ft_set_client("482");
@@ -121,11 +117,8 @@ public:
 				k++;
 			}
 		}
-		// Response: :gyeongjukim!~gyeongjuk@freenode-n68.49c.2i380a.IP MODE #test00 :+i
 		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + this->_channel + " ";
 		std::cout << "before loop: " << this->_response_arr[0] << std::endl;
-		// this->_response_arr[0] = this->_response_arr[0].substr(0, this->_response_arr[0].find_last_not_of("+-"));
-		// std::cout << "after substr: " << this->_response_arr[0] << std::endl;
 		while (this->_response_arr[0].size())
 		{
 			if (this->_response_arr[0][this->_response_arr[0].size() - 1] == '-' ||
@@ -176,7 +169,6 @@ public:
 
 			if (!this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
 			{
-				Logger("+ topic_work?").ft_error();
 				std::cout << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(true);
 				std::cout << "after set :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
@@ -188,7 +180,6 @@ public:
 		{
 			if (this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
 			{
-				Logger("- topic_work?").ft_error();
 				std::cout << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(false);
 				std::cout << "after set :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
@@ -198,7 +189,7 @@ public:
 		}
 	}
 
-	void ft_key_set(std::vector<std::string> msg) // argument가 숫자든 문자든 상관없음
+	void ft_key_set(std::vector<std::string> msg)
 	{
 		if (!(this->_param < this->_msg_size))
 		{
@@ -243,7 +234,6 @@ public:
 			this->ft_send();
 			return;
 		}
-		// user 검색 있는지 없는지
 		if (!this->_server->ft_get_user(msg[this->_param])->ft_get_channel(this->_channel))
 		{
 			this->ft_set_client("401");
@@ -271,10 +261,8 @@ public:
 		}
 	}
 
-	// Response: :*.freenode.net 696 gye #test00 l adsf :Invalid limit mode parameter. Syntax: <limit>.
 	void ft_set_limit(std::vector<std::string> msg)
 	{
-		// Response: :*.freenode.net 696 gye #test00 l asdf :Invalid limit mode parameter. Syntax: <limit>.
 		if (msg[this->_param].find_first_not_of("0123456789") != std::string::npos)
 		{
 			this->ft_set_client("696");
@@ -288,7 +276,7 @@ public:
 			this->_response_arr[0] += "l";
 			this->_response_arr.push_back(msg[this->_param]);
 		}
-		else // no argu / argu 있어도 무시
+		else 
 		{
 			if (this->_user->ft_get_channel(this->_channel)->ft_get_limit())
 			{

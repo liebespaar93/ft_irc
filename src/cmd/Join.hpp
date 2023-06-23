@@ -91,16 +91,4 @@ public:
 		
 	}
 };
-// Request: JOIN #channel_name
-// Response: :nick_name!~myname@freenode-pig.su5.hqs74b.IP JOIN :#channel_name
-// Response: :ft_irc 353 nick = #test :@nick name
-// Response: :*.freenode.net 353 nick_name = #channel_name :@nick_name
-// Response: :*.freenode.net 366 nick_name #ar :End of /NAMES list.
-// Request: MODE #channel_name +sn
-// Response: :nick_name!~myname@freenode-pig.su5.hqs74b.IP MODE #channel_name :+s
-
-
-// 암호 있는방
-// Request: JOIN #testroom
-// Response: :*.freenode.net 475 testnick2 #testroom :Cannot join channel (incorrect channel key)
 #endif

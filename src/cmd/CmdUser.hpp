@@ -69,13 +69,3 @@ public:
 };
 
 #endif
-// USER guest 0 * :Ronnie Reagan
-// Response: :*.freenode.net NOTICE gyeongjukim :*** Could not resolve your hostname: Domain not found; using your IP address (120.50.73.143) instead.
-// Response: :*.freenode.net NOTICE gyeongju_ :*** Ident lookup timed out, using ~gyeongjuk instead.
-// Response: :*.freenode.net 001 mynick :Welcome to the freenode IRC Network mynick!~myname@110.70.51.236
-// Response: :*.freenode.net 002 mynick :Your host is *.freenode.net, running version InspIRCd-3
-// Response: :*.freenode.net 003 mynick :This server was created 23:06:04 Apr 20 2022
-
-// Response: :*.freenode.net 004 mynick *.freenode.net InspIRCd-3 BDHILRSTWcdghikorswxz ABCDEFIJKLMNOPQRSTUWXYZbcdefhijklmnoprstuvwz :BEFIJLWXYZbdefhjklovw
-// Response: :*.freenode.net 005 mynick NICKLEN=30 PREFIX=(Yohv)!@%+ REMOVE SAFELIST SECURELIST=60 SILENCE=32 STATUSMSG=!@%+ TOPICLEN=390 UHNAMES USERIP USERLEN=10 USERMODES=,,s,BDHILRSTWcdghikorwxz VBANLIST :are supported by this server
-// Response: :gyeongjukim!~gyeongjuk@freenode-n68.49c.2i380a.IP MODE gyeongjukim :+wRix

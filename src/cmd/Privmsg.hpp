@@ -68,15 +68,3 @@ public:
 };
 
 #endif
-
-/*
-Request: PRIVMSG #testroom dd
-Response: :testnick2!~testlogin@freenode-8ft.tgg.6ohrpn.IP PRIVMSG #testroom :dd
-/401
-Response: :*.freenode.net 401 testnick2 test :No such nick
-
-/403
-Response: :*.freenode.net 403 testnick2 #testroom22 :No such channel
-/404
-Response: :*.freenode.net 404 testnick2 #testroom :You cannot send external messages to this channel whilst the +n (noextmsg) mode is set.
-*/
