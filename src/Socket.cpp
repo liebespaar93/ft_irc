@@ -9,7 +9,7 @@
 #include "Error.hpp"
 
 Socket::Socket(int fd, sockaddr *socket_info)
-	: _fd(fd), _ping_check(false), _time(time(NULL))
+	: _fd(fd), _ping_check(false), _time(time(NULL)), _msg("")
 {
 	this->_socket_info = *socket_info;
 	this->_pfd.fd = this->_fd;
@@ -19,7 +19,7 @@ Socket::Socket(int fd, sockaddr *socket_info)
 }
 
 Socket::Socket(const char *IP, const char *port)
-	:_time(time(NULL))
+	:_ping_check(false), _time(time(NULL)), _msg("")
 {
 	struct addrinfo hints = {.ai_flags = AI_PASSIVE | SO_REUSEADDR, .ai_family = AF_INET, .ai_socktype = SOCK_STREAM, .ai_protocol = IPPROTO_TCP};
 	if (getaddrinfo(NULL, port, &hints, &this->_info) != 0)
