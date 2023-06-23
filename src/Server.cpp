@@ -112,10 +112,11 @@ void Server::ft_pollin(Socket *socket_front)
 	}
 	buf[len] = '\0';
 	msg = socket_front->ft_push_msg(buf);
-	if (msg.find_first_of("\n"))
+	std::cout << msg << "msg.find_first_of(\n) : "  << msg.find_first_of("\n") << std::endl;
+	if (msg.find_first_of("\n") != std::string::npos)
 	{
-		socket_front->ft_set_msg(msg.substr(msg.find_first_of("\n")));
-		std::vector<std::__1::string> gnl = split(buf, "\r\n");
+		socket_front->ft_set_msg(msg.substr(msg.find_first_of("\n") + 1));
+		std::vector<std::__1::string> gnl = split(msg.c_str(), "\r\n");
 		for (int i = 0; i < gnl.size(); i++)
 		{
 			this->ft_parse(gnl[i], socket_front);

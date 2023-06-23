@@ -27,7 +27,7 @@ public:
 			this->ft_send();
 			return;
 		}
-		if (msg.size() < 4)
+		if (msg.size() <= 4)
 		{
 			this->ft_set_client("461");
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
