@@ -17,6 +17,8 @@ public:
 
 	void ft_recv(std::vector<std::string> msg)
 	{
+		if (!this->_user->ft_get_login())
+			return;
 		Channel *channel_info;
 		std::map<std::__1::string, User *> channel_user_list;
 		std::vector<std::string> channel;

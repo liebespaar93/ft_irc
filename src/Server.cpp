@@ -69,7 +69,9 @@ void Server::ft_server_check_socket_fd()
 			delete socket_front;
 		}
 		else if ((revents & POLLRDNORM))
+		{
 			this->ft_pollin(socket_front);
+		}
 		else
 		{
 			if (socket_front->ft_ping())
