@@ -14,5 +14,7 @@
 #include "Invite.hpp"
 #include "Mode.hpp"
 #include "Topic.hpp"
+#include "Help.hpp"
+#include "List.hpp"
 
 #endif

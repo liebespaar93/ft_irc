@@ -19,6 +19,8 @@ public:
 
 	void ft_recv(std::vector<std::string> msg)
 	{
+		if (!this->_user->ft_get_login())
+			return;
 		if (msg.size() == 1)
 		{
 			this->ft_set_client("461");

@@ -20,6 +20,7 @@ private:
 	std::string _IP;
 	std::map<std::string, Channel *> _channel_list;
 	bool _pass;
+	bool _login;
 
 	User(){};
 	User(const User &ref){};
@@ -30,7 +31,7 @@ private:
 	};
 
 public:
-	User(int fd) : _fd(fd), _user_name(""), _nick_name(""), _IP(""), _pass(false){};
+	User(int fd) : _fd(fd), _user_name(""), _nick_name(""), _IP(""), _pass(false), _login(false){};
 	~User(){
 		this->ft_quit();
 	};
@@ -43,6 +44,7 @@ public:
 	const inline size_t ft_get_channel_size() { return this->_channel_list.size(); };
     Channel * ft_get_channel(const std::string &channel_name);
 	bool ft_get_pass() { return this->_pass; }
+	bool ft_get_login() { return this->_login; }
 	std::string ft_get_IP() { return this->_IP; };
 	std::string ft_get_info() { return ":" + this->_nick_name + "!~" + this->_user_name + "@" + this->_IP; };
 
@@ -51,6 +53,7 @@ public:
 	void ft_set_real_name(std::string real_name) { this->_real_name = real_name; };
 	void ft_set_IP(std::string IP) { this->_IP = IP; };
 	void ft_set_pass() { this->_pass = true; }
+	void ft_set_login() { this->_login = true; }
 
 	void ft_quit();
 

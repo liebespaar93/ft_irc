@@ -66,6 +66,12 @@
 		"chrono": "cpp",
 		"compare": "cpp",
 		"concepts": "cpp",
-		"algorithm": "cpp"
+		"algorithm": "cpp",
+		"utility": "cpp",
+		"__functional_03": "cpp",
+		"iterator": "cpp",
+		"memory_resource": "cpp",
+		"functional": "cpp",
+		"__functional_base": "cpp"
 	}
 }
