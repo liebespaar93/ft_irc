@@ -33,7 +33,7 @@ public:
 				return;
 			}
 		}
-		else
+		else if (!this->_server->ft_get_nick(msg[1]))
 		{
 			this->ft_set_client("401");
 			this->_send_msg = ERR_NOSUCHNICK(this->_client, msg[1]);
