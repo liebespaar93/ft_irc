@@ -93,6 +93,7 @@ void Server::ft_pollin(Socket *socket_front)
 {
 	int fd;
 	char buf[512];
+	std::string msg;
 	ssize_t len;
 	int socket_send_loop;
 
@@ -110,13 +111,18 @@ void Server::ft_pollin(Socket *socket_front)
 		return;
 	}
 	buf[len] = '\0';
-	std::vector<std::__1::string> gnl = split(buf, "\r\n");
-	for (int i = 0; i < gnl.size(); i++)
+	msg = socket_front->ft_push_msg(buf);
+	if (msg.find_first_of("\n"))
 	{
-		this->ft_parse(gnl[i], socket_front);
-		Logger(gnl[i]).ft_recv_msg(fd);
+		socket_front->ft_set_msg(msg.substr(msg.find_first_of("\n")));
+		std::vector<std::__1::string> gnl = split(buf, "\r\n");
+		for (int i = 0; i < gnl.size(); i++)
+		{
+			this->ft_parse(gnl[i], socket_front);
+			Logger(gnl[i]).ft_recv_msg(fd);
+		}
+		gnl.clear();
 	}
-	gnl.clear();
 }
 
 void Server::ft_set_cmd_map()
@@ -136,31 +142,6 @@ void Server::ft_set_cmd_map()
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("TOPIC", new Topic()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("HELP", new Help()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("LIST" , new List()));
-
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("CAP" , new Cap()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("AUTHENTICATE" , new Authenticate()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("OPER" , new Oper()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("LIST" , new List()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("MOTD" , new Motd()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("ADMIN" , new Admin()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("CONNECT" , new Connect()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("LUSERS" , new Lusers()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("VERSION" , new Version()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("TIME" , new Time()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("STATS" , new Stats()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("HELP" , new Help()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("INFO" , new Info()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("NOTICE" , new Notice()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("WHO" , new Who()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("WHOIS" , new Whois()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("KILL" , new Kill()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("REHASH" , new Rehash()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("RESTART" , new Restart()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("SQUIT" , new Squit()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("AWAY" , new Away()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("LINKS" , new Links()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("USERHOST" , new Userhost()));
-	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("WALLOPS" , new Wallops()));
 }
 void Server::ft_parse(std::string buf, Socket *socket_front)
 {
