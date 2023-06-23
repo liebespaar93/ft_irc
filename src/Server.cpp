@@ -132,6 +132,8 @@ void Server::ft_set_cmd_map()
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("INVITE", new Invite()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("MODE", new Mode()));
 	this->_cmd_map.insert(std::pair<std::string, Cmd *>("TOPIC", new Topic()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("HELP", new Help()));
+	this->_cmd_map.insert(std::pair<std::string, Cmd *>("LIST" , new List()));
 
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("CAP" , new Cap()));
 	// this->_cmd_map.insert(std::pair<std::string, Cmd *>("AUTHENTICATE" , new Authenticate()));

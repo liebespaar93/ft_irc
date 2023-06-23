@@ -51,6 +51,27 @@ public:
 		this->_server->ft_append_nick_name(msg.at(1), this->_user);
 		this->_send_msg += "\r\n";
 		this->_server->ft_send_all_in_channels(this->_user, this->_send_msg);
+		if (this->_user->ft_get_user_name() != "")
+		{
+			if (!this->_user->ft_get_login())
+			{
+				this->ft_set_client("001");
+				this->_send_msg = RPL_WELCOME(this->_client, this->_server_name, this->_user->ft_get_nick_name(), this->_user->ft_get_user_name(), this->_user->ft_get_IP());
+				this->ft_send();
+				this->ft_set_client("002");
+				this->_send_msg = RPL_YOURHOST(this->_client, this->_server_name, "v.1");
+				this->ft_send();
+				this->ft_set_client("003");
+				this->_send_msg = RPL_CREATED(this->_client, (std::string)(this->_timestr));
+				this->ft_send();
+				this->_user->ft_set_login();
+			}
+			else
+			{
+				send(this->_user->ft_get_fd(), ": ft_irc NOTICE * :*** Looking up your ident...;", 49, 0);
+				send(this->_user->ft_get_fd(), ": ft_irc NOTICE * :*** Looking up your hostname...;", 52, 0);
+			}
+		}
 	}
 	// 실제 상용시 2번째 파람에 닉으로 변경 같을경우 안함
 	// ERR_NONICKNAMEGIVEN (431)
