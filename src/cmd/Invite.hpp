@@ -65,17 +65,3 @@ public:
 };
 
 #endif
-
-// irssi로 여러 클라이언트를 돌리면서 /mode로 invtite only 설정을 해도 join이 되어서 테스트하기 굉장히 까다로움
-// lime으로 모드 설정과 invtite 테스트 예정
-// irssi로 했을시 초대받았다라는 메시지만 받고 채널 입장은 하지 않음
-
-/*
-Request: INVITE testnick2 #testroom2
-Response: :testnick!~testlogin@freenode-ep7.0qi.hqs74b.IP INVITE testnick2 :#testroom2
-Response: :*.freenode.net 442 testnick2 #testroom :You're not on that channel!
-Response: :*.freenode.net 443 testnick testnick2 #testroom2 :is already on channel
-Response: :*.freenode.net 482 testnick2 #testroom :You must be a channel half-operator
-Response: :*.freenode.net 341 testnick testnick2 :#testroom2
-Response: :*.freenode.net 341 testnick2 testnick :#testroom2
-*/

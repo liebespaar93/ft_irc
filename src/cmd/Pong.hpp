@@ -30,5 +30,3 @@ public:
 };
 
 #endif
-
-// Response: :*.freenode.net 461 mynick PONG :Not enough parameters.

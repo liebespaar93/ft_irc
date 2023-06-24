@@ -62,8 +62,4 @@ public:
 		this->ft_send();
 	}
 };
-// Request: HELPOP CUSER
-// Response: :*.freenode.net 704 nick_name CUSER :User Commands
-// Response: :*.freenode.net 705 nick_name CUSER :ACCEPT      ADMIN       AWAY        COMMANDS    CYCLE       DCCALLOW
-// Response: :*.freenode.net 706 nick_name CUSER :End of /HELPOP.
 #endif

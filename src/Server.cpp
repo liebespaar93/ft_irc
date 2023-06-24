@@ -112,10 +112,10 @@ void Server::ft_pollin(Socket *socket_front)
 	}
 	buf[len] = '\0';
 	msg = socket_front->ft_push_msg(buf);
-	if (msg.find_first_of("\n"))
+	if (msg.find_last_of("\n") != std::string::npos)
 	{
-		socket_front->ft_set_msg(msg.substr(msg.find_first_of("\n")));
-		std::vector<std::__1::string> gnl = split(buf, "\r\n");
+		socket_front->ft_set_msg(msg.substr(msg.find_last_of("\n") + 1));
+		std::vector<std::__1::string> gnl = split(msg.c_str(), "\r\n");
 		for (int i = 0; i < gnl.size(); i++)
 		{
 			this->ft_parse(gnl[i], socket_front);
@@ -146,7 +146,8 @@ void Server::ft_set_cmd_map()
 void Server::ft_parse(std::string buf, Socket *socket_front)
 {
 	std::vector<std::string> msg = split(buf, " ");
-
+	for (int i = 0; i < msg[0].size(); i++)
+		msg[0][i] = toupper(msg[0][i]);
 	if (this->_cmd_map.find(msg.at(0)) != this->_cmd_map.end())
 	{
 		Cmd *cmd = this->_cmd_map.at(msg.at(0));
@@ -184,7 +185,7 @@ void Server::ft_server_input()
 		{
 			front = this->_socket.front();
 			send(front->ft_get_socket_fd(), buf.c_str(), buf.size(), 0);
-			Logger("server send").ft_server_msg(front->ft_get_socket_fd());
+			Logger(buf).ft_server_msg(front->ft_get_socket_fd());
 			this->_socket.pop();
 			this->_socket.push(front);
 		}

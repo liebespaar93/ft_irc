@@ -59,11 +59,3 @@ public:
 };
 
 #endif
-
-/*
-Request: PART #testroom Leaving...
-Response: :nick2!~login2@127.0.0.1 PART #test2:"Leaving...Leaving..."
-Response: :testnick2!~testlogin@freenode-1b4.su5.hqs74b.IP PART #testroom :"Leaving..."
-Response: :testnick2!~testlogin@freenode-1b4.su5.hqs74b.IP PART #testroom :"tstts"
-Response: :*.freenode.net 442 testnick2 #testroom :You're not on that channel
-*/

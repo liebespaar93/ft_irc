@@ -93,9 +93,9 @@ int Socket::ft_poll()
 bool Socket::ft_ping()
 {
 	time_t now = time(NULL);
-	if (this->_time + 30 > now)
+	if (this->_time + 120 > now)
 		return (false);
-	if ((this->_time + 60 < now) )
+	if ((this->_time + 180 < now) )
 		return (true);
 	if (this->_ping_check)
 		return (false);
@@ -111,60 +111,3 @@ bool Socket::ft_pong(std::string msg)
 	this->_ping_check = false;
 	return (true);
 }
-//Request: PING testnick2
-//29	13.236930	45.56.126.124	172.20.10.3	IRC	114	Response (PONG)
-// bool Socket::ft_ping()
-// {
-// 	if (this->_time + 3000 < time(NULL))
-// 	{
-// 		std::string msg = "PING " + asctime(localtime(time(NULL))) + socket_front->ft_get_socket_fd(); // error check
-// 		this->ft_set_time();
-// 		// this->_ping_check =
-// 		send(this->_fd, msg.c_str(), msg.size(), 0);
-// 	}
-// }
-
-/**
- * socket function for client
- * 소켓 ip 에따라 검색하여 내가 요청한 인터넷 타입을 찾는다
- */
-/*
-void	Socket::ft_ip_check()
-{
-	int IP_result = inet_addr(this->_IP);
-	if (IP_result == INADDR_NONE)
-		throw Error("inet_addr failed and returned INADDR_NONE\n");
-	if (IP_result == INADDR_ANY)
-		throw Error("inet_addr failed and returned INADDR_NONE\n");
-}
-
-void	Socket::ft_find_socker()
-{
-	struct addrinfo	*prompt, *info;
-	int				option_value = 1;
-
-	if (getaddrinfo(this->_IP, this->_port, &this->_hints, &info) != 0)
-		throw Error("getaddrinfo"); // gai_strerror()  getaddrinfo(IP, port, &this->_hints, &this->_info) need return value
-	for (prompt = info;prompt != NULL; prompt = prompt->ai_next) //	_info->ai_next // 하나의 도메인에 여러개의 아이피가 존제할 수 있음
-	{
-		try
-		{
-			if ((this->_socket_fd = socket(prompt->ai_family, prompt->ai_socktype, prompt->ai_protocol)) == -1)
-				throw Error("Error socker");
-			if (setsockopt(this->_socket_fd, SOL_SOCKET, SO_REUSEADDR, &option_value, sizeof(int)) == -1)
-				throw Error("Error setsocketopt");
-			break ;
-		}
-		catch ( const std::exception& e )
-		{
-			std::cerr << e.what() << '\n';
-			if (this->_socket_fd)
-				close(this->_socket_fd);
-		}
-	}
-	if (prompt == NULL)
-		throw Error("Error : getaddrinfo no socket");
-	std::cout << "find socket and create " << std::endl;
-	freeaddrinfo(info);
-}
-*/

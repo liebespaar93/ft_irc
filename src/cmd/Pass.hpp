@@ -21,6 +21,8 @@ public:
 	void ft_recv(std::vector<std::string> msg)
 	{
 		std::string password = this->_server->ft_get_password();
+		if (this->_user->ft_get_pass())
+			return ;
 		if (msg.size() == 1)
 		{
 			this->ft_set_client("461");
@@ -43,14 +45,22 @@ public:
 			return ;
 		}
 		this->_user->ft_set_pass();
+		if (this->_user->ft_get_login() && this->_user->ft_get_pass() && !this->_user->ft_get_wellcome())
+		{
+			this->ft_set_client("001");
+			this->_send_msg = RPL_WELCOME(this->_client, this->_server_name, this->_user->ft_get_nick_name(), this->_user->ft_get_user_name(), this->_user->ft_get_IP());
+			this->ft_send();
+			this->ft_set_client("002");
+			this->_send_msg = RPL_YOURHOST(this->_client, this->_server_name, "v.1");
+			this->ft_send();
+			this->ft_set_client("003");
+			this->_send_msg = RPL_CREATED(this->_client, (std::string)(this->_timestr));
+			this->ft_send();
+			this->_user->ft_set_wellcome();	
+		}
 		this->_send_msg = "PING :logintest";
 		this->ft_send();
-		Logger("PASS").ft_cmd_msg(this->_user->ft_get_fd());
 	}
 };
 
 #endif
-//Response: :*.freenode.net NOTICE mynick :*** Ident lookup timed out, using ~myname instead.
-//Response: :*.freenode.net 001 mynick :Welcome to the freenode IRC Network mynick!~myname@110.70.51.236
-//Response: :*.freenode.net 002 mynick :Your host is *.freenode.net, running version InspIRCd-3
-//Response: :*.freenode.net 003 mynick :This server was created 23:06:04 Apr 20 2022
