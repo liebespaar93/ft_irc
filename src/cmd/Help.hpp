@@ -1,22 +1,22 @@
 #ifndef HELP_HPP
-# define HELP_HPP
+#define HELP_HPP
 
 #include "Cmd.hpp"
 
-class Help: public Cmd
+class Help : public Cmd
 {
 private:
 	/* data */
-	Help(const Help& ref) {};
-	Help&	operator=(const Help& ref) { return *this; };
+	Help(const Help &ref){};
+	Help &operator=(const Help &ref) { return *this; };
 
 public:
 	Help()
 	{
 		this->_cmd = "HELP";
 	};
-	
-	~Help() {};
+
+	~Help(){};
 
 	void ft_recv(std::vector<std::string> msg)
 	{
