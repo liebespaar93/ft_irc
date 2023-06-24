@@ -93,9 +93,9 @@ int Socket::ft_poll()
 bool Socket::ft_ping()
 {
 	time_t now = time(NULL);
-	if (this->_time + 30 > now)
+	if (this->_time + 120 > now)
 		return (false);
-	if ((this->_time + 60 < now) )
+	if ((this->_time + 180 < now) )
 		return (true);
 	if (this->_ping_check)
 		return (false);
