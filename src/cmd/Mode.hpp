@@ -7,8 +7,12 @@ class Mode : public Cmd
 {
 private:
 	/* data */
-	Mode(const Mode &ref){};
-	Mode &operator=(const Mode &ref) { return *this; };
+	Mode(const Mode &ref) { (void)ref; };
+	Mode &operator=(const Mode &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 	// c++11
 	bool _sign;
 	int _param;
@@ -56,7 +60,7 @@ public:
 
 		if (2 < msg.size())
 		{
-			int k = 0;
+			size_t k = 0;
 
 			while (k < msg[2].size())
 			{
@@ -130,7 +134,7 @@ public:
 		std::cout << "after loop: " << this->_response_arr[0] << std::endl;
 		if (!this->_response_arr[0].size())
 			return;
-		for (int i = 0; i < this->_response_arr.size(); i++)
+		for (size_t i = 0; i < this->_response_arr.size(); i++)
 		{
 			if (i + 1 == this->_response_arr.size())
 				this->_send_msg += ":";
@@ -276,7 +280,7 @@ public:
 			this->_response_arr[0] += "l";
 			this->_response_arr.push_back(msg[this->_param]);
 		}
-		else 
+		else
 		{
 			if (this->_user->ft_get_channel(this->_channel)->ft_get_limit())
 			{

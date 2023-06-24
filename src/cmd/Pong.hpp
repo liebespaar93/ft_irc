@@ -6,9 +6,13 @@
 class Pong : public Cmd
 {
 private:
-	Pong(const Pong &ref){};
+	Pong(const Pong &ref) { (void)ref; };
 
-	Pong &operator=(const Pong &ref) { return *this; };
+	Pong &operator=(const Pong &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
 	Pong()

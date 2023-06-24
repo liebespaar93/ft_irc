@@ -7,8 +7,12 @@ class Help : public Cmd
 {
 private:
 	/* data */
-	Help(const Help &ref){};
-	Help &operator=(const Help &ref) { return *this; };
+	Help(const Help &ref) { (void)ref; };
+	Help &operator=(const Help &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
 	Help()
@@ -20,6 +24,7 @@ public:
 
 	void ft_recv(std::vector<std::string> msg)
 	{
+		(void)msg;
 		this->_subject = "start";
 		this->ft_set_client("704");
 		this->_send_msg = RPL_HELPSTART(this->_client, this->_subject, "--------------------------------------------------- HELP -----------------------------------------------------");

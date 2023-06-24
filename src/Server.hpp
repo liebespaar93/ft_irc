@@ -23,7 +23,7 @@ private:
 	std::queue<Socket *> _socket;
 
 	Server(){};
-	Server(const Server &ref){};
+	Server(const Server &ref) { (void)ref; };
 
 	void ft_pollin(Socket *socket_front);
 	void ft_server_check_socket_fd();

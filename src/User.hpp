@@ -24,16 +24,17 @@ private:
 	bool _wellcome;
 
 	User(){};
-	User(const User &ref){};
+	User(const User &ref) { (void)ref; };
 	User &operator=(const User &ref)
 	{
-		*this = ref;
+		this->_fd = ref._fd;
 		return *this;
 	};
 
 public:
-	User(int fd) : _fd(fd), _user_name(""), _nick_name(""), _IP(""), _pass(false), _login(false), _wellcome(false) {};
-	~User(){
+	User(int fd) : _fd(fd), _user_name(""), _nick_name(""), _IP(""), _pass(false), _login(false), _wellcome(false){};
+	~User()
+	{
 		this->ft_quit();
 	};
 
@@ -42,8 +43,8 @@ public:
 	const std::string ft_get_nick_name() { return this->_nick_name; };
 	const std::string ft_get_real_name() { return this->_real_name; };
 	const std::map<std::string, Channel *> ft_get_channel_list() { return this->_channel_list; };
-	const inline size_t ft_get_channel_size() { return this->_channel_list.size(); };
-    Channel * ft_get_channel(const std::string &channel_name);
+	size_t ft_get_channel_size() { return this->_channel_list.size(); };
+	Channel *ft_get_channel(const std::string &channel_name);
 	bool ft_get_pass() { return this->_pass; }
 	bool ft_get_login() { return this->_login; }
 	bool ft_get_wellcome() { return this->_wellcome; }

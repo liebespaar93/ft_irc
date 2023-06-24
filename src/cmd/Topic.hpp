@@ -7,8 +7,12 @@ class Topic : public Cmd
 {
 private:
 	/* data */
-	Topic(const Topic &ref){};
-	Topic &operator=(const Topic &ref) { return *this; };
+	Topic(const Topic &ref) { (void)ref; };
+	Topic &operator=(const Topic &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
 	Topic() { this->_cmd = "TOPIC"; };
@@ -67,7 +71,7 @@ public:
 		}
 		msg[2] = msg[2].substr(1);
 		std::string topic_msg = "";
-		for (int i = 2; i < msg.size(); i++)
+		for (size_t i = 2; i < msg.size(); i++)
 			topic_msg += msg[i] + " ";
 		this->_user->ft_get_channel(msg[1])->ft_set_topic(topic_msg);
 		this->_user->ft_get_channel(msg[1])->ft_set_topic_user(this->_user);

@@ -1,16 +1,21 @@
 #ifndef JOIN_HPP
-# define JOIN_HPP
+#define JOIN_HPP
 
 #include "Cmd.hpp"
 #include "Utile.hpp"
 
-class Join: public Cmd
+class Join : public Cmd
 {
 private:
 	/* data */
-	Join(const Join& ref) {};
+	Join(const Join &ref) { (void)ref; };
 
-	Join&	operator=(const Join& ref) {return *this;};
+	Join &operator=(const Join &ref)
+	{
+		(void)ref;
+		return *this;
+	};
+
 public:
 	Join() { this->_cmd = "JOIN"; };
 	~Join(){};
@@ -27,7 +32,7 @@ public:
 
 		if (msg.size() == 1)
 		{
-			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client,this->_cmd);
+			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
 			this->ft_send();
 			return;
 		}
@@ -35,7 +40,7 @@ public:
 			channel = split(msg[1], ",");
 		if (msg.size() > 2)
 			password = split(msg[2], ",");
-		int i = 0;
+		size_t i = 0;
 		while (i < channel.size())
 		{
 			if (password.size() > i)
@@ -54,18 +59,18 @@ public:
 				this->_send_msg = ERR_BADCHANNELKEY(this->_client, channel.at(i));
 				this->ft_send();
 			}
-			else if (code == 0 )
+			else if (code == 0)
 			{
 				channel_info = this->_server->ft_get_channel(channel[i]);
 				channel_user_list = channel_info->ft_get_user_list();
 				this->_prefix = channel_info->ft_privilege_has_user(this->_user->ft_get_user_name()) ? "@" : "";
-				this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " :" +  channel[i];
+				this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " :" + channel[i];
 				this->ft_send();
-				
+
 				this->ft_set_client("353");
 				this->_prefix = channel_info->ft_privilege_has_user(this->_user->ft_get_user_name()) ? "@" : "";
-				this->_send_msg = RPL_NAMREPLY(this->_client, this->_symbol, channel.at(i), this->_prefix , this->_user->ft_get_nick_name());
-				for (std::map<std::__1::string, User *>::iterator it = channel_user_list.begin(); it != channel_user_list.end(); it++ )
+				this->_send_msg = RPL_NAMREPLY(this->_client, this->_symbol, channel.at(i), this->_prefix, this->_user->ft_get_nick_name());
+				for (std::map<std::__1::string, User *>::iterator it = channel_user_list.begin(); it != channel_user_list.end(); it++)
 				{
 					if (this->_user->ft_get_user_name() != it->first)
 					{
@@ -77,18 +82,17 @@ public:
 				this->ft_set_client("366");
 				this->_send_msg = RPL_ENDOFNAMES(this->_client, this->_channel);
 				this->ft_send();
-				for (std::map<std::__1::string, User *>::iterator it = channel_user_list.begin(); it != channel_user_list.end(); it++ )
+				for (std::map<std::__1::string, User *>::iterator it = channel_user_list.begin(); it != channel_user_list.end(); it++)
 				{
 					if (this->_user->ft_get_user_name() != it->first)
 					{
-						this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " :" +  channel[i];
+						this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " :" + channel[i];
 						this->ft_send(it->second->ft_get_fd());
 					}
 				}
 			}
 			i++;
 		}
-		
 	}
 };
 #endif

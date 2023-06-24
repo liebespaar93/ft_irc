@@ -13,7 +13,7 @@ class Channel
 
 private:
 	Channel();
-	Channel(const Channel &ref){};
+	Channel(const Channel &ref) { (void)ref; };
 	/* data */
 	std::string _channel_name;
 	std::string _channel_topic;
@@ -26,7 +26,7 @@ private:
 	bool _has_password;
 	bool _is_invite_only;
 	bool _is_restricted;
-	int _limit;
+	size_t _limit;
 
 	std::map<std::string, User *> _user_list;
 	std::map<std::string, User *> _invite_map;
@@ -61,7 +61,7 @@ public:
 	std::string const &ft_get_topic() { return this->_channel_topic; };
 	std::string const &ft_get_password() { return this->_password; };
 
-	int const &ft_get_limit() { return this->_limit; };
+	size_t const &ft_get_limit() { return this->_limit; };
 	bool const &ft_get_has_password() { return this->_has_password; };
 	bool const &ft_get_restrict() { return this->_is_restricted; };
 	bool const &ft_get_invite() { return this->_is_invite_only; };
@@ -69,7 +69,7 @@ public:
 	User *ft_get_topic_user() { return this->_channel_topic_user; };
 	const std::string &ft_get_topic_time() { return this->_channel_topic_time; };
 
-	void ft_set_limit(int limit) { this->_limit = limit; };
+	void ft_set_limit(size_t limit) { this->_limit = limit; };
 	void ft_set_password(const std::string new_password) { this->_password = new_password; };
 	void ft_set_restrict(bool on) { this->_is_restricted = on; };
 	void ft_set_has_password(bool on) { this->_has_password = on; };

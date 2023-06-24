@@ -9,8 +9,12 @@ class CmdUser : public Cmd
 {
 private:
 	/* data */
-	CmdUser(const CmdUser &ref){};
-	CmdUser &operator=(const CmdUser &ref) { return *this; };
+	CmdUser(const CmdUser &ref) { (void)ref; };
+	CmdUser &operator=(const CmdUser &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
 	CmdUser() { this->_cmd = "USER"; };
@@ -25,7 +29,7 @@ public:
 			this->ft_set_client("461");
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
 			this->ft_send();
-			return ;
+			return;
 		}
 		user_name = msg[1];
 		if (this->_server->ft_get_user(user_name))
@@ -36,7 +40,7 @@ public:
 				i++;
 			user_name = user_name + ft_itostring(i);
 		}
-		int i = 3;
+		size_t i = 3;
 		while (i < msg.size())
 		{
 			real_name += msg[i++];
@@ -48,7 +52,7 @@ public:
 		{
 			send(this->_user->ft_get_fd(), ":ft_irc NOTICE * :*** Looking up your ident...;", 48, 0);
 			send(this->_user->ft_get_fd(), ":ft_irc NOTICE * :*** Looking up your nickname...;", 51, 0);
-			return ;
+			return;
 		}
 		this->_user->ft_set_login();
 		if (!this->_user->ft_get_pass())
@@ -69,7 +73,7 @@ public:
 			this->ft_set_client("003");
 			this->_send_msg = RPL_CREATED(this->_client, (std::string)(this->_timestr));
 			this->ft_send();
-			this->_user->ft_set_wellcome();	
+			this->_user->ft_set_wellcome();
 		}
 	}
 };

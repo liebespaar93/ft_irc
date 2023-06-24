@@ -7,8 +7,12 @@ class Privmsg : public Cmd
 {
 private:
 	/* data */
-	Privmsg(const Privmsg &ref){};
-	Privmsg &operator=(const Privmsg &ref) { return *this; };
+	Privmsg(const Privmsg &ref) { (void)ref; };
+	Privmsg &operator=(const Privmsg &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
 	Privmsg() { this->_cmd = "PRIVMSG"; };
@@ -42,7 +46,7 @@ public:
 				return;
 			}
 			this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :" + msg[2];
-			int i = 3;
+			size_t i = 3;
 			while (i < msg.size())
 			{
 				this->_send_msg += " " + msg[i];
@@ -65,7 +69,7 @@ public:
 			return;
 		}
 		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :" + msg[2];
-		int i = 3;
+		size_t i = 3;
 		while (i < msg.size())
 		{
 			this->_send_msg += " " + msg[i];

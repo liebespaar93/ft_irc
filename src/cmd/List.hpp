@@ -8,14 +8,19 @@ class List : public Cmd
 {
 private:
 	/* data */
-	List(const List &ref){};
-	List &operator=(const List &ref) { return *this; };
+	List(const List &ref) { (void)ref; };
+	List &operator=(const List &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
 	List() { this->_cmd = "LIST"; };
 	~List(){};
 	void ft_recv(std::vector<std::string> msg)
 	{
+		(void)msg;
 		this->ft_set_client("321");
 		this->_send_msg = RPL_LISTSTART(this->_client);
 		this->ft_send();

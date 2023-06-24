@@ -25,7 +25,11 @@ private:
 
 	Socket(){};
 	Socket(const Socket &ref);
-	Socket &operator=(const Socket &ref) { return *this; };
+	Socket &operator=(const Socket &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 	void ft_create_socket();
 
@@ -46,7 +50,11 @@ public:
 
 	bool ft_ping();
 	bool ft_pong(std::string msg);
-	std::string ft_push_msg(std::string msg) { this->_msg += msg;  return this->_msg;};
-	void ft_set_msg(std::string msg) { this->_msg = msg;};
+	std::string ft_push_msg(std::string msg)
+	{
+		this->_msg += msg;
+		return this->_msg;
+	};
+	void ft_set_msg(std::string msg) { this->_msg = msg; };
 };
 #endif

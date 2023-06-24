@@ -4,7 +4,7 @@ NAME = ircserv
 
 
 CC = c++
-CFLAGS = 
+CFLAGS = -Wall -Werror -Wextra -std=c++98
 IFLAGS = -I ${ROOTDIR}/src \
 		-I ${ROOTDIR}/src/cmd \
 		-I ${ROOTDIR}/src/control

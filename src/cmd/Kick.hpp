@@ -7,8 +7,12 @@ class Kick : public Cmd
 {
 private:
 	/* data */
-	Kick(const Kick &ref){};
-	Kick &operator=(const Kick &ref) { return *this; };
+	Kick(const Kick &ref) { (void)ref; };
+	Kick &operator=(const Kick &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
 	Kick()
@@ -50,7 +54,7 @@ public:
 			return;
 		}
 		this->_send_msg = ":" + this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " ";
-		int i = 2;
+		size_t i = 2;
 		while (i < msg.size())
 			this->_send_msg += msg[i++] + " ";
 		std::map<std::string, User *> user_list = this->_server->ft_get_channel(msg[1])->ft_get_user_list();

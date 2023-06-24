@@ -9,7 +9,7 @@
 #include "Error.hpp"
 
 Socket::Socket(int fd, sockaddr *socket_info)
-	: _fd(fd), _ping_check(false), _time(time(NULL)), _msg("")
+	: _fd(fd), _time(time(NULL)), _ping_check(false), _msg("")
 {
 	this->_socket_info = *socket_info;
 	this->_pfd.fd = this->_fd;
@@ -19,8 +19,9 @@ Socket::Socket(int fd, sockaddr *socket_info)
 }
 
 Socket::Socket(const char *IP, const char *port)
-	:_ping_check(false), _time(time(NULL)), _msg("")
+	: _time(time(NULL)), _ping_check(false), _msg("")
 {
+	(void)IP;
 	struct addrinfo hints = {.ai_flags = AI_PASSIVE | SO_REUSEADDR, .ai_family = AF_INET, .ai_socktype = SOCK_STREAM, .ai_protocol = IPPROTO_TCP};
 	if (getaddrinfo(NULL, port, &hints, &this->_info) != 0)
 		throw Error("getaddrinfo() != 0");
@@ -38,7 +39,6 @@ Socket::~Socket()
 
 void Socket::ft_create_socket()
 {
-	addrinfo *info;
 	int y = 1;
 
 	if ((this->_fd = socket(this->_info->ai_family, this->_info->ai_socktype, this->_info->ai_protocol)) == -1)
@@ -95,18 +95,19 @@ bool Socket::ft_ping()
 	time_t now = time(NULL);
 	if (this->_time + 120 > now)
 		return (false);
-	if ((this->_time + 180 < now) )
+	if ((this->_time + 180 < now))
 		return (true);
 	if (this->_ping_check)
 		return (false);
 	std::string test = "PING :life \r\n";
-	send(this->_fd, test.c_str(), test.size() , 0);
+	send(this->_fd, test.c_str(), test.size(), 0);
 	this->_ping_check = true;
 	return (false);
 }
 
 bool Socket::ft_pong(std::string msg)
 {
+	(void)msg;
 	this->_time = time(NULL);
 	this->_ping_check = false;
 	return (true);
