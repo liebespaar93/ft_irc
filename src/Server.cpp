@@ -7,6 +7,10 @@
 
 #include "Cmds.hpp"
 
+Server::Server(){}
+
+Server::Server(const Server &ref) { (void)ref; }
+
 Server::Server(std::string port, std::string password)
 	: UserControl(), _password(password), _on(1)
 {
@@ -27,6 +31,16 @@ Server::~Server()
 	}
 	delete this->_server;
 }
+
+Server &Server::operator=(const Server &ref)
+	{
+		this->_server = ref._server;
+		this->_password = ref._password;
+		this->_cmd_map = ref._cmd_map;
+		this->_on = ref._on;
+		this->_socket = ref._socket;
+		return *this;
+	};
 
 void Server::ft_server_on()
 {
@@ -158,6 +172,8 @@ void Server::ft_parse(std::string buf, Socket *socket_front)
 		cmd->ft_recv(msg);
 	}
 }
+
+std::string Server::ft_get_password() { return this->_password; }
 
 void Server::ft_user_destory(User *user)
 {

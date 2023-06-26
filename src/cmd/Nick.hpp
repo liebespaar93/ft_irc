@@ -28,17 +28,17 @@ public:
 			this->ft_send();
 			return;
 		}
-		if (!checkAlpha(msg.at(1)))
+		if (!ft_check_valid(msg.at(1).at(0))) // add checking the first element shouldn't be either a number or non-special characters
 		{
 			this->ft_set_client("432");
-			this->_send_msg = ERR_ERRONEUSNICKNAME(this->_client, this->_user->ft_get_nick_name() + msg.at(1));
+			this->_send_msg = ERR_ERRONEUSNICKNAME(this->_client, msg.at(1));
 			this->ft_send();
 			return;
 		}
 		if (this->_server->ft_get_nick(msg.at(1)))
 		{
 			this->ft_set_client("433");
-			this->_send_msg = ERR_NICKNAMEINUSE(this->_client, this->_user->ft_get_nick_name() + msg.at(1));
+			this->_send_msg = ERR_NICKNAMEINUSE(this->_client, msg.at(1));
 			this->ft_send();
 			return;
 		}

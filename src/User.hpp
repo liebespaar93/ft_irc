@@ -23,41 +23,34 @@ private:
 	bool _login;
 	bool _wellcome;
 
-	User(){};
-	User(const User &ref) { (void)ref; };
-	User &operator=(const User &ref)
-	{
-		this->_fd = ref._fd;
-		return *this;
-	};
+	User();
+	User(const User &ref);
+	User &operator=(const User &ref);
 
 public:
-	User(int fd) : _fd(fd), _user_name(""), _nick_name(""), _IP(""), _pass(false), _login(false), _wellcome(false){};
-	~User()
-	{
-		this->ft_quit();
-	};
+	User(int fd);
+	~User();
 
-	const int &ft_get_fd() { return this->_fd; };
-	const std::string ft_get_user_name() { return this->_user_name; };
-	const std::string ft_get_nick_name() { return this->_nick_name; };
-	const std::string ft_get_real_name() { return this->_real_name; };
-	const std::map<std::string, Channel *> ft_get_channel_list() { return this->_channel_list; };
-	size_t ft_get_channel_size() { return this->_channel_list.size(); };
+	const int &ft_get_fd();
+	const std::string ft_get_user_name();
+	const std::string ft_get_nick_name();
+	const std::string ft_get_real_name();
+	const std::map<std::string, Channel *> ft_get_channel_list();
+	size_t ft_get_channel_size();
 	Channel *ft_get_channel(const std::string &channel_name);
-	bool ft_get_pass() { return this->_pass; }
-	bool ft_get_login() { return this->_login; }
-	bool ft_get_wellcome() { return this->_wellcome; }
-	std::string ft_get_IP() { return this->_IP; };
-	std::string ft_get_info() { return ":" + this->_nick_name + "!~" + this->_user_name + "@" + this->_IP; };
+	bool ft_get_pass();
+	bool ft_get_login();
+	bool ft_get_wellcome();
+	std::string ft_get_IP();
+	std::string ft_get_info();
 
-	void ft_set_nick_name(std::string nick_name) { this->_nick_name = nick_name; };
-	void ft_set_user_name(std::string user_name) { this->_user_name = user_name; };
-	void ft_set_real_name(std::string real_name) { this->_real_name = real_name; };
-	void ft_set_IP(std::string IP) { this->_IP = IP; };
-	void ft_set_pass() { this->_pass = true; }
-	void ft_set_login() { this->_login = true; }
-	void ft_set_wellcome() { this->_wellcome = true; }
+	void ft_set_nick_name(std::string nick_name);
+	void ft_set_user_name(std::string user_name);
+	void ft_set_real_name(std::string real_name);
+	void ft_set_IP(std::string IP);
+	void ft_set_pass();
+	void ft_set_login();
+	void ft_set_wellcome();
 
 	void ft_quit();
 

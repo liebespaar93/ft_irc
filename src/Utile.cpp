@@ -18,12 +18,18 @@ std::vector<std::string> split(const std::string &str, const std::string &delimi
 	return tokens;
 }
 
-bool checkAlpha(const std::string &str)
+bool ft_check_valid(const char c)
 {
-	for (size_t i = 0; i < str.size(); i++)
-		if (!std::isalpha(str[i]) || !std::isspace(str[i]))
+	const char allowed_chars[9] = { '[', ']', '\\', '`', '_', '^', '{', '|', '}' };
+	for (int i = 0; i < 9; i++)
+	{
+		if (allowed_chars[i] == c)
 			return true;
-	return false;
+	}
+	if (isalpha(c))
+		return true;
+	else
+		return false;
 }
 
 std::string ft_itostring(int i)

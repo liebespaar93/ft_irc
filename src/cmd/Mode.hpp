@@ -13,7 +13,6 @@ private:
 		(void)ref;
 		return *this;
 	};
-	// c++11
 	bool _sign;
 	int _param;
 	int _msg_size;
@@ -122,7 +121,6 @@ public:
 			}
 		}
 		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + this->_channel + " ";
-		std::cout << "before loop: " << this->_response_arr[0] << std::endl;
 		while (this->_response_arr[0].size())
 		{
 			if (this->_response_arr[0][this->_response_arr[0].size() - 1] == '-' ||
@@ -131,7 +129,6 @@ public:
 			else
 				break;
 		}
-		std::cout << "after loop: " << this->_response_arr[0] << std::endl;
 		if (!this->_response_arr[0].size())
 			return;
 		for (size_t i = 0; i < this->_response_arr.size(); i++)
@@ -169,26 +166,18 @@ public:
 	{
 		if (this->_sign)
 		{
-			std::cout << "check before the process :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
-
 			if (!this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
 			{
-				std::cout << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(true);
-				std::cout << "after set :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_response_arr[0] += "t";
-				std::cout << this->_response_arr[0] << std::endl;
 			}
 		}
 		else
 		{
 			if (this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
 			{
-				std::cout << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(false);
-				std::cout << "after set :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_response_arr[0] += "t";
-				std::cout << this->_response_arr[0] << std::endl;
 			}
 		}
 	}

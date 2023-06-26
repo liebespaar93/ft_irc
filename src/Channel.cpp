@@ -1,6 +1,37 @@
 #include "Channel.hpp"
 #include "Logger.hpp"
 
+Channel::Channel(){};
+Channel::Channel(const Channel &ref) { (void)ref; }
+
+Channel::Channel(std::string channel_name)
+	: _channel_name(channel_name)
+	, _has_password(false)
+	, _is_invite_only(false)
+	, _is_restricted(true)
+	, _limit(0)
+{
+	Logger("channel_create").ft_channel_create(this->_channel_name);
+}
+Channel::~Channel()
+{
+	this->_user_list.clear();
+	Logger("channel_destory ").ft_channel_destory(this->_channel_name);
+}
+Channel &Channel::operator=(const Channel &ref)
+{
+	this->_channel_name = ref._channel_name;
+	this->_channel_topic = ref._channel_topic;
+	this->_password = ref._password;
+	this->_privilege_user_map = ref._privilege_user_map;
+	this->_has_password = ref._has_password;
+	this->_is_invite_only = ref._is_invite_only;
+	this->_is_restricted = ref._is_restricted;
+	this->_limit = ref._limit;
+	this->_invite_map = ref._invite_map;
+	return *this;
+}
+
 int Channel::ft_channel_join_user(User *user)
 {
 	if (this->_user_list.find(user->ft_get_user_name()) != this->_user_list.end())
@@ -106,3 +137,22 @@ bool Channel::ft_invite_has_user(User *user)
 		return (true);
 	return (false);
 }
+
+std::string const &Channel::ft_get_name() { return this->_channel_name; }
+std::string const &Channel::ft_get_topic() { return this->_channel_topic; }
+std::string const &Channel::ft_get_password() { return this->_password; }
+size_t const &Channel::ft_get_limit() { return this->_limit; }
+bool const &Channel::ft_get_has_password() { return this->_has_password; }
+bool const &Channel::ft_get_restrict() { return this->_is_restricted; }
+bool const &Channel::ft_get_invite() { return this->_is_invite_only; }
+std::map<std::string, User *> &Channel::ft_get_user_list() { return this->_user_list; }
+User *Channel::ft_get_topic_user() { return this->_channel_topic_user; }
+const std::string &Channel::ft_get_topic_time() { return this->_channel_topic_time; }
+void Channel::ft_set_limit(size_t limit) { this->_limit = limit; }
+void Channel::ft_set_password(const std::string new_password) { this->_password = new_password; }
+void Channel::ft_set_restrict(bool on) { this->_is_restricted = on; }
+void Channel::ft_set_has_password(bool on) { this->_has_password = on; }
+void Channel::ft_set_invite(bool on) { this->_is_invite_only = on; }
+void Channel::ft_set_topic(const std::string new_topic) { this->_channel_topic = new_topic; }
+void Channel::ft_set_topic_user(User *user) { this->_channel_topic_user = user; }
+void Channel::ft_set_topic_time(const std::string &time) { this->_channel_topic_time = time; }

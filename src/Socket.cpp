@@ -1,4 +1,4 @@
-#include <arpa/inet.h> // inet_addr
+#include <arpa/inet.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <fcntl.h>
@@ -7,6 +7,13 @@
 #include "Socket.hpp"
 #include "Logger.hpp"
 #include "Error.hpp"
+
+Socket::Socket(){}
+Socket &Socket::operator=(const Socket &ref)
+{
+	(void)ref;
+	return *this;
+}
 
 Socket::Socket(int fd, sockaddr *socket_info)
 	: _fd(fd), _time(time(NULL)), _ping_check(false), _msg("")
@@ -79,14 +86,6 @@ int Socket::ft_poll()
 {
 	if (poll(&this->_pfd, 1, 100) == -1 && this->_pfd.revents & POLLERR)
 		Logger("poll POLLERR").ft_error();
-#ifdef DEBUG
-	if (this->_pfd.revents)
-	{
-		std::cout << "fd : " << pfd.fd << std::endl;
-		std::cout << "pfd.revents : " << pfd.revents << std::endl;
-		std::cout << "pfd.events : " << pfd.events << std::endl;
-	}
-#endif
 	return (this->_pfd.revents);
 }
 
@@ -112,3 +111,14 @@ bool Socket::ft_pong(std::string msg)
 	this->_ping_check = false;
 	return (true);
 }
+
+int Socket::ft_get_socket_fd() { return this->_fd; };
+std::string Socket::ft_get_socket_IP() { return ((std::string)inet_ntoa(((sockaddr_in *)&this->_socket_info)->sin_addr)); }
+void Socket::ft_set_time() { this->_time = time(NULL); }
+time_t Socket::ft_get_time() { return this->_time; }
+std::string Socket::ft_push_msg(std::string msg)
+{
+	this->_msg += msg;
+	return this->_msg;
+};
+void Socket::ft_set_msg(std::string msg) { this->_msg = msg; };

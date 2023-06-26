@@ -27,7 +27,7 @@ public:
 	User *ft_get_user(const int fd);
 	User *ft_get_user(const std::string user_name);
 	User *ft_get_nick(const std::string nick_name);
-	UserControl &ft_get_user_control_class() { return (*this); }
+	UserControl &ft_get_user_control_class();
 
 	int ft_append_user(User *user);
 	int ft_delete_user(User *user);

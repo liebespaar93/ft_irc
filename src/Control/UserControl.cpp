@@ -7,19 +7,12 @@ UserControl::UserControl()
 {
 	this->_fd_map = new std::map<const int, User *>;
 	this->_name_map = new std::map<const std::string, int>;
-	// this->_invite_map = new std::map<std::string, Channel *>;
 	this->_nick_map = new std::map<std::string, int>;
-	std::cout << std::setw(15) << "[UserControl] "
-
-			  << "create!!" << std::endl;
 }
 
 UserControl::UserControl(const UserControl &ref)
 {
 	*this = ref;
-	std::cout << std::setw(15) << "[UserControl] "
-
-			  << "copy!!" << std::endl;
 }
 
 UserControl::~UserControl()
@@ -33,9 +26,6 @@ UserControl &UserControl::operator=(const UserControl &ref)
 {
 	this->_fd_map = ref._fd_map;
 	this->_name_map = ref._name_map;
-	std::cout << std::setw(15) << "[UserControl] "
-
-			  << "operator=!!" << std::endl;
 	return (*this);
 }
 
@@ -59,6 +49,8 @@ User *UserControl::ft_get_nick(const std::string nick_name)
 		return (NULL);
 	return (this->ft_get_user(this->_nick_map->at(nick_name)));
 }
+
+UserControl &UserControl::ft_get_user_control_class() { return (*this); }
 
 int UserControl::ft_append_user(User *user)
 {
