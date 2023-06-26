@@ -7,6 +7,6 @@
 
 
 std::vector<std::string> split(const std::string &str, const std::string &delimiters);
-bool checkAlpha(const std::string &str);
+bool ft_check_valid(const char c);
 std::string ft_itostring(int i);
 #endif

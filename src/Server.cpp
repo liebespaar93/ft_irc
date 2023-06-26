@@ -7,6 +7,10 @@
 
 #include "Cmds.hpp"
 
+Server::Server(){}
+
+Server::Server(const Server &ref) { (void)ref; }
+
 Server::Server(std::string port, std::string password)
 	: UserControl(), _password(password), _on(1)
 {
@@ -27,6 +31,16 @@ Server::~Server()
 	}
 	delete this->_server;
 }
+
+Server &Server::operator=(const Server &ref)
+	{
+		this->_server = ref._server;
+		this->_password = ref._password;
+		this->_cmd_map = ref._cmd_map;
+		this->_on = ref._on;
+		this->_socket = ref._socket;
+		return *this;
+	};
 
 void Server::ft_server_on()
 {
@@ -95,7 +109,6 @@ void Server::ft_pollin(Socket *socket_front)
 	char buf[512];
 	std::string msg;
 	ssize_t len;
-	int socket_send_loop;
 
 	fd = socket_front->ft_get_socket_fd();
 	len = recv(fd, &buf, 511, 0);
@@ -116,7 +129,7 @@ void Server::ft_pollin(Socket *socket_front)
 	{
 		socket_front->ft_set_msg(msg.substr(msg.find_last_of("\n") + 1));
 		std::vector<std::__1::string> gnl = split(msg.c_str(), "\r\n");
-		for (int i = 0; i < gnl.size(); i++)
+		for (size_t i = 0; i < gnl.size(); i++)
 		{
 			this->ft_parse(gnl[i], socket_front);
 			Logger(gnl[i]).ft_recv_msg(fd);
@@ -146,7 +159,7 @@ void Server::ft_set_cmd_map()
 void Server::ft_parse(std::string buf, Socket *socket_front)
 {
 	std::vector<std::string> msg = split(buf, " ");
-	for (int i = 0; i < msg[0].size(); i++)
+	for (size_t i = 0; i < msg[0].size(); i++)
 		msg[0][i] = toupper(msg[0][i]);
 	if (this->_cmd_map.find(msg.at(0)) != this->_cmd_map.end())
 	{
@@ -159,6 +172,8 @@ void Server::ft_parse(std::string buf, Socket *socket_front)
 		cmd->ft_recv(msg);
 	}
 }
+
+std::string Server::ft_get_password() { return this->_password; }
 
 void Server::ft_user_destory(User *user)
 {

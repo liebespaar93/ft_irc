@@ -7,9 +7,12 @@ class Mode : public Cmd
 {
 private:
 	/* data */
-	Mode(const Mode &ref){};
-	Mode &operator=(const Mode &ref) { return *this; };
-	// c++11
+	Mode(const Mode &ref) { (void)ref; };
+	Mode &operator=(const Mode &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 	bool _sign;
 	int _param;
 	int _msg_size;
@@ -56,7 +59,7 @@ public:
 
 		if (2 < msg.size())
 		{
-			int k = 0;
+			size_t k = 0;
 
 			while (k < msg[2].size())
 			{
@@ -118,7 +121,6 @@ public:
 			}
 		}
 		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + this->_channel + " ";
-		std::cout << "before loop: " << this->_response_arr[0] << std::endl;
 		while (this->_response_arr[0].size())
 		{
 			if (this->_response_arr[0][this->_response_arr[0].size() - 1] == '-' ||
@@ -127,10 +129,9 @@ public:
 			else
 				break;
 		}
-		std::cout << "after loop: " << this->_response_arr[0] << std::endl;
 		if (!this->_response_arr[0].size())
 			return;
-		for (int i = 0; i < this->_response_arr.size(); i++)
+		for (size_t i = 0; i < this->_response_arr.size(); i++)
 		{
 			if (i + 1 == this->_response_arr.size())
 				this->_send_msg += ":";
@@ -165,26 +166,18 @@ public:
 	{
 		if (this->_sign)
 		{
-			std::cout << "check before the process :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
-
 			if (!this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
 			{
-				std::cout << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(true);
-				std::cout << "after set :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_response_arr[0] += "t";
-				std::cout << this->_response_arr[0] << std::endl;
 			}
 		}
 		else
 		{
 			if (this->_user->ft_get_channel(this->_channel)->ft_get_restrict())
 			{
-				std::cout << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_user->ft_get_channel(this->_channel)->ft_set_restrict(false);
-				std::cout << "after set :" << this->_user->ft_get_channel(this->_channel)->ft_get_restrict() << std::endl;
 				this->_response_arr[0] += "t";
-				std::cout << this->_response_arr[0] << std::endl;
 			}
 		}
 	}
@@ -276,7 +269,7 @@ public:
 			this->_response_arr[0] += "l";
 			this->_response_arr.push_back(msg[this->_param]);
 		}
-		else 
+		else
 		{
 			if (this->_user->ft_get_channel(this->_channel)->ft_get_limit())
 			{

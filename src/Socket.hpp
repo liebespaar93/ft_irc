@@ -23,9 +23,9 @@ private:
 	bool _ping_check;
 	std::string _msg;
 
-	Socket(){};
+	Socket();
 	Socket(const Socket &ref);
-	Socket &operator=(const Socket &ref) { return *this; };
+	Socket &operator=(const Socket &ref);
 
 	void ft_create_socket();
 
@@ -35,18 +35,14 @@ public:
 	~Socket();
 
 	int ft_poll();
-
-	int ft_get_socket_fd() { return this->_fd; };
-	std::string ft_get_socket_IP() { return ((std::string)inet_ntoa(((sockaddr_in *)&this->_socket_info)->sin_addr)); }
-
-	void ft_set_time() { this->_time = time(NULL); }
-	time_t ft_get_time() { return this->_time; }
-
+	int ft_get_socket_fd();
+	std::string ft_get_socket_IP();
+	void ft_set_time();
+	time_t ft_get_time();
 	Socket *ft_accept();
-
 	bool ft_ping();
 	bool ft_pong(std::string msg);
-	std::string ft_push_msg(std::string msg) { this->_msg += msg;  return this->_msg;};
-	void ft_set_msg(std::string msg) { this->_msg = msg;};
+	std::string ft_push_msg(std::string msg);
+	void ft_set_msg(std::string msg);
 };
 #endif

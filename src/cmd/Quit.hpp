@@ -1,18 +1,22 @@
 #ifndef QUIT_HPP
-# define QUIT_HPP
+#define QUIT_HPP
 
 #include "Cmd.hpp"
 
-class Quit: public Cmd
+class Quit : public Cmd
 {
 private:
 	/* data */
-	Quit(const Quit& ref) {};
-	Quit&	operator=(const Quit& ref) { return *this;};
+	Quit(const Quit &ref) { (void)ref; };
+	Quit &operator=(const Quit &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
-	Quit() { this->_cmd = "QUIT";};
-	~Quit() {};
+	Quit() { this->_cmd = "QUIT"; };
+	~Quit(){};
 
 	void ft_recv(std::vector<std::string> msg)
 	{
@@ -25,10 +29,10 @@ public:
 			this->ft_send();
 			return;
 		}
-		this->_send_msg = "ERROR :Closing link: (!" + this->_user->ft_get_user_name() + "@" + this->_user->ft_get_IP() + ")[Quit: "; 
+		this->_send_msg = "ERROR :Closing link: (!" + this->_user->ft_get_user_name() + "@" + this->_user->ft_get_IP() + ")[Quit: ";
 		if (msg.size() > 2)
 		{
-			int i = 3;
+			size_t i = 3;
 			this->_send_msg += msg[2];
 			while (i < msg.size())
 				this->_send_msg += " " + msg[i];
@@ -37,7 +41,6 @@ public:
 			this->_send_msg += "Leaving...";
 		this->_send_msg += "]";
 		this->ft_send();
-
 	}
 };
 

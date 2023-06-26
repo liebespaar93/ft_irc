@@ -13,9 +13,13 @@ private:
 	std::string _msg;
 
 	Logger(){};
-	Logger(const Logger &ref){};
+	Logger(const Logger &ref) { (void)ref; };
 
-	Logger &operator=(const Logger &ref) { return *this; };
+	Logger &operator=(const Logger &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
 	Logger(std::string msg) { this->_msg = msg; };
@@ -46,7 +50,7 @@ public:
 
 	void ft_channel_destory(std::string channel_name)
 	{
-		std::cout << FG_MEMO << "[DESTORY] " << FG_LMAGENTA << channel_name << " : "  << FG_INFO << _msg
+		std::cout << FG_MEMO << "[DESTORY] " << FG_LMAGENTA << channel_name << " : " << FG_INFO << _msg
 				  << NO_COLOR << std::endl;
 	}
 	void ft_socket(int fd)
@@ -59,17 +63,17 @@ public:
 		std::cout << FG_ERROR << "[CLOSE] " << FG_LBLUE << "[ " << fd << " ] " << FG_INFO << _msg
 				  << NO_COLOR << std::endl;
 	}
-	void	ft_server_msg(int fd)
+	void ft_server_msg(int fd)
 	{
 		std::cout << FG_WHITE << "[SERVER] SEND" << FG_LBLUE << "[ " << fd << " ] " << FG_INFO << _msg
 				  << NO_COLOR << std::endl;
 	}
-	void	ft_cmd_msg(int fd)
+	void ft_cmd_msg(int fd)
 	{
 		std::cout << FG_WARNING << "[CMD] SEND" << FG_LBLUE << "[ " << fd << " ] " << FG_INFO << _msg
 				  << NO_COLOR << std::endl;
 	}
-	void	ft_recv_msg(int fd)
+	void ft_recv_msg(int fd)
 	{
 		std::cout << FG_GREEN << "[CMD] SEND" << FG_LBLUE << "[ " << fd << " ] " << FG_INFO << _msg
 				  << NO_COLOR << std::endl;

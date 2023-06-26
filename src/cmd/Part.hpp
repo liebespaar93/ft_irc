@@ -7,8 +7,12 @@ class Part : public Cmd
 {
 private:
 	/* data */
-	Part(const Part &ref){};
-	Part &operator=(const Part &ref) { return *this; };
+	Part(const Part &ref) { (void)ref; };
+	Part &operator=(const Part &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
 	Part()
@@ -46,7 +50,7 @@ public:
 
 		if (msg.size() > 2)
 		{
-			int i = 3;
+			size_t i = 3;
 			while (i < msg.size())
 				this->_send_msg += " " + msg[i];
 		}

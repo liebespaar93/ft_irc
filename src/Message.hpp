@@ -259,7 +259,8 @@
 
 // 321
 #define RPL_LISTSTART(client) \
-    ":" + client + " Channel :Users Name"
+    ":" + client + " Channel : Topic"
+    // ":" + client + " Channel :Users Name"
 //   "<client> Channel :Users  Name"
 // Sent as a reply to the LIST command, this numeric marks the start of a channel list. As noted in the command description, this numeric MAY be skipped by the server so clients MUST NOT depend on receiving it.
 

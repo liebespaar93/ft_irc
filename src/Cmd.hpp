@@ -14,8 +14,12 @@ class Cmd
 {
 private:
 	/* data */
-	Cmd(const Cmd &ref){};
-	Cmd &operator=(const Cmd &ref) { return *this; };
+	Cmd(const Cmd &ref) { (void)ref; };
+	Cmd &operator=(const Cmd &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 protected:
 	Server *_server;

@@ -7,14 +7,17 @@ class Invite : public Cmd
 {
 private:
 	/* data */
-	Invite(const Invite &ref){};
+	Invite(const Invite &ref) { (void)ref; };
 
-	Invite &operator=(const Invite &ref) { return *this; };
+	Invite &operator=(const Invite &ref)
+	{
+		(void)ref;
+		return *this;
+	};
 
 public:
 	Invite() { this->_cmd = "INVITE"; };
 	~Invite(){};
-
 
 	void ft_recv(std::vector<std::string> msg)
 	{

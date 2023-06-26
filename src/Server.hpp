@@ -22,8 +22,8 @@ private:
 
 	std::queue<Socket *> _socket;
 
-	Server(){};
-	Server(const Server &ref){};
+	Server();
+	Server(const Server &ref);
 
 	void ft_pollin(Socket *socket_front);
 	void ft_server_check_socket_fd();
@@ -35,21 +35,12 @@ private:
 
 public:
 	Server(std::string port_str, std::string password_str);
-	Server &operator=(const Server &ref)
-	{
-		this->_server = ref._server;
-		this->_password = ref._password;
-		this->_cmd_map = ref._cmd_map;
-		this->_on = ref._on;
-		this->_socket = ref._socket;
-		return *this;
-	};
+	Server &operator=(const Server &ref);
 	~Server();
 
 	void ft_server_on();
 
-	std::string ft_get_password() { return this->_password; };
-
+	std::string ft_get_password();
 	void ft_server_input();
 	void ft_user_destory(User *user);
 };

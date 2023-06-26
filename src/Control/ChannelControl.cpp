@@ -7,29 +7,21 @@
 ChannelControl::ChannelControl()
 {
 	this->_channel_map = new std::map<const std::string, Channel *>;
-
-	std::cout << std::setw(15) << "[ChannelControl] "
-			  << "create!!" << std::endl;
 }
 
 ChannelControl::ChannelControl(const ChannelControl &ref)
 	: _channel_map(ref._channel_map)
 {
-	std::cout << std::setw(15) << "[ChannelControl] "
-			  << "copy!!" << std::endl;
 }
 
 ChannelControl::~ChannelControl()
 {
-	std::cout << std::setw(15) << "[ChannelControl] "
-			  << "delete!!" << std::endl;
 }
 
 ChannelControl &ChannelControl::operator=(const ChannelControl &ref)
 {
 	this->_channel_map = ref._channel_map;
-	std::cout << std::setw(15) << "[ChannelControl] "
-			  << "operator=!!" << std::endl;
+	
 	return (*this);
 }
 
@@ -111,3 +103,6 @@ int ChannelControl::ft_send_all_in_channels(User *user, const std::string &msg)
 	}
 	return (0);
 }
+
+ChannelControl &ChannelControl::ft_get_channel_control_class() { return (*this); }
+std::map<const std::string, Channel *> *ChannelControl::ft_get_channel_map() { return this->_channel_map; }
