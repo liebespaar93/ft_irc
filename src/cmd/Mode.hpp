@@ -2,6 +2,7 @@
 #define MODE_HPP
 
 #include "Cmd.hpp"
+#include "Logger.hpp"
 
 class Mode : public Cmd
 {
@@ -227,7 +228,12 @@ public:
 			this->ft_send();
 			return;
 		}
-		if (!this->_server->ft_get_user(msg[this->_param])->ft_get_channel(this->_channel))
+		if (!this->_server->ft_get_nick(msg[this->_param]))
+		{
+
+			return;
+		}
+		if (!this->_server->ft_get_nick(msg[this->_param])->ft_get_channel(this->_channel))
 		{
 			this->ft_set_client("401");
 			this->_send_msg = ERR_NOSUCHNICK(this->_client, this->_user->ft_get_nick_name());
@@ -238,6 +244,7 @@ public:
 		{
 			if (!this->_user->ft_get_channel(this->_channel)->ft_privilege_has_user(msg[this->_param]))
 			{
+				Logger(msg).ft_error();
 				this->_user->ft_get_channel(this->_channel)->ft_privilege_user_authorization(this->_server->ft_get_nick(msg[this->_param]));
 				this->_response_arr[0] += "o";
 				this->_response_arr.push_back(msg[this->_param]);
