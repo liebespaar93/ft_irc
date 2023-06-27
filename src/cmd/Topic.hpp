@@ -78,6 +78,7 @@ public:
 		this->_user->ft_get_channel(msg[1])->ft_set_topic_time(this->_timestr);
 		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :" +
 						  this->_user->ft_get_channel(msg[1])->ft_get_topic();
+		this->_user->ft_get_channel(msg[1])->ft_send_all(this->_user->ft_get_user_name(), this->_send_msg);
 		this->ft_send();
 	}
 };

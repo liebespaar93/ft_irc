@@ -90,6 +90,22 @@ public:
 						this->ft_send(it->second->ft_get_fd());
 					}
 				}
+				if (this->_server->ft_get_channel(channel.at(i))->ft_get_topic() != "")
+				{
+					this->ft_set_client("332");
+					this->_send_msg = RPL_TOPIC(this->_client, msg[1], this->_user->ft_get_channel(msg[1])->ft_get_topic());
+					this->ft_send();
+					this->ft_set_client("333");
+					this->_send_msg = RPL_TOPICWHOTIME(this->_client, msg[1],
+													this->_server->ft_get_channel(msg[1])->ft_get_topic_user()->ft_get_nick_name(),
+													this->_server->ft_get_channel(msg[1])->ft_get_topic_time());
+				}
+				if (this->_server->ft_get_channel(channel.at(i))->ft_mode_has())
+				{
+					this->ft_set_client("324");
+					this->_send_msg = RPL_CHANNELMODEIS(this->_client, msg[1], this->_server->ft_get_channel(msg[1])->ft_mode_string());
+					this->ft_send();
+				}
 			}
 			i++;
 		}

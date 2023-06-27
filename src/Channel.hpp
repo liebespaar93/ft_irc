@@ -70,6 +70,8 @@ public:
 	int ft_invite_append_user(User *user);
 	int ft_invite_delete_user(User *user);
 	bool ft_invite_has_user(User *user);
+
+	bool ft_mode_has();
 };
 
 #endif
