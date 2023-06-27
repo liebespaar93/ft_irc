@@ -2,7 +2,6 @@
 #define MODE_HPP
 
 #include "Cmd.hpp"
-#include "Logger.hpp"
 
 class Mode : public Cmd
 {
@@ -230,7 +229,9 @@ public:
 		}
 		if (!this->_server->ft_get_nick(msg[this->_param]))
 		{
-
+			this->ft_set_client("441");
+			this->_send_msg = ERR_USERNOTINCHANNEL(this->_client, msg[this->_param], msg[1]);
+			this->ft_send();
 			return;
 		}
 		if (!this->_server->ft_get_nick(msg[this->_param])->ft_get_channel(this->_channel))
@@ -242,20 +243,23 @@ public:
 		}
 		if (this->_sign)
 		{
-			if (!this->_user->ft_get_channel(this->_channel)->ft_privilege_has_user(msg[this->_param]))
+			std::cout << "sign : " << this->_sign << std::endl;
+			if (!this->_user->ft_get_channel(this->_channel)->ft_privilege_has_user(this->_server->ft_get_nick(msg[this->_param])->ft_get_user_name()))
 			{
-				Logger(msg).ft_error();
 				this->_user->ft_get_channel(this->_channel)->ft_privilege_user_authorization(this->_server->ft_get_nick(msg[this->_param]));
 				this->_response_arr[0] += "o";
+				std::cout << "auth  : on" << msg[this->_param] <<  std::endl;
 				this->_response_arr.push_back(msg[this->_param]);
 			}
 		}
 		else
 		{
+			std::cout << "sign : " << this->_sign  << std::endl;
 			if (this->_user->ft_get_channel(this->_channel)->ft_privilege_has_user(msg[this->_param]))
 			{
 				this->_user->ft_get_channel(this->_channel)->ft_privilege_user_delete(msg[this->_param]);
 				this->_response_arr[0] += "o";
+				std::cout << "auth  : off" << msg[this->_param] <<  std::endl;
 				this->_response_arr.push_back(msg[this->_param]);
 			}
 		}

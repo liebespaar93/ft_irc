@@ -592,7 +592,7 @@
 
 // 433
 #define ERR_NICKNAMEINUSE(client, nick) \
-    ":" + client + " " + nick + " :Nickname is already in use"
+    ":" + client + " * " + nick + " :Nickname is already in use."
 //   "<client> <nick> :Nickname is already in use"
 // Returned when a NICK command cannot be successfully completed as the desired nickname is already in use on the network. The text used in the last param of this message may vary.
 
