@@ -243,23 +243,19 @@ public:
 		}
 		if (this->_sign)
 		{
-			std::cout << "sign : " << this->_sign << std::endl;
 			if (!this->_user->ft_get_channel(this->_channel)->ft_privilege_has_user(this->_server->ft_get_nick(msg[this->_param])->ft_get_user_name()))
 			{
 				this->_user->ft_get_channel(this->_channel)->ft_privilege_user_authorization(this->_server->ft_get_nick(msg[this->_param]));
 				this->_response_arr[0] += "o";
-				std::cout << "auth  : on" << msg[this->_param] <<  std::endl;
 				this->_response_arr.push_back(msg[this->_param]);
 			}
 		}
 		else
 		{
-			std::cout << "sign : " << this->_sign  << std::endl;
-			if (this->_user->ft_get_channel(this->_channel)->ft_privilege_has_user(msg[this->_param]))
+			if (this->_user->ft_get_channel(this->_channel)->ft_privilege_has_user(this->_server->ft_get_nick(msg[this->_param])->ft_get_user_name()))
 			{
-				this->_user->ft_get_channel(this->_channel)->ft_privilege_user_delete(msg[this->_param]);
+				this->_user->ft_get_channel(this->_channel)->ft_privilege_user_delete(this->_server->ft_get_nick(msg[this->_param])->ft_get_user_name());
 				this->_response_arr[0] += "o";
-				std::cout << "auth  : off" << msg[this->_param] <<  std::endl;
 				this->_response_arr.push_back(msg[this->_param]);
 			}
 		}
