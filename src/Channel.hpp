@@ -72,6 +72,7 @@ public:
 	bool ft_invite_has_user(User *user);
 
 	bool ft_mode_has();
+	std::string ft_mode_string();
 };
 
 #endif
