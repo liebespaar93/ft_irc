@@ -44,8 +44,8 @@ public:
 		}
 		if (this->_user->ft_get_user_name() == "")
 		{
-			send(this->_user->ft_get_fd(), ":ft_irc NOTICE * :*** Looking up your ident...;", 48, 0);
-			send(this->_user->ft_get_fd(), ":ft_irc NOTICE * :*** Looking up your hostname...;", 51, 0);
+			send(this->_user->ft_get_fd(), ":*.ft_irc NOTICE * :*** Looking up your ident...\r\n", 50, 0);
+			send(this->_user->ft_get_fd(), ":*.ft_irc NOTICE * :*** Looking up your hostname...\r\n", 53, 0);
 		}
 		else
 		{
