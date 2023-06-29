@@ -195,8 +195,8 @@ public:
 		{
 			if (this->_user->ft_get_channel(this->_channel)->ft_get_has_password())
 				return;
-			this->_user->ft_get_channel(this->_channel)->ft_set_has_password(true);
 			this->_user->ft_get_channel(this->_channel)->ft_set_password(msg[this->_param]);
+			this->_user->ft_get_channel(this->_channel)->ft_set_has_password(true);
 			this->_response_arr[0] += "k";
 			this->_response_arr.push_back(msg[this->_param]);
 		}
