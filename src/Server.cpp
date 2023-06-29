@@ -118,7 +118,7 @@ void Server::ft_pollin(Socket *socket_front)
 	if (len == 0)
 	{
 		this->_socket.pop();
-		this->ft_delete_user(this->ft_get_user(socket_front->ft_get_socket_fd()));
+		this->ft_user_destory(this->ft_get_user(socket_front->ft_get_socket_fd()));
 		Logger("connect close").ft_socket_close(fd);
 		delete socket_front;
 		return;
@@ -128,6 +128,7 @@ void Server::ft_pollin(Socket *socket_front)
 	if (msg.find_last_of("\n") != std::string::npos)
 	{
 		socket_front->ft_set_msg(msg.substr(msg.find_last_of("\n") + 1));
+		msg = msg.substr(0, msg.find_last_of("\n"));
 		std::vector<std::__1::string> gnl = split(msg.c_str(), "\r\n");
 		for (size_t i = 0; i < gnl.size(); i++)
 		{
