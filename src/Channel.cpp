@@ -33,10 +33,15 @@ int Channel::ft_channel_join_user(User *user)
 {
 	if (this->_user_list.find(user->ft_get_user_name()) != this->_user_list.end())
 		return (1);
-	if (this->_limit && this->_limit <= this->_user_list.size())
-		return (471);
-	if (!(this->ft_invite_has_user(user) || !this->_has_password))
-		return (475);
+	if (!this->ft_invite_has_user(user))
+	{
+		if (this->_is_invite_only)
+			return (473);
+		if (this->_has_password)
+			return (475);
+		if (this->_limit && this->_limit <= this->_user_list.size())
+			return (471);
+	}
 	this->_user_list.insert(std::pair<std::string, User *>(user->ft_get_user_name(), user));
 	user->ft_append_channel(this);
 	this->ft_invite_delete_user(user);
@@ -48,10 +53,15 @@ int Channel::ft_channel_join_user(User *user, std::string password)
 {
 	if (this->_user_list.find(user->ft_get_user_name()) != this->_user_list.end())
 		return (1);
-	if (this->_limit && this->_limit <= this->_user_list.size())
-		return (471);
-	if (!(this->ft_invite_has_user(user) || this->_password.compare(password)))
-		return (475);
+	if (!this->ft_invite_has_user(user))
+	{
+		if (this->_is_invite_only)
+			return (473);
+		if (!this->_password.compare(password))
+			return (475);
+		if (this->_limit && this->_limit <= this->_user_list.size())
+			return (471);
+	}
 	this->_user_list.insert(std::pair<std::string, User *>(user->ft_get_user_name(), user));
 	user->ft_append_channel(this);
 	this->ft_invite_delete_user(user);

@@ -60,10 +60,10 @@ public:
 		}
 		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :" + msg[2];
 		this->ft_send(this->_server->ft_get_nick(msg[1])->ft_get_fd());
-
 		this->ft_set_client("341");
 		this->_send_msg = RPL_INVITING(this->_client, msg[1], msg[2]);
 		this->ft_send();
+		this->_user->ft_get_channel(msg[2])->ft_invite_append_user(this->_server->ft_get_nick(msg[1]));
 	}
 };
 

@@ -59,6 +59,12 @@ public:
 				this->_send_msg = ERR_BADCHANNELKEY(this->_client, channel.at(i));
 				this->ft_send();
 			}
+			else if (code == 473)
+			{
+				this->ft_set_client("473");
+				this->_send_msg = ERR_INVITEONLYCHAN(this->_client, channel.at(i));
+				this->ft_send();
+			}
 			else if (code == 0)
 			{
 				channel_info = this->_server->ft_get_channel(channel[i]);
