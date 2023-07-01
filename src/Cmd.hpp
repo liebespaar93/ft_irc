@@ -55,11 +55,11 @@ public:
 	};
 	void ft_append_msg()
 	{
-		this->_user->ft_append_send_msg(this->_send_msg + "\r\n");
+		this->_user->ft_append_send_msg(this->_send_msg);
 	};
 	void ft_append_msg(User *user)
 	{
-		user->ft_append_send_msg(this->_send_msg + "\r\n");
+		user->ft_append_send_msg(this->_send_msg);
 	};
 	virtual void ft_recv(std::vector<std::string> msg) = 0;
 };

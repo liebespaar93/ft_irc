@@ -69,7 +69,6 @@ public:
 			this->ft_append_msg();
 			return;
 		}
-		msg[2] = msg[2].substr(1);
 		std::string topic_msg = "";
 		for (size_t i = 2; i < msg.size(); i++)
 			topic_msg += msg[i] + " ";
@@ -78,7 +77,9 @@ public:
 		this->_user->ft_get_channel(msg[1])->ft_set_topic_time(this->_timestr);
 		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :" +
 						  this->_user->ft_get_channel(msg[1])->ft_get_topic();
-		this->_user->ft_get_channel(msg[1])->ft_send_all(this->_user->ft_get_user_name(), this->_send_msg);
+		Logger(topic_msg).ft_error();
+		Logger(this->_user->ft_get_channel(msg[1])->ft_get_topic());
+		this->_server->ft_send_msg_to_channel(this->_user, this->_user->ft_get_channel(msg[1]), this->_send_msg);
 		this->ft_append_msg();
 	}
 };

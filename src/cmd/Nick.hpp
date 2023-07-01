@@ -44,8 +44,8 @@ public:
 		}
 		if (this->_user->ft_get_user_name() == "")
 		{
-			this->_user->ft_append_send_msg(":*.ft_irc NOTICE * :*** Looking up your ident...\r\n");
-			this->_user->ft_append_send_msg(":*.ft_irc NOTICE * :*** Looking up your hostname...\r\n");
+			this->_user->ft_append_send_msg(":*.ft_irc NOTICE * :*** Looking up your ident...");
+			this->_user->ft_append_send_msg(":*.ft_irc NOTICE * :*** Looking up your hostname...");
 		}
 		else
 		{

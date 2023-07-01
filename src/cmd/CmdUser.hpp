@@ -50,8 +50,8 @@ public:
 		this->_user->ft_set_real_name(real_name);
 		if (this->_user->ft_get_nick_name() == "")
 		{
-			this->_user->ft_append_send_msg(":*.ft_irc NOTICE * :*** Looking up your ident...\r\n");
-			this->_user->ft_append_send_msg(":*.ft_irc NOTICE * :*** Looking up your hostname...\r\n");
+			this->_user->ft_append_send_msg(":*.ft_irc NOTICE * :*** Looking up your ident...");
+			this->_user->ft_append_send_msg(":*.ft_irc NOTICE * :*** Looking up your hostname...");
 			return;
 		}
 		this->_user->ft_set_login();

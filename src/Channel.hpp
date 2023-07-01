@@ -55,12 +55,11 @@ public:
 	void ft_set_invite(bool on);
 	void ft_set_topic(const std::string new_topic);
 	void ft_set_topic_user(User *user);
-	void ft_set_topic_time(const std::string &time);
+	void ft_set_topic_time(const std::string time);
 
 	int ft_channel_join_user(User *user);
 	int ft_channel_join_user(User *user, std::string password);
 	int ft_channel_leave_user(User *user);
-	void ft_send_all(std::string user_name, std::string buf);
 
 	int ft_privilege_user_authorization(User *user);
 	int ft_privilege_user_delete(std::string user_name);

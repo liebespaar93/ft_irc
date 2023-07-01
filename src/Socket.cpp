@@ -98,7 +98,7 @@ bool Socket::ft_ping()
 		return (true);
 	if (this->_ping_check)
 		return (false);
-	this->ft_append_send_msg("PING :life \r\n");
+	this->ft_append_send_msg("PING :life ");
 	this->_ping_check = true;
 	return (false);
 }
@@ -123,7 +123,7 @@ std::string Socket::ft_push_recv_msg(std::string recv_msg)
 }
 
 void Socket::ft_set_recv_msg(std::string recv_msg) { this->_recv_msg = recv_msg; }
-void Socket::ft_append_send_msg(std::string send_msg){ this->_send_msg += send_msg; }
+void Socket::ft_append_send_msg(std::string send_msg){ this->_send_msg += send_msg + "\r\n"; }
 
 void Socket::ft_send_msg()
 {

@@ -57,7 +57,7 @@ int Channel::ft_channel_join_user(User *user, std::string password)
 	{
 		if (this->_is_invite_only)
 			return (473);
-		if (!this->_password.compare(password))
+		if (this->_password.compare(password))
 			return (475);
 		if (this->_limit && this->_limit <= this->_user_list.size())
 			return (471);
@@ -83,20 +83,6 @@ int Channel::ft_channel_leave_user(User *user)
 	user->ft_delete_channel(this->_channel_name);
 	Logger(user->ft_get_nick_name()).ft_leave(this->_channel_name);
 	return (0);
-}
-
-void Channel::ft_send_all(std::string user_name, std::string buf)
-{
-	std::map<std::string, User *>::iterator it = this->_user_list.begin();
-	buf += "\r\n";
-	while (it != this->_user_list.end())
-	{
-		if (it->first != user_name)
-		{
-			send(it->second->ft_get_fd(), buf.c_str(), buf.length(), 0);
-		}
-		it++;
-	}
 }
 
 int Channel::ft_privilege_user_authorization(User *user)
@@ -162,7 +148,7 @@ void Channel::ft_set_has_password(bool on) { this->_has_password = on; }
 void Channel::ft_set_invite(bool on) { this->_is_invite_only = on; }
 void Channel::ft_set_topic(const std::string new_topic) { this->_channel_topic = new_topic; }
 void Channel::ft_set_topic_user(User *user) { this->_channel_topic_user = user; }
-void Channel::ft_set_topic_time(const std::string &time) { this->_channel_topic_time = time; }
+void Channel::ft_set_topic_time(const std::string time) { this->_channel_topic_time = time; }
 
 bool Channel::ft_mode_has()
 {

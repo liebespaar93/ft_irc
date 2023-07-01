@@ -138,7 +138,6 @@ public:
 			this->_send_msg += this->_response_arr[i] + " ";
 		}
 		this->ft_append_msg();
-		this->_send_msg += "\r\n";
 		this->_server->ft_send_msg_to_channel(this->_user, this->_user->ft_get_channel(this->_channel), this->_send_msg);
 	}
 
