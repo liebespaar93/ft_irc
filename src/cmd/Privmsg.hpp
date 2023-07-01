@@ -45,12 +45,16 @@ public:
 				this->ft_append_msg();
 				return;
 			}
-			this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :" + msg[2];
-			size_t i = 3;
-			while (i < msg.size())
+
+			this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :";
+			if (msg[2].at(0) == ':')
+				this->_send_msg += msg[2].substr(1, msg[2].size());
+			else
+				this->_send_msg += msg[2];
+			if (3 < msg.size())
 			{
-				this->_send_msg += " " + msg[i];
-				i++;
+				for (size_t i = 3; i < msg.size(); i++)
+					this->_send_msg += " " + msg[i];
 			}
 			std::map<std::string, User *> user_list = this->_server->ft_get_channel(msg[1])->ft_get_user_list();
 
@@ -68,12 +72,15 @@ public:
 			this->ft_append_msg();
 			return;
 		}
-		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :" + msg[2];
-		size_t i = 3;
-		while (i < msg.size())
+		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :";
+		if (msg[2].at(0) == ':')
+			this->_send_msg += msg[2].substr(1, msg[2].size());
+		else
+			this->_send_msg += msg[2];
+		if (3 < msg.size())
 		{
-			this->_send_msg += " " + msg[i];
-			i++;
+			for (size_t i = 3; i < msg.size(); i++)
+				this->_send_msg += " " + msg[i];
 		}
 		this->ft_append_msg(this->_server->ft_get_nick(msg[1]));
 	}

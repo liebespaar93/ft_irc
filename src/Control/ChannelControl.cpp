@@ -27,6 +27,8 @@ ChannelControl &ChannelControl::operator=(const ChannelControl &ref)
 
 int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::string &symbol)
 {
+	if (channel_name.at(0) != '#')
+		return (476);
 	if (this->_channel_map->find(channel_name) == this->_channel_map->end())
 	{
 		Channel *new_channel = new Channel(channel_name);
@@ -42,6 +44,8 @@ int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::s
 
 int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::string password, std::string &symbol)
 {
+	if (channel_name.at(0) != '#')
+		return (476);
 	if (this->_channel_map->find(channel_name) == this->_channel_map->end())
 	{
 		Channel *new_channel = new Channel(channel_name);

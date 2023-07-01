@@ -69,16 +69,20 @@ public:
 			this->ft_append_msg();
 			return;
 		}
-		std::string topic_msg = "";
-		for (size_t i = 2; i < msg.size(); i++)
-			topic_msg += msg[i] + " ";
+		std::string topic_msg = msg[2];
+		if (msg[2].at(0) == ':')
+			topic_msg = msg[2].substr(1, msg[2].size());
+		if (3 < msg.size())
+		{
+			topic_msg = msg[2].substr(1, msg[2].size());
+			for (size_t i = 3; i < msg.size(); i++)
+				topic_msg += " " + msg[i];
+		}
 		this->_user->ft_get_channel(msg[1])->ft_set_topic(topic_msg);
 		this->_user->ft_get_channel(msg[1])->ft_set_topic_user(this->_user);
 		this->_user->ft_get_channel(msg[1])->ft_set_topic_time(this->_timestr);
 		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :" +
 						  this->_user->ft_get_channel(msg[1])->ft_get_topic();
-		Logger(topic_msg).ft_error();
-		Logger(this->_user->ft_get_channel(msg[1])->ft_get_topic());
 		this->_server->ft_send_msg_to_channel(this->_user, this->_user->ft_get_channel(msg[1]), this->_send_msg);
 		this->ft_append_msg();
 	}
