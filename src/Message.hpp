@@ -685,8 +685,8 @@
 // Not to be confused with ERR_INVALIDKEY, which may be returned when setting a key.
 
 // 476
-#define ERR_BADCHANMASK(channel) \
-    channel + " :Bad Channel Mask"
+#define ERR_BADCHANMASK(client, channel) \
+    ":" + client + " " + channel + " :Bad Channel Mask"
 //   "<channel> :Bad Channel Mask"
 // Indicates the supplied channel name is not a valid.
 

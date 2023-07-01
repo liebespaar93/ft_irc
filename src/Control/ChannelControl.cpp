@@ -27,6 +27,8 @@ ChannelControl &ChannelControl::operator=(const ChannelControl &ref)
 
 int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::string &symbol)
 {
+	if (channel_name.at(0) != '#')
+		return (476);
 	if (this->_channel_map->find(channel_name) == this->_channel_map->end())
 	{
 		Channel *new_channel = new Channel(channel_name);
@@ -42,6 +44,8 @@ int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::s
 
 int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::string password, std::string &symbol)
 {
+	if (channel_name.at(0) != '#')
+		return (476);
 	if (this->_channel_map->find(channel_name) == this->_channel_map->end())
 	{
 		Channel *new_channel = new Channel(channel_name);
@@ -62,7 +66,7 @@ int ChannelControl::ft_leave_channel(User *user, std::string channel_name)
 		return (403); // ERR_NOSUCHCHANNEL
 	if (this->_channel_map->at(channel_name)->ft_channel_leave_user(user))
 		return (442); // ERR_NOTONCHANNEL
-	msg += ":" + user->ft_get_nick_name() + "!~" + user->ft_get_user_name() + "@" + user->ft_get_IP() + " PART " + channel_name + " :\"Leaving...\"\r\n" ;
+	msg += ":" + user->ft_get_nick_name() + "!~" + user->ft_get_user_name() + "@" + user->ft_get_IP() + " PART " + channel_name + " :\"Leaving...\"" ;
 	this->ft_send_msg_to_channel(user, this->ft_get_channel(channel_name), msg);
 	if (this->_channel_map->at(channel_name)->ft_get_user_list().size() == 0)
 	{
