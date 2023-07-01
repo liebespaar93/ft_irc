@@ -26,7 +26,7 @@ public:
 		{
 			this->ft_set_client("461");
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		this->_send_msg = "ERROR :Closing link: (!" + this->_user->ft_get_user_name() + "@" + this->_user->ft_get_IP() + ")[Quit: ";
@@ -40,7 +40,7 @@ public:
 		else
 			this->_send_msg += "Leaving...";
 		this->_send_msg += "]";
-		this->ft_send();
+		this->ft_append_msg();
 	}
 };
 

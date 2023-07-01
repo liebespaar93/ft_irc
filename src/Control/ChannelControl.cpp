@@ -57,10 +57,13 @@ int ChannelControl::ft_join_channel(User *user, std::string channel_name, std::s
 
 int ChannelControl::ft_leave_channel(User *user, std::string channel_name)
 {
+	std::string msg = "";
 	if (this->_channel_map->find(channel_name) == this->_channel_map->end())
 		return (403); // ERR_NOSUCHCHANNEL
 	if (this->_channel_map->at(channel_name)->ft_channel_leave_user(user))
 		return (442); // ERR_NOTONCHANNEL
+	msg += ":" + user->ft_get_nick_name() + "!~" + user->ft_get_user_name() + "@" + user->ft_get_IP() + " PART " + channel_name + " :\"Leaving...\"\r\n" ;
+	this->ft_send_msg_to_channel(user, this->ft_get_channel(channel_name), msg);
 	if (this->_channel_map->at(channel_name)->ft_get_user_list().size() == 0)
 	{
 		Channel *tmp = this->_channel_map->at(channel_name);
@@ -89,7 +92,7 @@ int ChannelControl::ft_send_msg_to_channel(User *user, Channel *channel, const s
 	for (std::map<std::string, User *>::iterator it = user_list.begin(); it != user_list.end(); it++)
 	{
 		if (it->first != user_name)
-			send(it->second->ft_get_fd(), msg.c_str(), msg.size(), 0);
+			it->second->ft_append_send_msg(msg);
 	}
 	return (0);
 }

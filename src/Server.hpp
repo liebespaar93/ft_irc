@@ -41,7 +41,6 @@ public:
 	void ft_server_on();
 
 	std::string ft_get_password();
-	void ft_server_input();
 	void ft_user_destory(User *user);
 };
 

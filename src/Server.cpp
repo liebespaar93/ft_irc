@@ -33,14 +33,14 @@ Server::~Server()
 }
 
 Server &Server::operator=(const Server &ref)
-	{
-		this->_server = ref._server;
-		this->_password = ref._password;
-		this->_cmd_map = ref._cmd_map;
-		this->_on = ref._on;
-		this->_socket = ref._socket;
-		return *this;
-	};
+{
+	this->_server = ref._server;
+	this->_password = ref._password;
+	this->_cmd_map = ref._cmd_map;
+	this->_on = ref._on;
+	this->_socket = ref._socket;
+	return *this;
+}
 
 void Server::ft_server_on()
 {
@@ -51,18 +51,16 @@ void Server::ft_server_on()
 		if (accept_socket)
 			this->ft_connect_socket(accept_socket);
 		this->ft_server_check_socket_fd();
-		ft_server_input();
 	}
 }
 
 void Server::ft_connect_socket(Socket *accept_socket)
 {
 	this->_socket.push(accept_socket);
-	User *new_user = new User(accept_socket->ft_get_socket_fd());
-	new_user->ft_set_IP(accept_socket->ft_get_socket_IP());
+	User *new_user = new User(accept_socket);
 	this->ft_append_user(new_user);
 }
-
+#include "Utile.hpp"
 void Server::ft_server_check_socket_fd()
 {
 	int revents;
@@ -85,6 +83,7 @@ void Server::ft_server_check_socket_fd()
 		else if ((revents & POLLRDNORM))
 		{
 			this->ft_pollin(socket_front);
+			socket_front->ft_send_msg();
 		}
 		else
 		{
@@ -99,6 +98,7 @@ void Server::ft_server_check_socket_fd()
 				this->_socket.pop();
 				this->_socket.push(socket_front);
 			}
+			socket_front->ft_send_msg();
 		}
 	}
 }
@@ -118,16 +118,17 @@ void Server::ft_pollin(Socket *socket_front)
 	if (len == 0)
 	{
 		this->_socket.pop();
-		this->ft_delete_user(this->ft_get_user(socket_front->ft_get_socket_fd()));
+		this->ft_user_destory(this->ft_get_user(socket_front->ft_get_socket_fd()));
 		Logger("connect close").ft_socket_close(fd);
 		delete socket_front;
 		return;
 	}
 	buf[len] = '\0';
-	msg = socket_front->ft_push_msg(buf);
+	msg = socket_front->ft_push_recv_msg(buf);
 	if (msg.find_last_of("\n") != std::string::npos)
 	{
-		socket_front->ft_set_msg(msg.substr(msg.find_last_of("\n") + 1));
+		socket_front->ft_set_recv_msg(msg.substr(msg.find_last_of("\n") + 1));
+		msg = msg.substr(0, msg.find_last_of("\n"));
 		std::vector<std::__1::string> gnl = split(msg.c_str(), "\r\n");
 		for (size_t i = 0; i < gnl.size(); i++)
 		{
@@ -181,28 +182,4 @@ void Server::ft_user_destory(User *user)
 	for (std::map<std::string, Channel *>::iterator it = channnel_list.begin(); it != channnel_list.end(); it++)
 		this->ft_leave_channel(user, it->first);
 	this->ft_delete_user(user);
-}
-
-void Server::ft_server_input()
-{
-	std::string buf;
-	struct pollfd pfd = {.fd = 0, .events = POLLIN};
-	int ret_poll;
-	int size = this->_socket.size();
-	Socket *front = NULL;
-
-	ret_poll = poll(&pfd, 1, 0);
-	if (ret_poll > 0)
-	{
-		std::getline(std::cin, buf);
-		buf.append("\r\n");
-		while (size--)
-		{
-			front = this->_socket.front();
-			send(front->ft_get_socket_fd(), buf.c_str(), buf.size(), 0);
-			Logger(buf).ft_server_msg(front->ft_get_socket_fd());
-			this->_socket.pop();
-			this->_socket.push(front);
-		}
-	}
 }

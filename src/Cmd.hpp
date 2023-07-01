@@ -53,15 +53,13 @@ public:
 		this->_time = time(NULL);
 		this->_timestr = asctime(localtime(&this->_time));
 	};
-	void ft_send()
+	void ft_append_msg()
 	{
-		this->_send_msg += "\r\n";
-		send(this->_user->ft_get_fd(), this->_send_msg.c_str(), this->_send_msg.size(), 0);
+		this->_user->ft_append_send_msg(this->_send_msg + "\r\n");
 	};
-	void ft_send(int fd)
+	void ft_append_msg(User *user)
 	{
-		this->_send_msg += "\r\n";
-		send(fd, this->_send_msg.c_str(), this->_send_msg.size(), 0);
+		user->ft_append_send_msg(this->_send_msg + "\r\n");
 	};
 	virtual void ft_recv(std::vector<std::string> msg) = 0;
 };

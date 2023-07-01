@@ -16,7 +16,7 @@ Socket &Socket::operator=(const Socket &ref)
 }
 
 Socket::Socket(int fd, sockaddr *socket_info)
-	: _fd(fd), _time(time(NULL)), _ping_check(false), _msg("")
+	: _fd(fd), _time(time(NULL)), _ping_check(false), _recv_msg(""), _send_msg("")
 {
 	this->_socket_info = *socket_info;
 	this->_pfd.fd = this->_fd;
@@ -26,7 +26,7 @@ Socket::Socket(int fd, sockaddr *socket_info)
 }
 
 Socket::Socket(const char *IP, const char *port)
-	: _time(time(NULL)), _ping_check(false), _msg("")
+	: _time(time(NULL)), _ping_check(false), _recv_msg("")
 {
 	(void)IP;
 	struct addrinfo hints = {.ai_flags = AI_PASSIVE | SO_REUSEADDR, .ai_family = AF_INET, .ai_socktype = SOCK_STREAM, .ai_protocol = IPPROTO_TCP};
@@ -39,7 +39,7 @@ Socket::Socket(const char *IP, const char *port)
 
 Socket::~Socket()
 {
-	send(this->_fd, "", 0, 0);
+	send(this->_fd, 0, 0, 0);
 	close(this->_fd);
 	Logger("socket close").ft_socket_close(this->_fd);
 }
@@ -92,14 +92,13 @@ int Socket::ft_poll()
 bool Socket::ft_ping()
 {
 	time_t now = time(NULL);
-	if (this->_time + 120 > now)
+	if (this->_time + 300 > now)
 		return (false);
-	if ((this->_time + 180 < now))
+	if ((this->_time + 360 < now))
 		return (true);
 	if (this->_ping_check)
 		return (false);
-	std::string test = "PING :life \r\n";
-	send(this->_fd, test.c_str(), test.size(), 0);
+	this->ft_append_send_msg("PING :life \r\n");
 	this->_ping_check = true;
 	return (false);
 }
@@ -112,13 +111,22 @@ bool Socket::ft_pong(std::string msg)
 	return (true);
 }
 
-int Socket::ft_get_socket_fd() { return this->_fd; };
+int Socket::ft_get_socket_fd() { return this->_fd; }
 std::string Socket::ft_get_socket_IP() { return ((std::string)inet_ntoa(((sockaddr_in *)&this->_socket_info)->sin_addr)); }
 void Socket::ft_set_time() { this->_time = time(NULL); }
 time_t Socket::ft_get_time() { return this->_time; }
-std::string Socket::ft_push_msg(std::string msg)
+
+std::string Socket::ft_push_recv_msg(std::string recv_msg)
 {
-	this->_msg += msg;
-	return this->_msg;
-};
-void Socket::ft_set_msg(std::string msg) { this->_msg = msg; };
+	this->_recv_msg += recv_msg;
+	return this->_recv_msg;
+}
+
+void Socket::ft_set_recv_msg(std::string recv_msg) { this->_recv_msg = recv_msg; }
+void Socket::ft_append_send_msg(std::string send_msg){ this->_send_msg += send_msg; }
+
+void Socket::ft_send_msg()
+{
+	send(this->_fd, this->_send_msg.c_str(), this->_send_msg.size(), 0);
+	this->_send_msg = "";
+}

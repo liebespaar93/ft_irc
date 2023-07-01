@@ -1,15 +1,12 @@
 #include "Channel.hpp"
 #include "Logger.hpp"
+#include "Utile.hpp"
 
-Channel::Channel(){};
+Channel::Channel(){}
 Channel::Channel(const Channel &ref) { (void)ref; }
 
 Channel::Channel(std::string channel_name)
-	: _channel_name(channel_name)
-	, _has_password(false)
-	, _is_invite_only(false)
-	, _is_restricted(true)
-	, _limit(0)
+	: _channel_name(channel_name), _has_password(false), _is_invite_only(false), _is_restricted(false), _limit(0)
 {
 	Logger("channel_create").ft_channel_create(this->_channel_name);
 }
@@ -36,8 +33,15 @@ int Channel::ft_channel_join_user(User *user)
 {
 	if (this->_user_list.find(user->ft_get_user_name()) != this->_user_list.end())
 		return (1);
-	if (this->_limit && this->_limit <= this->_user_list.size())
-		return (471); 
+	if (!this->ft_invite_has_user(user))
+	{
+		if (this->_is_invite_only)
+			return (473);
+		if (this->_has_password)
+			return (475);
+		if (this->_limit && this->_limit <= this->_user_list.size())
+			return (471);
+	}
 	this->_user_list.insert(std::pair<std::string, User *>(user->ft_get_user_name(), user));
 	user->ft_append_channel(this);
 	this->ft_invite_delete_user(user);
@@ -49,10 +53,15 @@ int Channel::ft_channel_join_user(User *user, std::string password)
 {
 	if (this->_user_list.find(user->ft_get_user_name()) != this->_user_list.end())
 		return (1);
-	if (this->_limit && this->_limit <= this->_user_list.size())
-		return (471);
-	if (!this->ft_invite_has_user(user) || !this->_password.compare(password))
-		return (475);
+	if (!this->ft_invite_has_user(user))
+	{
+		if (this->_is_invite_only)
+			return (473);
+		if (!this->_password.compare(password))
+			return (475);
+		if (this->_limit && this->_limit <= this->_user_list.size())
+			return (471);
+	}
 	this->_user_list.insert(std::pair<std::string, User *>(user->ft_get_user_name(), user));
 	user->ft_append_channel(this);
 	this->ft_invite_delete_user(user);
@@ -79,17 +88,15 @@ int Channel::ft_channel_leave_user(User *user)
 void Channel::ft_send_all(std::string user_name, std::string buf)
 {
 	std::map<std::string, User *>::iterator it = this->_user_list.begin();
+	buf += "\r\n";
 	while (it != this->_user_list.end())
 	{
-		if ((*it).first != user_name)
-			send((*it).second->ft_get_fd(), buf.c_str(), buf.length(), 0);
+		if (it->first != user_name)
+		{
+			send(it->second->ft_get_fd(), buf.c_str(), buf.length(), 0);
+		}
 		it++;
 	}
-}
-
-void Channel::ft_send_me(std::string user_name, std::string buf)
-{
-	send(this->_user_list.at(user_name)->ft_get_fd(), buf.c_str(), buf.length(), 0);
 }
 
 int Channel::ft_privilege_user_authorization(User *user)
@@ -119,7 +126,7 @@ int Channel::ft_invite_append_user(User *user)
 {
 	if (this->_invite_map.find(user->ft_get_user_name()) != this->_invite_map.end())
 		return (0);
-	this->_invite_map.insert(std::pair<std::string, User* >(user->ft_get_user_name(), user));
+	this->_invite_map.insert(std::pair<std::string, User *>(user->ft_get_user_name(), user));
 	return (0);
 }
 
@@ -156,3 +163,34 @@ void Channel::ft_set_invite(bool on) { this->_is_invite_only = on; }
 void Channel::ft_set_topic(const std::string new_topic) { this->_channel_topic = new_topic; }
 void Channel::ft_set_topic_user(User *user) { this->_channel_topic_user = user; }
 void Channel::ft_set_topic_time(const std::string &time) { this->_channel_topic_time = time; }
+
+bool Channel::ft_mode_has()
+{
+	if (this->_limit || this->_has_password || this->_is_restricted || this->_is_invite_only)
+		return (true);
+	return (false);
+}
+
+std::string Channel::ft_mode_string()
+{
+	std::string mode_string = "+";
+	std::string param = "";
+
+	if (!this->ft_mode_has())
+		return ("");
+	if (this->_is_invite_only)
+		mode_string += "i";
+	if (this->_is_restricted)
+		mode_string += "t";
+	if (this->_limit)
+	{
+		mode_string += "l";
+		param += " " + ft_itostring(this->_limit);
+	}
+	if (this->_has_password)
+	{
+		mode_string += "k";
+		param += " " + this->_password;
+	}
+	return (mode_string + param);
+}

@@ -33,7 +33,7 @@ public:
 		if (msg.size() == 1)
 		{
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (msg.size() > 1)
@@ -51,13 +51,19 @@ public:
 			{
 				this->ft_set_client("471");
 				this->_send_msg = ERR_CHANNELISFULL(this->_client, channel.at(i));
-				this->ft_send();
+				this->ft_append_msg();
 			}
 			else if (code == 475)
 			{
 				this->ft_set_client("475");
 				this->_send_msg = ERR_BADCHANNELKEY(this->_client, channel.at(i));
-				this->ft_send();
+				this->ft_append_msg();
+			}
+			else if (code == 473)
+			{
+				this->ft_set_client("473");
+				this->_send_msg = ERR_INVITEONLYCHAN(this->_client, channel.at(i));
+				this->ft_append_msg();
 			}
 			else if (code == 0)
 			{
@@ -65,7 +71,7 @@ public:
 				channel_user_list = channel_info->ft_get_user_list();
 				this->_prefix = channel_info->ft_privilege_has_user(this->_user->ft_get_user_name()) ? "@" : "";
 				this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " :" + channel[i];
-				this->ft_send();
+				this->ft_append_msg();
 
 				this->ft_set_client("353");
 				this->_prefix = channel_info->ft_privilege_has_user(this->_user->ft_get_user_name()) ? "@" : "";
@@ -78,17 +84,33 @@ public:
 						this->_send_msg += " " + this->_prefix + this->_server->ft_get_user(it->first)->ft_get_nick_name();
 					}
 				}
-				this->ft_send();
+				this->ft_append_msg();
 				this->ft_set_client("366");
 				this->_send_msg = RPL_ENDOFNAMES(this->_client, this->_channel);
-				this->ft_send();
+				this->ft_append_msg();
 				for (std::map<std::__1::string, User *>::iterator it = channel_user_list.begin(); it != channel_user_list.end(); it++)
 				{
 					if (this->_user->ft_get_user_name() != it->first)
 					{
 						this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " :" + channel[i];
-						this->ft_send(it->second->ft_get_fd());
+						this->ft_append_msg(it->second);
 					}
+				}
+				if (this->_server->ft_get_channel(channel.at(i))->ft_get_topic() != "")
+				{
+					this->ft_set_client("332");
+					this->_send_msg = RPL_TOPIC(this->_client, msg[1], this->_user->ft_get_channel(msg[1])->ft_get_topic());
+					this->ft_append_msg();
+					this->ft_set_client("333");
+					this->_send_msg = RPL_TOPICWHOTIME(this->_client, msg[1],
+													this->_server->ft_get_channel(msg[1])->ft_get_topic_user()->ft_get_nick_name(),
+													this->_server->ft_get_channel(msg[1])->ft_get_topic_time());
+				}
+				if (this->_server->ft_get_channel(channel.at(i))->ft_mode_has())
+				{
+					this->ft_set_client("324");
+					this->_send_msg = RPL_CHANNELMODEIS(this->_client, msg[1], this->_server->ft_get_channel(msg[1])->ft_mode_string());
+					this->ft_append_msg();
 				}
 			}
 			i++;

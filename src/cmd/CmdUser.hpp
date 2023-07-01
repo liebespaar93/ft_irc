@@ -28,7 +28,7 @@ public:
 		{
 			this->ft_set_client("461");
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		user_name = msg[1];
@@ -50,8 +50,8 @@ public:
 		this->_user->ft_set_real_name(real_name);
 		if (this->_user->ft_get_nick_name() == "")
 		{
-			send(this->_user->ft_get_fd(), ":ft_irc NOTICE * :*** Looking up your ident...;", 48, 0);
-			send(this->_user->ft_get_fd(), ":ft_irc NOTICE * :*** Looking up your nickname...;", 51, 0);
+			this->_user->ft_append_send_msg(":*.ft_irc NOTICE * :*** Looking up your ident...\r\n");
+			this->_user->ft_append_send_msg(":*.ft_irc NOTICE * :*** Looking up your hostname...\r\n");
 			return;
 		}
 		this->_user->ft_set_login();
@@ -59,20 +59,20 @@ public:
 		{
 			this->ft_set_client("462");
 			this->_send_msg = ERR_ALREADYREGISTERED(this->_client);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (this->_user->ft_get_login() && this->_user->ft_get_pass() && !this->_user->ft_get_wellcome())
 		{
 			this->ft_set_client("001");
 			this->_send_msg = RPL_WELCOME(this->_client, this->_server_name, this->_user->ft_get_nick_name(), this->_user->ft_get_user_name(), this->_user->ft_get_IP());
-			this->ft_send();
+			this->ft_append_msg();
 			this->ft_set_client("002");
 			this->_send_msg = RPL_YOURHOST(this->_client, this->_server_name, "v.1");
-			this->ft_send();
+			this->ft_append_msg();
 			this->ft_set_client("003");
 			this->_send_msg = RPL_CREATED(this->_client, (std::string)(this->_timestr));
-			this->ft_send();
+			this->ft_append_msg();
 			this->_user->ft_set_wellcome();
 		}
 	}

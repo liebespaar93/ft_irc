@@ -276,7 +276,9 @@
 //   "<client> :End of /LIST"
 // Sent as a reply to the LIST command, this numeric indicates the end of a LIST response.
 
-// RPL_CHANNELMODEIS(324)
+// 324
+#define RPL_CHANNELMODEIS(client, channel, modestring) \
+	":" + client + " " + channel + " " + modestring
 //   "<client> <channel> <modestring> <mode arguments>..."
 // Sent to a client to inform them of the currently-set modes of a channel. <channel> is the name of the channel. <modestring> and <mode arguments> are a mode string and the mode arguments (delimited as separate parameters) as defined in the MODE message description.
 
@@ -592,7 +594,7 @@
 
 // 433
 #define ERR_NICKNAMEINUSE(client, nick) \
-    ":" + client + " " + nick + " :Nickname is already in use"
+    ":" + client + " * " + nick + " :Nickname is already in use."
 //   "<client> <nick> :Nickname is already in use"
 // Returned when a NICK command cannot be successfully completed as the desired nickname is already in use on the network. The text used in the last param of this message may vary.
 

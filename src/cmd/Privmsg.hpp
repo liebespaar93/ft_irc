@@ -26,7 +26,7 @@ public:
 		{
 			this->ft_set_client("461");
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (msg[1].at(0) == '#')
@@ -35,14 +35,14 @@ public:
 			{
 				this->ft_set_client("403");
 				this->_send_msg = ERR_NOSUCHCHANNEL(this->_client, msg[1]);
-				this->ft_send();
+				this->ft_append_msg();
 				return;
 			}
 			if (!this->_user->ft_get_channel(msg[1]) && !this->_server->ft_get_nick(msg[1]))
 			{
 				this->ft_set_client("404");
 				this->_send_msg = ERR_CANNOTSENDTOCHAN(this->_client, msg[1]);
-				this->ft_send();
+				this->ft_append_msg();
 				return;
 			}
 			this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :" + msg[2];
@@ -57,7 +57,7 @@ public:
 			for (std::map<std::string, User *>::iterator it = user_list.begin(); it != user_list.end(); it++)
 			{
 				if (it->first != this->_user->ft_get_user_name())
-					this->ft_send(it->second->ft_get_fd());
+					this->ft_append_msg(it->second);
 			}
 			return;
 		}
@@ -65,7 +65,7 @@ public:
 		{
 			this->ft_set_client("401");
 			this->_send_msg = ERR_NOSUCHNICK(this->_client, msg[1]);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		this->_send_msg = this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " :" + msg[2];
@@ -75,7 +75,7 @@ public:
 			this->_send_msg += " " + msg[i];
 			i++;
 		}
-		this->ft_send(this->_server->ft_get_nick(msg[1])->ft_get_fd());
+		this->ft_append_msg(this->_server->ft_get_nick(msg[1]));
 	}
 };
 
