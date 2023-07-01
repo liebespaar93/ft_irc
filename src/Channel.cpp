@@ -99,11 +99,6 @@ void Channel::ft_send_all(std::string user_name, std::string buf)
 	}
 }
 
-void Channel::ft_send_me(std::string user_name, std::string buf)
-{
-	send(this->_user_list.at(user_name)->ft_get_fd(), buf.c_str(), buf.length(), 0);
-}
-
 int Channel::ft_privilege_user_authorization(User *user)
 {
 	if (this->_privilege_user_map.find(user->ft_get_user_name()) != this->_privilege_user_map.end())

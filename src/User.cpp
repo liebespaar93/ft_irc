@@ -7,13 +7,14 @@ User &User::operator=(const User &ref)
 	this->_fd = ref._fd;
 	return *this;
 }
-User::User(int fd) : _fd(fd)
-				 , _user_name("")
-				 , _nick_name("")
-				 , _IP("")
-				 , _pass(false)
-				 , _login(false)
-				 , _wellcome(false)
+User::User(Socket *socket) : _socket(socket)
+				, _fd(socket->ft_get_socket_fd())
+				, _user_name("")
+				, _nick_name("")
+				, _IP(socket->ft_get_socket_IP())
+				, _pass(false)
+				, _login(false)
+				, _wellcome(false)
 {	
 }
 User::~User()
@@ -68,3 +69,4 @@ void User::ft_set_IP(std::string IP) { this->_IP = IP; }
 void User::ft_set_pass() { this->_pass = true; }
 void User::ft_set_login() { this->_login = true; }
 void User::ft_set_wellcome() { this->_wellcome = true; }
+void User::ft_append_send_msg(std::string send_msg) { this->_socket->ft_append_send_msg(send_msg); }

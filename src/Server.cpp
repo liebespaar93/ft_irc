@@ -57,8 +57,7 @@ void Server::ft_server_on()
 void Server::ft_connect_socket(Socket *accept_socket)
 {
 	this->_socket.push(accept_socket);
-	User *new_user = new User(accept_socket->ft_get_socket_fd());
-	new_user->ft_set_IP(accept_socket->ft_get_socket_IP());
+	User *new_user = new User(accept_socket);
 	this->ft_append_user(new_user);
 }
 #include "Utile.hpp"
@@ -84,6 +83,7 @@ void Server::ft_server_check_socket_fd()
 		else if ((revents & POLLRDNORM))
 		{
 			this->ft_pollin(socket_front);
+			socket_front->ft_send_msg();
 		}
 		else
 		{
@@ -98,6 +98,7 @@ void Server::ft_server_check_socket_fd()
 				this->_socket.pop();
 				this->_socket.push(socket_front);
 			}
+			socket_front->ft_send_msg();
 		}
 	}
 }
@@ -123,10 +124,10 @@ void Server::ft_pollin(Socket *socket_front)
 		return;
 	}
 	buf[len] = '\0';
-	msg = socket_front->ft_push_msg(buf);
+	msg = socket_front->ft_push_recv_msg(buf);
 	if (msg.find_last_of("\n") != std::string::npos)
 	{
-		socket_front->ft_set_msg(msg.substr(msg.find_last_of("\n") + 1));
+		socket_front->ft_set_recv_msg(msg.substr(msg.find_last_of("\n") + 1));
 		msg = msg.substr(0, msg.find_last_of("\n"));
 		std::vector<std::__1::string> gnl = split(msg.c_str(), "\r\n");
 		for (size_t i = 0; i < gnl.size(); i++)

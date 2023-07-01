@@ -92,7 +92,7 @@ int ChannelControl::ft_send_msg_to_channel(User *user, Channel *channel, const s
 	for (std::map<std::string, User *>::iterator it = user_list.begin(); it != user_list.end(); it++)
 	{
 		if (it->first != user_name)
-			send(it->second->ft_get_fd(), msg.c_str(), msg.size(), 0);
+			it->second->ft_append_send_msg(msg);
 	}
 	return (0);
 }

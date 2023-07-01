@@ -21,7 +21,8 @@ private:
 	pollfd _pfd;
 	time_t _time;
 	bool _ping_check;
-	std::string _msg;
+	std::string _recv_msg;
+	std::string _send_msg;
 
 	Socket();
 	Socket(const Socket &ref);
@@ -42,7 +43,9 @@ public:
 	Socket *ft_accept();
 	bool ft_ping();
 	bool ft_pong(std::string msg);
-	std::string ft_push_msg(std::string msg);
-	void ft_set_msg(std::string msg);
+	std::string ft_push_recv_msg(std::string recv_msg);
+	void ft_set_recv_msg(std::string recv_msg);
+	void ft_append_send_msg(std::string send_msg);
+	void ft_send_msg();
 };
 #endif

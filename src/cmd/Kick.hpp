@@ -29,28 +29,28 @@ public:
 		{
 			this->ft_set_client("461");
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (!this->_server->ft_get_channel(msg[1]))
 		{
 			this->ft_set_client("403");
 			this->_send_msg = ERR_NOSUCHCHANNEL(this->_client, msg[1]);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (!this->_user->ft_get_channel(msg[1]))
 		{
 			this->ft_set_client("442");
 			this->_send_msg = ERR_NOTONCHANNEL(this->_client, msg[1]);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (!this->_user->ft_get_channel(msg[1])->ft_privilege_has_user(this->_user->ft_get_user_name()))
 		{
 			this->ft_set_client("482");
 			this->_send_msg = ERR_CHANOPRIVSNEEDED(this->_client, msg[1]);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		this->_send_msg = ":" + this->_user->ft_get_info() + " " + this->_cmd + " " + msg[1] + " ";
@@ -60,7 +60,7 @@ public:
 		std::map<std::string, User *> user_list = this->_server->ft_get_channel(msg[1])->ft_get_user_list();
 		for (std::map<std::string, User *>::iterator it = user_list.begin(); it != user_list.end(); it++)
 		{
-			this->ft_send(it->second->ft_get_fd());
+			this->ft_append_msg(it->second);
 		}
 		i = 2;
 		while (i < msg.size())

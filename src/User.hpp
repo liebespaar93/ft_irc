@@ -13,6 +13,7 @@ class User
 
 private:
 	/* data */
+	Socket *_socket;
 	int _fd;
 	std::string _real_name;
 	std::string _user_name;
@@ -28,7 +29,7 @@ private:
 	User &operator=(const User &ref);
 
 public:
-	User(int fd);
+	User(Socket *socket);
 	~User();
 
 	const int &ft_get_fd();
@@ -56,6 +57,7 @@ public:
 
 	void ft_append_channel(Channel *channel);
 	void ft_delete_channel(std::string channel_name);
+	void ft_append_send_msg(std::string send_msg);
 };
 
 #endif

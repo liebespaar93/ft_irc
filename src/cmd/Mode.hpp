@@ -33,21 +33,21 @@ public:
 		{
 			this->ft_set_client("461");
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (!this->_user->ft_get_channel(msg[1]))
 		{
 			this->ft_set_client("401");
 			this->_send_msg = ERR_NOSUCHNICK(this->_client, this->_user->ft_get_nick_name());
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (!this->_user->ft_get_channel(msg[1])->ft_privilege_has_user(this->_user->ft_get_user_name()))
 		{
 			this->ft_set_client("482");
 			this->_send_msg = ERR_CHANOPRIVSNEEDED(this->_client, msg[1]);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		this->_msg_size = msg.size();
@@ -113,7 +113,7 @@ public:
 					default:
 						this->ft_set_client("472");
 						this->_send_msg = ERR_UNKNOWNMODE(this->_client, msg[2][k]);
-						this->ft_send();
+						this->ft_append_msg();
 						break;
 					}
 				}
@@ -137,7 +137,7 @@ public:
 				this->_send_msg += ":";
 			this->_send_msg += this->_response_arr[i] + " ";
 		}
-		this->ft_send();
+		this->ft_append_msg();
 		this->_send_msg += "\r\n";
 		this->_server->ft_send_msg_to_channel(this->_user, this->_user->ft_get_channel(this->_channel), this->_send_msg);
 	}
@@ -188,7 +188,7 @@ public:
 		{
 			this->ft_set_client("461");
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (this->_sign)
@@ -208,7 +208,7 @@ public:
 			{
 				this->ft_set_client("800");
 				this->_send_msg = this->_client + " error: you put wrong password";
-				this->ft_send();
+				this->ft_append_msg();
 				return;
 			}
 			this->_user->ft_get_channel(this->_channel)->ft_set_password("");
@@ -224,21 +224,21 @@ public:
 		{
 			this->ft_set_client("461");
 			this->_send_msg = ERR_NEEDMOREPARAMS(this->_client, this->_cmd);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (!this->_server->ft_get_nick(msg[this->_param]))
 		{
 			this->ft_set_client("441");
 			this->_send_msg = ERR_USERNOTINCHANNEL(this->_client, msg[this->_param], msg[1]);
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (!this->_server->ft_get_nick(msg[this->_param])->ft_get_channel(this->_channel))
 		{
 			this->ft_set_client("401");
 			this->_send_msg = ERR_NOSUCHNICK(this->_client, this->_user->ft_get_nick_name());
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (this->_sign)
@@ -267,7 +267,7 @@ public:
 		{
 			this->ft_set_client("696");
 			this->_send_msg = ERR_INVALIDMODEPARAM(this->_client, this->_channel, "l", msg[this->_param], "wrong type of the parameter");
-			this->ft_send();
+			this->ft_append_msg();
 			return;
 		}
 		if (this->_sign)
