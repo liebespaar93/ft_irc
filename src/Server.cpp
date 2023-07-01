@@ -33,14 +33,14 @@ Server::~Server()
 }
 
 Server &Server::operator=(const Server &ref)
-	{
-		this->_server = ref._server;
-		this->_password = ref._password;
-		this->_cmd_map = ref._cmd_map;
-		this->_on = ref._on;
-		this->_socket = ref._socket;
-		return *this;
-	};
+{
+	this->_server = ref._server;
+	this->_password = ref._password;
+	this->_cmd_map = ref._cmd_map;
+	this->_on = ref._on;
+	this->_socket = ref._socket;
+	return *this;
+}
 
 void Server::ft_server_on()
 {
@@ -51,7 +51,6 @@ void Server::ft_server_on()
 		if (accept_socket)
 			this->ft_connect_socket(accept_socket);
 		this->ft_server_check_socket_fd();
-		ft_server_input();
 	}
 }
 
@@ -62,7 +61,7 @@ void Server::ft_connect_socket(Socket *accept_socket)
 	new_user->ft_set_IP(accept_socket->ft_get_socket_IP());
 	this->ft_append_user(new_user);
 }
-
+#include "Utile.hpp"
 void Server::ft_server_check_socket_fd()
 {
 	int revents;
@@ -182,28 +181,4 @@ void Server::ft_user_destory(User *user)
 	for (std::map<std::string, Channel *>::iterator it = channnel_list.begin(); it != channnel_list.end(); it++)
 		this->ft_leave_channel(user, it->first);
 	this->ft_delete_user(user);
-}
-
-void Server::ft_server_input()
-{
-	std::string buf;
-	struct pollfd pfd = {.fd = 0, .events = POLLIN};
-	int ret_poll;
-	int size = this->_socket.size();
-	Socket *front = NULL;
-
-	ret_poll = poll(&pfd, 1, 0);
-	if (ret_poll > 0)
-	{
-		std::getline(std::cin, buf);
-		buf.append("\r\n");
-		while (size--)
-		{
-			front = this->_socket.front();
-			send(front->ft_get_socket_fd(), buf.c_str(), buf.size(), 0);
-			Logger(buf).ft_server_msg(front->ft_get_socket_fd());
-			this->_socket.pop();
-			this->_socket.push(front);
-		}
-	}
 }

@@ -2,7 +2,7 @@
 #include "Logger.hpp"
 #include "Utile.hpp"
 
-Channel::Channel(){};
+Channel::Channel(){}
 Channel::Channel(const Channel &ref) { (void)ref; }
 
 Channel::Channel(std::string channel_name)
@@ -91,8 +91,10 @@ void Channel::ft_send_all(std::string user_name, std::string buf)
 	buf += "\r\n";
 	while (it != this->_user_list.end())
 	{
-		if ((*it).first != user_name)
-			send((*it).second->ft_get_fd(), buf.c_str(), buf.length(), 0);
+		if (it->first != user_name)
+		{
+			send(it->second->ft_get_fd(), buf.c_str(), buf.length(), 0);
+		}
 		it++;
 	}
 }

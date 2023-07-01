@@ -92,9 +92,9 @@ int Socket::ft_poll()
 bool Socket::ft_ping()
 {
 	time_t now = time(NULL);
-	if (this->_time + 120 > now)
+	if (this->_time + 300 > now)
 		return (false);
-	if ((this->_time + 180 < now))
+	if ((this->_time + 360 < now))
 		return (true);
 	if (this->_ping_check)
 		return (false);
@@ -112,7 +112,7 @@ bool Socket::ft_pong(std::string msg)
 	return (true);
 }
 
-int Socket::ft_get_socket_fd() { return this->_fd; };
+int Socket::ft_get_socket_fd() { return this->_fd; }
 std::string Socket::ft_get_socket_IP() { return ((std::string)inet_ntoa(((sockaddr_in *)&this->_socket_info)->sin_addr)); }
 void Socket::ft_set_time() { this->_time = time(NULL); }
 time_t Socket::ft_get_time() { return this->_time; }
@@ -120,5 +120,5 @@ std::string Socket::ft_push_msg(std::string msg)
 {
 	this->_msg += msg;
 	return this->_msg;
-};
-void Socket::ft_set_msg(std::string msg) { this->_msg = msg; };
+}
+void Socket::ft_set_msg(std::string msg) { this->_msg = msg; }

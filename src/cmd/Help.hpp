@@ -34,7 +34,7 @@ public:
 		this->ft_send();
 		this->_send_msg = RPL_HELPTXT(this->_client, "*", "- PRIVMSG - \"/privmsg nickname message\" : message to nickname");
 		this->ft_send();
-		this->_send_msg = RPL_HELPTXT(this->_client, "*", "[Command List in the Public Channel or General]");
+		this->_send_msg = RPL_HELPTXT(this->_client, "*", "[Commands List]");
 		this->ft_send();
 		this->_send_msg = RPL_HELPTXT(this->_client, "*", "-  JOIN  - \"/join channel_name\" : join a channel or create a channel if not exist.");
 		this->ft_send();
@@ -42,13 +42,13 @@ public:
 		this->ft_send();
 		this->_send_msg = RPL_HELPTXT(this->_client, "*", "-  HELP  - \"/help\" : display HELP.");
 		this->ft_send();
-		this->_send_msg = RPL_HELPTXT(this->_client, "*", "[Command List in a Channel]");
+		this->_send_msg = RPL_HELPTXT(this->_client, "*", "[Commands List in Channel]");
 		this->ft_send();
 		this->_send_msg = RPL_HELPTXT(this->_client, "*", "-  KICK  - \"/kick nickname\" : kick the user who has the nickname out of the channel.");
 		this->ft_send();
 		this->_send_msg = RPL_HELPTXT(this->_client, "*", "- INVITE - \"/invite nickname\" : invite the user who has the nickname.");
 		this->ft_send();
-		this->_send_msg = RPL_HELPTXT(this->_client, "*", "-  TOPIC - \"/topic topic_content(or empty)\" : change the topic as topic_content or view the topic if empty.");
+		this->_send_msg = RPL_HELPTXT(this->_client, "*", "-  TOPIC - \"/topic topic_content(or empty)\" : change the topic to topic_content or view the topic if empty.");
 		this->ft_send();
 		this->_send_msg = RPL_HELPTXT(this->_client, "*", "-  MODE  - \"/mode options(+, -, i, t, k, o, l)\"");
 		this->ft_send();
